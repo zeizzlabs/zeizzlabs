@@ -1,26 +1,259 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==================================================================
+   ZeizzLabs — Design token system
+   Digital creation & innovation studio. Dark, premium, restrained.
+   The LOGO is the colour; the UI is dark surfaces + white type +
+   subtle borders + occasional gradient energy. All values live here
+   as tokens — no magic hex in components. Tailwind v4 exposes every
+   --color-* as a utility (bg-bg-950, text-ink, border-line, etc.).
+================================================================== */
+
+@theme {
+  /* Fonts (wired to next/font CSS variables in app/layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+
+  /* Backgrounds — very dark, near-black, subtly blue-cool */
+  --color-bg-950: #050508;
+  --color-bg-900: #080a12;
+  --color-bg-850: #0b0d18;
+  --color-bg-800: #101322;
+  --color-bg-750: #161a2c;
+
+  /* Surfaces / lines */
+  --color-surface: #0c0f1a;
+  --color-surface-2: #11152260;
+  --color-line: #ffffff14; /* hairline borders */
+  --color-line-strong: #ffffff26;
+
+  /* Brand spectrum */
+  --color-blue: #149bff;
+  --color-violet: #6c35ff;
+  --color-magenta: #d52bff;
+  --color-orange: #ff7a18;
+
+  /* Text */
+  --color-ink: #f7f7fa;
+  --color-muted: #9296a5;
+  --color-faint: #6a6e7e;
+
+  /* Semantic aliases */
+  --color-background: var(--color-bg-950);
+  --color-foreground: var(--color-ink);
+
+  /* Status */
+  --color-status-live: #16c784;
+  --color-status-dev: #149bff;
+  --color-status-experimental: #d52bff;
+  --color-status-soon: #ff7a18;
+
+  /* Radii */
+  --radius-card: 1rem;
+  --radius-lg: 1.5rem;
+
+  /* Gradient energy (used sparingly, as accents) */
+  --gradient-brand: linear-gradient(
+    90deg,
+    var(--color-blue),
+    var(--color-violet),
+    var(--color-magenta),
+    var(--color-orange)
+  );
+  --gradient-brand-135: linear-gradient(
+    135deg,
+    var(--color-blue),
+    var(--color-violet) 42%,
+    var(--color-magenta) 72%,
+    var(--color-orange)
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base ------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+  background: var(--color-bg-950);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-950);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-violet) 45%, transparent);
+  color: #fff;
+}
+
+/* Custom scrollbar (subtle) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-900);
+}
+::-webkit-scrollbar-thumb {
+  background: #ffffff1a;
+  border-radius: 999px;
+  border: 2px solid var(--color-bg-900);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff33;
+}
+
+/* Utilities ------------------------------------------------------- */
+
+/* Gradient text — the brand energy, used only on select headline spans */
+.text-gradient {
+  background: var(--gradient-brand-135);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Hairline border helper */
+.border-line {
+  border-color: var(--color-line);
+}
+
+/* Glass surface — used sparingly (nav, some cards) */
+.glass {
+  background: color-mix(in oklab, var(--color-bg-850) 72%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Gradient hairline border on hover (border illumination) */
+.border-glow {
+  position: relative;
+}
+.border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-brand-135);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.border-glow:hover::before,
+.border-glow:focus-within::before {
+  opacity: 1;
+}
+
+/* Section grid backdrop — faint technical grid */
+.grid-lines {
+  background-image: linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+/* Tabular numerics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Motion (CSS only, GPU-friendly) ---- */
+
+/* Slow drifting gradient blobs in the hero background */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -6%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-5%, 4%, 0) scale(0.96);
+  }
+}
+.animate-drift {
+  animation: drift 22s ease-in-out infinite;
+}
+.animate-drift-slow {
+  animation: drift 34s ease-in-out infinite reverse;
+}
+
+/* Animated brand gradient sweep (footer line, underlines) */
+@keyframes sweep {
+  to {
+    background-position: 200% center;
+  }
+}
+.animate-sweep {
+  background-size: 200% auto;
+  animation: sweep 6s linear infinite;
+}
+
+/* Scroll-reveal — toggled by the Reveal client component */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Circuit trace dash animation */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+.animate-dash {
+  stroke-dasharray: 6 10;
+  animation: dash-flow 1.6s linear infinite;
+}
+
+/* Focus ring — accessible, brand-tinted */
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion everywhere */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

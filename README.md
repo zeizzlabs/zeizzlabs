@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZeizzLabs — Digital Creation & Innovation
 
-## Getting Started
+The ZeizzLabs studio website. Dark, premium, built around the official brand
+identity. Next.js 16 (App Router) · TypeScript · Tailwind CSS v4.
 
-First, run the development server:
+**Everything digital. Endless possibilities.**
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What |
+| --- | --- |
+| `content/site.ts` | Brand config + navigation |
+| `content/capabilities.ts` | "What We Create" universe (add categories freely) |
+| `content/lab.ts` | THE LAB experiments |
+| `content/work.ts` | Case-study projects (labelled honestly) |
+| `content/products.ts` | Product ecosystem, process steps, AI system nodes |
+| `components/sections/*` | One file per homepage section |
+| `components/ui/*` | Reusable primitives (Button, SectionHeading, Reveal, …) |
+| `components/brand/Logo.tsx` | Logo — swap artwork in `public/brand/` |
+| `lib/types.ts` | Single source of truth for all content shapes |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**The site is a data layer + component system.** To add a capability, an
+experiment, a project, or a product, push an object into the relevant array in
+`content/` — no component changes needed.
 
-## Learn More
+## Brand assets
 
-To learn more about Next.js, take a look at the following resources:
+The official artwork is in `public/brand/`. See
+[`public/brand/README.md`](public/brand/README.md) to swap it (zero code
+changes if you keep the filenames).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact form
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`POST /api/contact` validates with the shared Zod schema and is Resend-ready.
+Without env vars it validates + logs (so the form works in dev). To send email:
 
-## Deploy on Vercel
+```bash
+RESEND_API_KEY=...        # enables delivery
+CONTACT_TO=you@domain     # optional, defaults to hello@zeizzlabs.com
+CONTACT_FROM="ZeizzLabs <hello@yourdomain>"  # optional, must be a verified sender
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Swap the delivery block in `app/api/contact/route.ts` for a CRM, database, or
+webhook without touching the client.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Optional environment variables
+
+Set these to override brand defaults (all have safe fallbacks):
+`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CONTACT_EMAIL`, and the social URLs
+(`NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_LINKEDIN_URL`, etc.).
+
+## Accessibility & performance
+
+Semantic HTML, skip-link, keyboard-navigable, visible focus rings, `alt` text,
+and full `prefers-reduced-motion` support. Motion is CSS + a small
+IntersectionObserver — no animation library — to keep the bundle lean.
