@@ -43,7 +43,7 @@ export function Navbar() {
               : "border-transparent"
           )}
         >
-          <Logo variant="emblem" size={40} priority />
+          <Logo variant="emblem" size={44} priority showWordmark={false} />
 
           {/* Desktop links */}
           <ul className="hidden items-center gap-1 lg:flex">

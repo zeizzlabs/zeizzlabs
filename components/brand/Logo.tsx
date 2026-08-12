@@ -23,6 +23,7 @@ export function Logo({
   priority,
   href = "/",
   size = 42,
+  showWordmark = true,
 }: {
   variant?: "emblem" | "board";
   className?: string;
@@ -30,6 +31,8 @@ export function Logo({
   href?: string;
   /** Rendered height in px for the emblem variant. */
   size?: number;
+  /** Show the "ZeizzLabs" text beside the emblem. */
+  showWordmark?: boolean;
 }) {
   if (variant === "board") {
     // Un-linked showpiece for the hero.
@@ -78,7 +81,7 @@ export function Logo({
     return (
       <span className={wrapCls}>
         {mark}
-        {wordmark}
+        {showWordmark && wordmark}
       </span>
     );
   }
@@ -86,7 +89,7 @@ export function Logo({
   return (
     <Link href={href} aria-label={`${site.brandName} home`} className={wrapCls}>
       {mark}
-      {wordmark}
+      {showWordmark && wordmark}
     </Link>
   );
 }
