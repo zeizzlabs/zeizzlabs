@@ -116,12 +116,12 @@ export function ContactForm() {
         </div>
         <div>
           <label htmlFor="building" className={labelCls}>
-            What are you building?
+            What do you need?
           </label>
           <input
             id="building"
             className={fieldCls}
-            placeholder="An AI agent, a web app, an automation…"
+            placeholder="A website, WhatsApp automation, an AI agent…"
             {...register("building")}
           />
           {errors.building && <p className={errCls}>{errors.building.message}</p>}
@@ -171,7 +171,7 @@ export function ContactForm() {
 
       <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Button type="submit" size="lg" arrow disabled={status === "sending"}>
-          {status === "sending" ? "Sending…" : "Start a Project"}
+          {status === "sending" ? "Sending…" : "Send request"}
         </Button>
         {status === "error" && (
           <p className="text-sm text-[#ff6b6b]">

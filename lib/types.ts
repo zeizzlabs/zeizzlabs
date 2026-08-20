@@ -95,6 +95,10 @@ export interface SiteConfig {
   tagline: string;
   description: string;
   email: string;
+  /** Display phone number, e.g. "+91 70175 96468". */
+  phone: string;
+  /** WhatsApp number, digits only with country code, e.g. "917017596468". */
+  whatsappNumber: string;
   /** Canonical production URL (also used for metadata + sitemap). */
   url: string;
   social: {

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO || "hello@zeizzlabs.com";
+  const to = process.env.CONTACT_TO || "zeizzlabs@gmail.com";
   const from = process.env.CONTACT_FROM || "ZeizzLabs <onboarding@resend.dev>";
 
   if (apiKey) {

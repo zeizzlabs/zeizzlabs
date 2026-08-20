@@ -1,63 +1,65 @@
 import type { Product, ProcessStep, SystemNode } from "@/lib/types";
 
 /**
- * BUILT BY ZEIZZLABS — the product ecosystem. A store, not a service list.
- * Templates, tools, software, AI products, assets, micro-SaaS. Extend freely.
+ * WHAT WE OFFER — productised service packages a business can start with.
+ * `type` is shown as a small category tag on the card; `description` is the
+ * pitch. These are offerings (things we do for you), not products we sell.
+ * Extend freely.
  */
 export const products: Product[] = [
   {
-    id: "kit-os",
-    name: "Kit OS",
-    type: "Design System",
+    id: "business-website",
+    name: "Business Website & Web Apps",
+    type: "Web",
     status: "live",
     description:
-      "A component + token kit that turns ideas into polished, consistent product UI fast.",
-    icon: "Layers",
+      "Fast, modern websites and web apps that turn visitors into customers — designed, built, and launched for you.",
+    icon: "Code2",
   },
   {
-    id: "studio-notion",
-    name: "Studio OS",
-    type: "Notion System",
+    id: "whatsapp-automation",
+    name: "WhatsApp Automation",
+    type: "WhatsApp",
     status: "live",
     description:
-      "An opinionated Notion workspace that runs a small studio's operations end to end.",
-    icon: "Package",
+      "Auto-replies, broadcasts, catalogues, and chatbots on the WhatsApp Business API — so no lead goes cold.",
+    icon: "MessageCircle",
   },
   {
-    id: "flowforge",
-    name: "FlowForge",
-    type: "Automation Tool",
-    status: "in-development",
+    id: "ai-calling-agent",
+    name: "AI Calling Agent",
+    type: "Voice AI",
+    status: "live",
     description:
-      "Turn a described process into a running automation across the tools you already use.",
-    icon: "Workflow",
+      "A voice AI that answers and makes calls — booking appointments and qualifying leads around the clock.",
+    icon: "Phone",
   },
   {
-    id: "agent-mesh",
-    name: "Agent Mesh",
-    type: "AI Framework",
-    status: "in-development",
+    id: "custom-ai-agent",
+    name: "Custom AI Agent",
+    type: "AI",
+    status: "live",
     description:
-      "Wire multiple AI agents into one coordinated system with shared memory and tools.",
+      "An AI assistant trained on your own data and docs to support customers and your team.",
     icon: "BrainCircuit",
   },
   {
-    id: "pulse",
-    name: "Pulse",
-    type: "Analytics",
-    status: "experimental",
+    id: "business-automation",
+    name: "Business Automation",
+    type: "Automation",
+    status: "live",
     description:
-      "Lightweight product analytics that surfaces what actually moves the metric.",
-    icon: "Activity",
+      "Connect your tools and remove the manual work between them — CRM, sheets, email, and more.",
+    icon: "Workflow",
   },
   {
-    id: "atlas",
-    name: "Atlas",
-    type: "Knowledge Platform",
-    status: "coming-soon",
+    id: "ecommerce-store",
+    name: "E-commerce Store",
+    type: "Commerce",
+    status: "live",
     description:
-      "One queryable brain across your docs, code, and data. Early access soon.",
-    icon: "Boxes",
+      "An online store with payments, inventory, and automated order flows — ready to sell.",
+    icon: "ShoppingCart",
   },
 ];
 

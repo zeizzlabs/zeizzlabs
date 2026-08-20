@@ -21,7 +21,7 @@ export function CapabilityCard({ cap }: { cap: Capability }) {
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">{cap.blurb}</p>
           <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
-            Tell us the idea
+            Tell us what you need
             <Icon
               name="ArrowRight"
               className="h-4 w-4 transition-transform group-hover:translate-x-1"

@@ -6,15 +6,15 @@ import { capabilities } from "@/content/capabilities";
 
 export function WhatWeCreate() {
   return (
-    <Section id="create">
+    <Section id="services">
       <SectionHeading
-        eyebrow="What We Create"
+        eyebrow="Services"
         title={
           <>
-            If it&apos;s digital, <span className="text-gradient">we can create it.</span>
+            Everything your business needs, <span className="text-gradient">built for you.</span>
           </>
         }
-        intro="Not a fixed menu of five services — a universe of digital creation. These are examples of what's possible, not the edges of what we do."
+        intro="Full-stack digital services — from your website to AI agents that answer the phone. One team for everything you need to run and grow online."
       />
 
       <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

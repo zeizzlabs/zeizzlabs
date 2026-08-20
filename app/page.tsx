@@ -1,7 +1,5 @@
 import { Hero } from "@/components/sections/Hero";
 import { WhatWeCreate } from "@/components/sections/WhatWeCreate";
-import { Lab } from "@/components/sections/Lab";
-import { Work } from "@/components/sections/Work";
 import { Products } from "@/components/sections/Products";
 import { AiAutomation } from "@/components/sections/AiAutomation";
 import { DesignBuild } from "@/components/sections/DesignBuild";
@@ -14,8 +12,6 @@ export default function Home() {
     <>
       <Hero />
       <WhatWeCreate />
-      <Lab />
-      <Work />
       <Products />
       <AiAutomation />
       <DesignBuild />

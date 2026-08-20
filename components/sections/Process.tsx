@@ -10,10 +10,10 @@ export function Process() {
         eyebrow="Process"
         title={
           <>
-            From idea to <span className="text-gradient">evolving product.</span>
+            From idea to <span className="text-gradient">launch — and beyond.</span>
           </>
         }
-        intro="A clear path, not a black box. Every engagement moves through these seven stages."
+        intro="A clear path, not a black box. Every project we take on moves through these seven stages."
       />
 
       <ol className="mt-12 space-y-px">

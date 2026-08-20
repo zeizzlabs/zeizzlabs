@@ -62,7 +62,7 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <span className="hidden sm:block">
               <Button href="/#contact" size="md" arrow>
-                Start a Project
+                Get Started
               </Button>
             </span>
             {/* Mobile toggle */}
@@ -104,7 +104,7 @@ export function Navbar() {
           </ul>
           <div className="mt-auto">
             <Button href="/#contact" size="lg" arrow className="w-full" >
-              Start a Project
+              Get Started
             </Button>
           </div>
         </div>

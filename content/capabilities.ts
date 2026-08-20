@@ -1,72 +1,73 @@
 import type { Capability } from "@/lib/types";
 
 /**
- * The "What We Create" universe. These are examples of what's possible, NOT a
- * fixed service menu — the closing frontier card makes that explicit. Add a new
- * category here and it slots into the grid with zero component changes.
+ * "Services" — what ZeizzLabs does for a business. These are the broad
+ * categories; concrete packaged offerings live in content/products.ts. The
+ * closing frontier card keeps it open-ended. Add a category here and it slots
+ * into the grid with zero component changes.
  */
 export const capabilities: Capability[] = [
   {
-    id: "digital-products",
-    title: "Digital Products",
-    blurb: "End-to-end products people actually use.",
-    icon: "Layers",
-    examples: ["Websites", "Web apps", "Mobile apps", "Software"],
+    id: "web-development",
+    title: "Website & Web App Development",
+    blurb: "Fast, modern sites and web apps built to perform.",
+    icon: "Code2",
+    examples: ["Business websites", "Web apps", "Landing pages", "E-commerce"],
   },
   {
-    id: "ai-intelligence",
-    title: "AI & Intelligence",
-    blurb: "Systems that reason, decide, and act.",
+    id: "whatsapp",
+    title: "WhatsApp Integration & Automation",
+    blurb: "Meet customers where they already are.",
+    icon: "MessageCircle",
+    examples: ["WhatsApp API", "Auto-replies", "Broadcasts", "Chatbots"],
+  },
+  {
+    id: "ai-agents",
+    title: "AI Agents & Assistants",
+    blurb: "AI that works inside your business.",
     icon: "BrainCircuit",
-    examples: ["AI agents", "Copilots", "RAG systems", "Model integration"],
+    examples: ["Custom AI agents", "Support bots", "RAG systems", "AI integrations"],
+  },
+  {
+    id: "ai-calling",
+    title: "AI Calling Agents",
+    blurb: "Voice AI that talks to your customers, 24/7.",
+    icon: "Phone",
+    examples: ["Inbound calls", "Outbound calls", "Appointment booking", "Lead qualification"],
   },
   {
     id: "automation",
-    title: "Automation & Workflows",
-    blurb: "Remove the manual work between tools.",
+    title: "Business Automation",
+    blurb: "Remove the manual work between your tools.",
     icon: "Workflow",
-    examples: ["Pipelines", "Integrations", "Internal ops", "Bots"],
+    examples: ["Workflow automation", "CRM automation", "Integrations", "Internal tools"],
+  },
+  {
+    id: "custom-software",
+    title: "Custom Software & Integrations",
+    blurb: "Bespoke systems for how your business actually works.",
+    icon: "Server",
+    examples: ["APIs", "Dashboards", "SaaS", "Mobile apps"],
   },
   {
     id: "design-brand",
     title: "Design & Branding",
-    blurb: "Identity and interface, made coherent.",
+    blurb: "Identity and interfaces that build trust.",
     icon: "PenTool",
-    examples: ["UI / UX", "Brand systems", "Design tokens", "Prototypes"],
+    examples: ["UI / UX", "Brand identity", "Design systems", "Prototypes"],
   },
   {
-    id: "digital-assets",
-    title: "Digital Assets",
-    blurb: "Reusable things that ship faster.",
-    icon: "Package",
-    examples: ["Templates", "Notion systems", "Component kits", "Resources"],
-  },
-  {
-    id: "data-analytics",
-    title: "Data & Analytics",
-    blurb: "Turn raw events into decisions.",
-    icon: "BarChart3",
-    examples: ["Dashboards", "Pipelines", "Instrumentation", "Reporting"],
-  },
-  {
-    id: "cloud-infra",
-    title: "Cloud & Infrastructure",
-    blurb: "The systems behind the interface.",
-    icon: "Server",
-    examples: ["APIs", "Databases", "Deployment", "Edge & serverless"],
-  },
-  {
-    id: "digital-experiences",
-    title: "Digital Experiences",
-    blurb: "Interfaces worth remembering.",
-    icon: "Sparkles",
-    examples: ["Interactive sites", "Tools", "Internal platforms", "Content systems"],
+    id: "digital-growth",
+    title: "Digital Growth",
+    blurb: "Get found, get leads, and grow.",
+    icon: "TrendingUp",
+    examples: ["SEO", "Analytics", "Marketing automation", "Lead generation"],
   },
   {
     id: "frontier",
-    title: "And whatever comes next",
+    title: "And whatever your business needs",
     blurb:
-      "SaaS, plugins, browser extensions, games, 3D, developer tools — if it's digital, it's on the table.",
+      "SaaS, plugins, integrations, dashboards, bots — if it's digital and it moves your business forward, we can build it.",
     icon: "Rocket",
     examples: [],
     isFrontier: true,

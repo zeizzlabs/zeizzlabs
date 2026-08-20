@@ -15,7 +15,7 @@ export function Hero() {
         className="is-visible mb-6 inline-flex items-center gap-2 rounded-full border border-line-strong glass px-4 py-1.5 text-xs font-medium uppercase tracking-[0.22em] text-muted"
       >
         <span className="h-1.5 w-1.5 rounded-full [background:var(--gradient-brand)]" />
-        Digital Creation &amp; Innovation
+        Digital Services &amp; AI Automation
       </div>
 
       {/* The logo is the visual anchor — framed as a deliberate showpiece so its
@@ -28,32 +28,32 @@ export function Hero() {
       </div>
 
       <h1 className="font-display text-balance text-4xl font-semibold leading-[1.03] tracking-tight text-ink sm:text-6xl md:text-7xl">
-        We build what the digital
-        <br className="hidden sm:block" /> world needs{" "}
+        We build what your
+        <br className="hidden sm:block" /> business needs{" "}
         <span className="text-gradient">next.</span>
       </h1>
 
       <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
-        ZeizzLabs is a digital laboratory. We create products, software, AI
-        systems, automations, experiences, and assets — and the systems that
-        connect them. If it's digital, we can build it.
+        ZeizzLabs is your digital team. We build websites and web apps, WhatsApp
+        and business automation, AI agents, and AI calling agents — everything
+        you need to run and grow online. Tell us the goal; we&apos;ll build it.
       </p>
 
       <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
         <Magnetic>
           <Button href="/#contact" size="lg" arrow>
-            Start a Project
+            Get Started
           </Button>
         </Magnetic>
-        <Button href="/#lab" size="lg" variant="secondary" arrow>
-          Explore the Lab
+        <Button href="/#services" size="lg" variant="secondary" arrow>
+          See our services
         </Button>
       </div>
 
       {/* Scroll cue */}
       <a
-        href="/#create"
-        aria-label="Scroll to what we create"
+        href="/#services"
+        aria-label="Scroll to our services"
         className="mt-16 hidden items-center gap-2 text-xs uppercase tracking-[0.2em] text-faint transition-colors hover:text-muted sm:inline-flex"
       >
         <Icon name="ArrowRight" className="h-4 w-4 rotate-90" />

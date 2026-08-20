@@ -4,16 +4,27 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { systemNodes } from "@/content/products";
 
+// Label placement pushes each node's text OUTWARD from the brain, so the
+// connector line to the icon is never crossed by the label and the layout
+// stays symmetric: top→above, bottom→below, left column→left, right column→right.
+const labelPlacement = {
+  top: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
+  bottom: "absolute top-full left-1/2 -translate-x-1/2 mt-2",
+  left: "absolute right-full top-1/2 -translate-y-1/2 mr-2",
+  right: "absolute left-full top-1/2 -translate-y-1/2 ml-2",
+} as const;
+
 export function AiAutomation() {
-  // Six nodes arranged around a central brain (desktop radial layout).
+  // Six nodes around a central brain (desktop radial layout). `label` is the
+  // side the text sits on, matched to the node's position for symmetry.
   const positions = [
-    { top: "6%", left: "50%" },
-    { top: "28%", left: "90%" },
-    { top: "72%", left: "90%" },
-    { top: "94%", left: "50%" },
-    { top: "72%", left: "10%" },
-    { top: "28%", left: "10%" },
-  ];
+    { top: "6%", left: "50%", label: "top" }, // AI — top centre
+    { top: "28%", left: "90%", label: "right" }, // Data — top right
+    { top: "72%", left: "90%", label: "right" }, // APIs — bottom right
+    { top: "94%", left: "50%", label: "bottom" }, // Automation — bottom centre
+    { top: "72%", left: "10%", label: "left" }, // Apps — bottom left
+    { top: "28%", left: "10%", label: "left" }, // Users — top left
+  ] as const;
 
   return (
     <Section id="ai">
@@ -55,24 +66,59 @@ export function AiAutomation() {
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="conn" x1="0" y1="0" x2="1" y2="1">
+                {/* userSpaceOnUse is essential: with the default
+                    objectBoundingBox units, a perfectly vertical or horizontal
+                    line has a zero-area bounding box, the gradient degenerates,
+                    and the stroke renders as nothing — which is exactly why the
+                    AI (top) and Automation (bottom) connectors were invisible. */}
+                <linearGradient
+                  id="conn"
+                  gradientUnits="userSpaceOnUse"
+                  x1="0"
+                  y1="0"
+                  x2="100"
+                  y2="100"
+                >
                   <stop stopColor="#149bff" />
                   <stop offset="1" stopColor="#d52bff" />
                 </linearGradient>
               </defs>
-              {positions.map((p, i) => (
-                <line
-                  key={i}
-                  x1="50"
-                  y1="50"
-                  x2={parseFloat(p.left)}
-                  y2={parseFloat(p.top)}
-                  stroke="url(#conn)"
-                  strokeWidth="0.4"
-                  className="animate-dash"
-                  opacity="0.6"
-                />
-              ))}
+              {positions.map((p, i) => {
+                const x = parseFloat(p.left);
+                const y = parseFloat(p.top);
+                return (
+                  <g key={i}>
+                    {/* faint static rail so the connection always reads, even
+                        between dashes of the animated line */}
+                    <line
+                      x1="50"
+                      y1="50"
+                      x2={x}
+                      y2={y}
+                      stroke="url(#conn)"
+                      strokeWidth="1.4"
+                      vectorEffect="non-scaling-stroke"
+                      opacity="0.22"
+                    />
+                    {/* animated dashed line — non-scaling stroke keeps the
+                        vertical lines (AI top / Automation bottom) as visible
+                        as the diagonal ones */}
+                    <line
+                      x1="50"
+                      y1="50"
+                      x2={x}
+                      y2={y}
+                      stroke="url(#conn)"
+                      strokeWidth="1.4"
+                      vectorEffect="non-scaling-stroke"
+                      className="animate-dash"
+                      opacity="0.9"
+                    />
+                    {/* endpoint dot at each node */}
+                    <circle cx={x} cy={y} r="1.1" fill="#149bff" opacity="0.9" />
+                  </g>
+                );
+              })}
             </svg>
 
             {/* central brain */}
@@ -83,18 +129,23 @@ export function AiAutomation() {
               </div>
             </div>
 
-            {/* orbit nodes */}
+            {/* orbit nodes — the icon box is centred exactly on the connector
+                endpoint; the label sits on the outward side (see labelPlacement) */}
             {systemNodes.map((node, i) => (
               <div
                 key={node.id}
                 className="absolute -translate-x-1/2 -translate-y-1/2"
                 style={{ top: positions[i].top, left: positions[i].left }}
               >
-                <div className="flex flex-col items-center gap-1.5">
+                <div className="relative">
                   <span className="grid h-12 w-12 place-items-center rounded-xl border border-line bg-surface text-blue">
                     <Icon name={node.icon} className="h-5 w-5" />
                   </span>
-                  <span className="text-[11px] font-medium text-muted">{node.label}</span>
+                  <span
+                    className={`${labelPlacement[positions[i].label]} whitespace-nowrap text-[11px] font-medium text-muted`}
+                  >
+                    {node.label}
+                  </span>
                 </div>
               </div>
             ))}

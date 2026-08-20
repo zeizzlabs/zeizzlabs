@@ -36,12 +36,20 @@ export function Footer() {
               <br />
               {site.tagline}
             </p>
-            <a
-              href={`mailto:${site.email}`}
-              className="w-fit text-sm font-medium text-ink transition-colors hover:text-blue"
-            >
-              {site.email}
-            </a>
+            <div className="flex flex-col gap-1">
+              <a
+                href={`mailto:${site.email}`}
+                className="w-fit text-sm font-medium text-ink transition-colors hover:text-blue"
+              >
+                {site.email}
+              </a>
+              <a
+                href={`tel:${site.phone.replace(/\s/g, "")}`}
+                className="w-fit text-sm font-medium text-ink tabular-nums transition-colors hover:text-blue"
+              >
+                {site.phone}
+              </a>
+            </div>
           </div>
 
           <nav className="flex flex-col gap-3" aria-label="Footer">

@@ -6,15 +6,15 @@ import { products } from "@/content/products";
 
 export function Products() {
   return (
-    <Section id="products">
+    <Section id="offerings">
       <SectionHeading
-        eyebrow="Built by ZeizzLabs"
+        eyebrow="What We Offer"
         title={
           <>
-            Our own <span className="text-gradient">product ecosystem.</span>
+            Ready-to-build <span className="text-gradient">solutions.</span>
           </>
         }
-        intro="Templates, tools, systems, and micro-products we build and ship — a growing catalogue, not a service list."
+        intro="Popular, productised offerings you can start with today — each one tailored to your business. Not sure which fits? Tell us the goal and we'll advise."
       />
 
       <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
