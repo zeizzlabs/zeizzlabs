@@ -1,0 +1,36 @@
+# Netlify configuration for the ZeizzLabs site.
+#
+# The Next.js runtime handles routing, the API route, ISR and image
+# optimisation; there is no static export here because /api/contact runs on
+# demand. `npm run build` also triggers the prebuild step that regenerates
+# lib/media-manifest.ts, so artwork added since the last commit is picked up.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # Match the local toolchain; Next 16 requires 20+.
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Long-cache the generated artwork. Filenames carry a content stamp (?v=), so a
+# replaced file gets a new URL and this cache can never serve a stale image.
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, must-revalidate"
+
+[[headers]]
+  for = "/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

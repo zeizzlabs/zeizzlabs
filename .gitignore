@@ -44,3 +44,6 @@ next-env.d.ts
 !.env.example
 # Personal Claude Code settings (keep launch.json tracked)
 .claude/settings.local.json
+
+# Local Netlify folder
+.netlify
