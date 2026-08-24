@@ -77,9 +77,7 @@ export function WorkRail() {
   return (
     <section ref={root} className="relative overflow-hidden py-16 sm:py-20">
       <div className="mx-auto mb-10 flex max-w-[100rem] items-end justify-between gap-6 px-5 sm:px-8">
-        <p className="eyebrow">
-          {String(projects.length).padStart(2, "0")} projects
-        </p>
+        <p className="eyebrow">Selected work</p>
         <p className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-faint lg:flex">
           Scroll to explore
           <Icon name="ArrowRight" className="h-3.5 w-3.5" />
@@ -95,7 +93,7 @@ export function WorkRail() {
           "max-lg:overflow-x-auto max-lg:snap-x max-lg:snap-mandatory max-lg:pb-4"
         )}
       >
-        {projects.map((p, i) => (
+        {projects.map((p) => (
           <TransitionLink
             key={p.slug}
             href={`/work/${p.slug}`}
@@ -111,9 +109,6 @@ export function WorkRail() {
               sizes="(max-width: 1024px) 86vw, 46rem"
               className="h-[42vh] min-h-[16rem] lg:h-[52vh]"
             >
-              <span className="absolute left-6 top-6 font-mono text-[11px] tracking-[0.2em] text-white/70">
-                {String(i + 1).padStart(2, "0")}
-              </span>
               <span
                 className={cn(
                   "absolute right-6 top-6 rounded-full border bg-ink-950/70 px-3 py-1 font-mono text-[10.5px] uppercase tracking-[0.18em] backdrop-blur",

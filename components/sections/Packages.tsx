@@ -36,7 +36,7 @@ export function Packages() {
 
       {/* Price index */}
       <div className="border-t border-line">
-        {offerings.map((o, i) => {
+        {offerings.map((o) => {
           const isOpen = open === o.id;
           return (
             <div key={o.id} className="border-b border-line">
@@ -48,10 +48,6 @@ export function Packages() {
                 data-cursor="lg"
                 className="group flex w-full items-center gap-4 py-6 text-left sm:gap-8"
               >
-                <span className="w-7 shrink-0 font-mono text-[11px] tracking-[0.2em] text-gold-400/80 sm:w-12">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
                 <span className="min-w-0 flex-1">
                   <span
                     className={cn(
@@ -100,7 +96,7 @@ export function Packages() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="grid gap-8 pb-9 sm:grid-cols-[1fr_1fr] sm:pl-20 lg:grid-cols-[1.2fr_1fr_auto]">
+                  <div className="grid gap-8 pb-9 sm:grid-cols-[1fr_1fr] lg:grid-cols-[1.2fr_1fr_auto]">
                     <p className="max-w-md text-[15px] leading-relaxed text-muted">
                       {o.description}
                     </p>

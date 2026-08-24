@@ -139,6 +139,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme="light"
       className={`${inter.variable} ${sora.variable} ${poppins.variable} ${jet.variable} h-full antialiased`}
     >
       <head>
@@ -170,7 +171,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <Cursor />
         <PageTransition>
-          <Navbar logo={<Logo size={46} priority revealOnScroll />} />
+          <Navbar logo={<Logo size={58} priority revealOnScroll />} />
           <main id="main">{children}</main>
           <Footer />
         </PageTransition>

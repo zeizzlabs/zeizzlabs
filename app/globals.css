@@ -449,6 +449,93 @@ body {
 }
 
 /* ================================================================
+   Dark theme
+   ----------------------------------------------------------------
+   The token defaults in @theme are the dark set, which covers the whole
+   page when <html data-theme="dark">. This block exists so a dark SECTION
+   nested inside a light page gets them back — without it such a section
+   would inherit the light tokens from the root and disappear.
+================================================================ */
+[data-theme="dark"] {
+  --color-canvas: #04060c;
+  --color-panel: #090e1b;
+  --color-raised: #ffffff08;
+  --color-raised-strong: #ffffff14;
+  --color-surface: #090e1b;
+  --color-surface-2: #0d1424;
+
+  --color-ink: #f4f7fc;
+  --color-muted: #939eb2;
+  --color-faint: #7d8a9f;
+
+  --color-line: #ffffff14;
+  --color-line-strong: #ffffff28;
+  --color-line-gold: #c9a15c33;
+
+  --color-blue-300: #8cc4ff;
+  --color-blue-400: #4da3ff;
+  --color-blue-500: #1e7bff;
+
+  --color-gold-300: #ecd3a0;
+  --color-gold-400: #dcb877;
+  --color-gold-500: #c9a15c;
+
+  --color-steel-300: #cdd8e8;
+  --color-steel-400: #a4b3c9;
+  --color-steel-500: #7d8da6;
+
+  --color-status-live: #23c98b;
+
+  --gradient-brand: linear-gradient(
+    100deg in oklab,
+    var(--color-blue-600) 0%,
+    var(--color-blue-500) 22%,
+    var(--color-blue-300) 52%,
+    var(--color-gold-400) 82%,
+    var(--color-gold-300) 100%
+  );
+
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  color-scheme: dark;
+}
+
+[data-theme="dark"] .plate {
+  background:
+    linear-gradient(180deg, #ffffff0a 0%, #ffffff02 40%, transparent 100%),
+    var(--color-panel);
+  border-color: var(--color-line);
+  box-shadow: none;
+}
+[data-theme="dark"] .glass {
+  background: color-mix(in oklab, var(--color-ink-880) 62%, transparent);
+}
+[data-theme="dark"] .grid-lines {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+}
+[data-theme="dark"] .dot-matrix {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+}
+[data-theme="dark"] .wordmark-clip img { filter: none; }
+[data-theme="dark"] .wordmark {
+  background: linear-gradient(
+    170deg, #ffffff 0%, #f2f5fa 26%, #b9c4d4 52%, #ffffff 66%, #cfd8e6 88%, #9aa7bb 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-theme="dark"] .text-steel-gradient {
+  background: linear-gradient(160deg, #ffffff 10%, var(--color-steel-400) 55%, #6d7c93 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ================================================================
    Light theme
    ----------------------------------------------------------------
    Set data-theme="light" on <html> for the whole site, or on a single

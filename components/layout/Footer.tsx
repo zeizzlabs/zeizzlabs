@@ -1,10 +1,8 @@
-import Image from "next/image";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
 import { services } from "@/content/services";
 import { Logo } from "@/components/brand/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { Reveal } from "@/components/motion/Reveal";
 
 const socialIcons: Record<string, string> = {
   whatsapp: "MessageCircle",
@@ -118,20 +116,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Oversized wordmark — the closing brand beat. */}
-        {/* Closing brand beat — the official wordmark artwork, wiped in on scroll. */}
-        <Reveal mode="mask" className="mt-16 select-none">
-          <Image
-            src="/brand/zeizzlabs-wordmark.png"
-            alt=""
-            width={1200}
-            height={349}
-            sizes="(max-width: 1024px) 92vw, 1100px"
-            className="h-auto w-full max-w-[68rem] opacity-90"
-          />
-        </Reveal>
-
-        <div className="mt-10 flex flex-col gap-3 border-t border-line pt-7 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-line pt-7 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.brandName}. All rights reserved.
           </p>

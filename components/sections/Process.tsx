@@ -89,13 +89,12 @@ export function Process() {
                         )}
                       >
                         <span
+                          aria-hidden
                           className={cn(
-                            "font-mono text-[11px] tracking-[0.2em] transition-colors",
-                            i === active ? "text-gold-300" : "text-faint"
+                            "h-1.5 w-1.5 shrink-0 rotate-45 transition-colors",
+                            i === active ? "bg-gold-300" : "bg-line-strong"
                           )}
-                        >
-                          {s.no}
-                        </span>
+                        />
                         <span
                           className={cn(
                             "h-card text-lg transition-colors",
@@ -135,14 +134,6 @@ export function Process() {
                       : ""
                   )}
                 >
-                  {/* Big ghost number */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-2 -top-6 font-display text-[6rem] font-bold leading-none text-white/[0.025] sm:text-[8rem]"
-                  >
-                    {s.no}
-                  </span>
-
                   <div className="relative flex items-start gap-4">
                     <span
                       className={cn(
@@ -155,12 +146,7 @@ export function Process() {
                       <Icon name={s.icon} className="h-5 w-5" />
                     </span>
                     <div className="min-w-0">
-                      <div className="flex items-baseline gap-3">
-                        <span className="font-mono text-[11px] tracking-[0.2em] text-gold-400">
-                          {s.no}
-                        </span>
-                        <h3 className="h-card text-xl text-ink sm:text-2xl">{s.title}</h3>
-                      </div>
+                      <h3 className="h-card text-xl text-ink sm:text-2xl">{s.title}</h3>
                       <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
                         {s.body}
                       </p>

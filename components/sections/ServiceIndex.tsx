@@ -85,7 +85,6 @@ export function ServiceIndex() {
           <PreviewCard
             className="h-60 w-[19rem]"
             data={{
-              index: String((active ?? 0) + 1).padStart(2, "0"),
               title: current.short,
               icon: current.icon,
               tags: current.deliverables,
@@ -116,10 +115,6 @@ export function ServiceIndex() {
                 )}
               >
                 <div className="flex items-baseline gap-4 sm:gap-8">
-                  <span className="w-7 shrink-0 font-mono text-[11px] tracking-[0.2em] text-gold-400/80 sm:w-14">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
                   <h3
                     className={cn(
                       "font-display font-bold leading-[1.02] tracking-[-0.04em] transition-all duration-500",
@@ -161,7 +156,7 @@ export function ServiceIndex() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <ul className="mt-4 flex flex-wrap gap-2 pl-11 sm:pl-22">
+                    <ul className="mt-4 flex flex-wrap gap-2">
                       {s.deliverables.map((d) => (
                         <li
                           key={d}

@@ -20,7 +20,7 @@ import { ThemeToggle } from "./ThemeToggle";
 export function Navbar({ logo }: { logo: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [over, setOver] = useState<"dark" | "light">("dark");
+  const [over, setOver] = useState<"dark" | "light">("light");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -33,17 +33,22 @@ export function Navbar({ logo }: { logo: ReactNode }) {
   // Detect whether a light-themed section currently sits under the bar so the
   // chrome can invert instead of disappearing into it.
   useEffect(() => {
+    // Any section can declare its own theme; the bar adopts whichever one is
+    // currently under it, falling back to the page's theme between sections.
     const sections = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-theme="light"]')
-    );
+      document.querySelectorAll<HTMLElement>("[data-theme]")
+    ).filter((el) => el !== document.documentElement);
     const check = () => {
       const y = 40;
-      // An empty list simply never hits, which resolves to the dark default.
-      const hit = sections.some((s) => {
-        const r = s.getBoundingClientRect();
+      const hit = sections.find((el) => {
+        const r = el.getBoundingClientRect();
         return r.top <= y && r.bottom >= y;
       });
-      setOver(hit ? "light" : "dark");
+      const pageTheme =
+        (document.documentElement.dataset.theme as "dark" | "light") ?? "light";
+      setOver(
+        hit ? ((hit.dataset.theme as "dark" | "light") ?? pageTheme) : pageTheme
+      );
     };
     // First measurement waits a frame so layout has settled after a route swap.
     const id = requestAnimationFrame(check);

@@ -17,22 +17,18 @@ export const metadata: Metadata = {
 
 const beliefs = [
   {
-    n: "01",
     t: "One team beats four freelancers",
     b: "When the designer, the developer and the person wiring your AI are the same team, nothing gets lost in the handover — and there is nobody to blame but us.",
   },
   {
-    n: "02",
     t: "Speed is a feature, not a setting",
     b: "A beautiful site that takes six seconds to load is a broken site. Performance is designed in from the first decision, not bolted on before launch.",
   },
   {
-    n: "03",
     t: "You should own everything",
     b: "Code, designs, domain, hosting — all in your name from day one. If you ever want to leave, you can, and that keeps us honest.",
   },
   {
-    n: "04",
     t: "Say the uncomfortable thing",
     b: "If your idea needs less than you asked for, or the timing is wrong, we will tell you. Losing a project is cheaper than building the wrong one.",
   },
@@ -42,7 +38,6 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        index="05"
         eyebrow="About"
         title="A studio built"
         accent="to do all of it."
@@ -79,11 +74,8 @@ export default function AboutPage() {
 
           <ul>
             {beliefs.map((x) => (
-              <Reveal as="li" key={x.n} mode="fade" className="border-t border-line py-8 last:border-b">
+              <Reveal as="li" key={x.t} mode="fade" className="border-t border-line py-8 last:border-b">
                 <div className="flex gap-5">
-                  <span className="font-mono text-[11px] leading-7 tracking-[0.2em] text-gold-400/80">
-                    {x.n}
-                  </span>
                   <div>
                     <h3 className="h-card text-xl text-ink sm:text-2xl">{x.t}</h3>
                     <p className="mt-3 max-w-xl text-[15.5px] leading-relaxed text-muted">

@@ -15,8 +15,13 @@ import { gsap } from "@/lib/gsap";
  *   data-cursor="invert"            difference blend over imagery
  *
  * The dot tracks the pointer exactly; the ring lags behind on a spring, which
- * is what makes it feel physical rather than glued on. Pointer-fine devices
- * only, and never for reduced-motion visitors.
+ * is what makes it feel physical rather than glued on.
+ *
+ * The system cursor is only hidden once the custom one has actually been
+ * positioned by a real pointer move. An earlier version hid it on mount, while
+ * the replacement was hidden by a CSS width breakpoint — so on any pointer
+ * device narrower than 768px, or after a window resize, there was no visible
+ * cursor at all. The two conditions must never be allowed to disagree.
  */
 export function Cursor() {
   const dot = useRef<HTMLDivElement>(null);
@@ -26,8 +31,6 @@ export function Cursor() {
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    document.documentElement.classList.add("has-custom-cursor");
 
     const xTo = gsap.quickTo(dot.current, "x", { duration: 0.14, ease: "power3" });
     const yTo = gsap.quickTo(dot.current, "y", { duration: 0.14, ease: "power3" });
@@ -76,6 +79,9 @@ export function Cursor() {
 
       if (!shown) {
         shown = true;
+        // Proven working: it has a position and is about to be painted. Only
+        // now is it safe to take the system cursor away.
+        document.documentElement.classList.add("has-custom-cursor");
         gsap.to([dot.current, ring.current], { autoAlpha: 1, duration: 0.3 });
       }
 
@@ -93,6 +99,8 @@ export function Cursor() {
 
     const onLeave = () => {
       shown = false;
+      // Give the system cursor back the moment ours is not on screen.
+      document.documentElement.classList.remove("has-custom-cursor");
       gsap.to([dot.current, ring.current], { autoAlpha: 0, duration: 0.25 });
     };
     const onDown = () => gsap.to(ring.current, { scale: "-=0.45", duration: 0.2 });
@@ -113,7 +121,7 @@ export function Cursor() {
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[150] hidden md:block">
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[150]">
       <div
         ref={dot}
         className="fixed left-0 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-300 opacity-0"

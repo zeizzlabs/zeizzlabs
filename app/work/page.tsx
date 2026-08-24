@@ -13,7 +13,6 @@ export default function WorkPage() {
   return (
     <>
       <PageHero
-        index="02"
         eyebrow="Selected work"
         title="Built to prove"
         accent="they work."

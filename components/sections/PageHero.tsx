@@ -3,21 +3,17 @@ import { CircuitField } from "@/components/visual/CircuitField";
 import { Aurora } from "@/components/visual/Aurora";
 
 /**
- * The opening block of every inner page.
- *
- * Deliberately asymmetric and left-aligned rather than the centred hero the
- * home page uses — inner pages are documents, and a left rail with an index
- * number reads as a chapter opening rather than a second front door.
+ * The opening block of every inner page. Deliberately asymmetric and
+ * left-aligned rather than the centred hero the home page uses, so an inner
+ * page reads as a chapter rather than a second front door.
  */
 export function PageHero({
-  index,
   eyebrow,
   title,
   accent,
   lede,
   meta,
 }: {
-  index?: string;
   eyebrow: string;
   title: string;
   accent?: string;
@@ -31,11 +27,6 @@ export function PageHero({
 
       <div className="relative mx-auto max-w-[100rem]">
         <div className="flex items-center gap-4">
-          {index && (
-            <span className="font-mono text-[11px] tracking-[0.2em] text-gold-400/80">
-              {index}
-            </span>
-          )}
           <span className="h-px w-10 bg-gradient-to-r from-gold-500/70 to-transparent" />
           <span className="eyebrow">{eyebrow}</span>
         </div>

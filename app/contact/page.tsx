@@ -12,7 +12,6 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        index="06"
         eyebrow="Start a project"
         title="Tell us the goal."
         accent="We'll build the thing."

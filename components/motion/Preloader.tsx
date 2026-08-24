@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
@@ -138,8 +139,21 @@ export function Preloader() {
 
       <div className="relative flex flex-col items-center gap-8 px-8">
         <div className="overflow-hidden">
-          <div data-intro-rise className="wordmark text-4xl sm:text-6xl">
-            ZeizzLabs
+          <div data-intro-rise className="relative">
+            {/* Kept subtle: on the light theme a strong blue bloom reads as a
+                grey box behind the mark rather than as light. */}
+            <div
+              aria-hidden
+              className="absolute -inset-6 -z-10 blur-2xl [background:radial-gradient(circle,rgba(30,123,255,0.18),transparent_70%)]"
+            />
+            <Image
+              src="/brand/zeizzlabs-mark.png"
+              alt=""
+              width={320}
+              height={320}
+              priority
+              className="h-24 w-24 sm:h-32 sm:w-32"
+            />
           </div>
         </div>
 

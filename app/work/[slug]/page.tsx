@@ -34,7 +34,6 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
   return (
     <>
       <PageHero
-        index={String(i + 1).padStart(2, "0")}
         eyebrow={project.category}
         title={project.name}
         lede={project.summary}

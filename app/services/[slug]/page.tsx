@@ -36,7 +36,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   return (
     <>
       <PageHero
-        index={String(i + 1).padStart(2, "0")}
         eyebrow="Service"
         title={service.title}
         lede={service.blurb}
@@ -80,11 +79,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             <Reveal>
               <h2 className="eyebrow mb-6">What you end up with</h2>
               <ul className="space-y-5">
-                {service.outcomes.map((o, n) => (
-                  <li key={o} className="flex gap-4">
-                    <span className="font-mono text-[11px] leading-6 tracking-[0.2em] text-gold-400/80">
-                      {String(n + 1).padStart(2, "0")}
-                    </span>
+                {service.outcomes.map((o) => (
+                  <li key={o} className="flex gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-400/80"
+                    />
                     <span className="text-[15.5px] leading-relaxed text-muted">{o}</span>
                   </li>
                 ))}
@@ -105,7 +105,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       </Section>
 
       {/* Related packages */}
-      <Section data-theme="light" className="border-y border-line" inner="max-w-[100rem]">
+      <Section data-theme="dark" className="border-y border-line" inner="max-w-[100rem]">
         <Reveal>
           <p className="eyebrow mb-6">Ways to start</p>
         </Reveal>

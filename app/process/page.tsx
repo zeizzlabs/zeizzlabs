@@ -13,7 +13,6 @@ export default function ProcessPage() {
   return (
     <>
       <PageHero
-        index="03"
         eyebrow="How we work"
         title="Six steps."
         accent="No mystery."

@@ -14,7 +14,6 @@ export default function PackagesPage() {
   return (
     <>
       <PageHero
-        index="04"
         eyebrow="Packages & pricing"
         title="Pick a starting point."
         accent="We shape the rest."

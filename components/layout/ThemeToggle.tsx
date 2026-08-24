@@ -11,20 +11,20 @@ import { cn } from "@/lib/cn";
  * doing it here would mean a flash of the wrong theme on every load, which is
  * worse than not offering the switch at all.
  *
- * Default is dark: the brand mark is a navy circuit board, so dark is the
- * brand's own ground. Light exists because it is what the reference studios do
- * and because some visitors simply prefer it.
+ * Default is light, matching the reference studios. Dark remains a first-class
+ * option — the brand mark is a navy circuit board, so it is the brand's own
+ * ground — and the choice is remembered per visitor.
  */
 export type Theme = "dark" | "light";
 
 export const THEME_KEY = "zeizz.theme";
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const current =
-      (document.documentElement.dataset.theme as Theme | undefined) ?? "dark";
+      (document.documentElement.dataset.theme as Theme | undefined) ?? "light";
     const id = requestAnimationFrame(() => setTheme(current));
     return () => cancelAnimationFrame(id);
   }, []);

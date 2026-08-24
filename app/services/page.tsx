@@ -15,7 +15,6 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        index="01"
         eyebrow="Services"
         title="Eight pillars."
         accent="One studio."

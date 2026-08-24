@@ -98,12 +98,12 @@ export function Logo({
       priority={priority}
       /* Served at 3x the rendered height so the bevel detail stays crisp on
          high-DPR screens; the source is far larger than any use here. */
-      sizes={`${Math.round(size * 0.46 * (WORDMARK_W / WORDMARK_H) * 3)}px`}
+      sizes={`${Math.round(size * 0.42 * (WORDMARK_W / WORDMARK_H) * 3)}px`}
       className="w-auto"
-      style={{ height: size * 0.46 }}
+      style={{ height: size * 0.42 }}
     />
   ) : (
-    <span className="wordmark leading-none" style={{ fontSize: size * 0.46 }}>
+    <span className="wordmark leading-none" style={{ fontSize: size * 0.42 }}>
       {site.brandName}
     </span>
   );

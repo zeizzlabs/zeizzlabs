@@ -175,7 +175,6 @@ export function MenuOverlay({
   }, [open]);
 
   const p = previews[hovered] ?? previews["/"];
-  const navIndex = Math.max(0, nav.findIndex((n) => n.href === hovered));
 
   return (
     <div
@@ -197,7 +196,6 @@ export function MenuOverlay({
           compact
           className="h-[min(19rem,38vh)] w-[min(15.5rem,24vw)] transition-opacity duration-500"
           data={{
-            index: String(navIndex + 1).padStart(2, "0"),
             title: p.title,
             icon: p.icon,
             tags: p.tags,
@@ -211,7 +209,7 @@ export function MenuOverlay({
         {/* Index */}
         <nav aria-label="Primary" className="relative">
           <ul>
-            {nav.map((item, i) => {
+            {nav.map((item) => {
               const active = pathname === item.href;
               return (
                 <li key={item.href} className="overflow-hidden">
@@ -227,9 +225,6 @@ export function MenuOverlay({
                       active ? "text-ink" : "text-steel-400 hover:text-ink"
                     )}
                   >
-                    <span className="w-8 shrink-0 font-mono text-[11px] tracking-[0.2em] text-gold-400/70 sm:w-12">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <span className="font-display text-[clamp(1.55rem,min(6.2vw,5.6vh),4.4rem)] font-bold leading-[1.03] tracking-[-0.04em]">
                       {item.label}
                     </span>
