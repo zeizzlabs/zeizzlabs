@@ -18,9 +18,6 @@ import { site, whatsappLink } from "@/content/site";
  * animates into a page the visitor is actually looking at, rather than playing
  * to an empty room behind the curtain.
  *
- * `revealImage` is the layer the cursor tears open — a second, unrelated image
- * sitting under the generated surface.
- *
  * On scroll the whole block is pinned briefly and pushed away with a scrubbed
  * timeline, so leaving the hero feels like a camera move rather than a scroll.
  */
@@ -88,10 +85,7 @@ export function Hero() {
       ref={root}
       className="noise relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-20 pt-32 text-center sm:px-6 sm:pt-36"
     >
-      <ShaderField
-        className="pointer-events-none absolute inset-0 h-full w-full"
-        revealImage="/media/hero-reveal.jpg"
-      />
+      <ShaderField className="pointer-events-none absolute inset-0 h-full w-full" />
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-25" />
 
       <div data-hero-content className="relative z-10 flex flex-col items-center">
