@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { projects } from "@/content/work";
 import { Icon } from "@/components/ui/Icon";
+import { TransitionLink } from "@/components/motion/PageTransition";
 import { cn } from "@/lib/cn";
 import type { WorkLabel } from "@/lib/types";
 
@@ -94,9 +95,12 @@ export function WorkRail() {
         )}
       >
         {projects.map((p, i) => (
-          <article
+          <TransitionLink
             key={p.slug}
-            className="group relative w-[86vw] shrink-0 overflow-hidden rounded-[1.5rem] border border-line max-lg:snap-center sm:w-[70vw] lg:w-[46rem]"
+            href={`/work/${p.slug}`}
+            data-cursor="text"
+            data-cursor-text="View"
+            className="group relative block w-[86vw] shrink-0 overflow-hidden rounded-[1.5rem] border border-line transition-colors duration-500 hover:border-white/25 max-lg:snap-center sm:w-[70vw] lg:w-[46rem]"
           >
             {/* Preview plate */}
             <div
@@ -152,7 +156,7 @@ export function WorkRail() {
                 ))}
               </ul>
             </div>
-          </article>
+          </TransitionLink>
         ))}
       </div>
 

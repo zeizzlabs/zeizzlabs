@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/components/motion/PageTransition";
 import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
 import { services } from "@/content/services";
 import { Logo } from "@/components/brand/Logo";
@@ -43,12 +43,12 @@ export function Footer() {
             <ul className="space-y-1">
               {services.slice(0, 6).map((s) => (
                 <li key={s.id}>
-                  <Link
-                    href="/#services"
+                  <TransitionLink
+                    href={`/services/${s.id}`}
                     className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink"
                   >
                     {s.short}
-                  </Link>
+                  </TransitionLink>
                 </li>
               ))}
             </ul>
@@ -59,19 +59,15 @@ export function Footer() {
             <ul className="space-y-1">
               {nav.map((n) => (
                 <li key={n.label}>
-                  <Link
+                  <TransitionLink
                     href={n.href}
                     className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink"
                   >
                     {n.label}
-                  </Link>
+                  </TransitionLink>
                 </li>
               ))}
-              <li>
-                <Link href="/#contact" className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink">
-                  Contact
-                </Link>
-              </li>
+
             </ul>
           </div>
 
