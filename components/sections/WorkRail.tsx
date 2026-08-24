@@ -43,7 +43,32 @@ export function WorkRail() {
 
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 1024px)", () => {
+      // Touch: the rail stays swipeable, but the whole strip also drifts as its
+      // section crosses the viewport, so the section is not motionless while
+      // the desktop one is doing the pinned horizontal travel. The drift is on
+      // a wrapper, so it cannot fight the native horizontal scroll inside.
+      mm.add("(pointer: coarse)", () => {
+        const drift = gsap.fromTo(
+          rail.current,
+          { xPercent: 6 },
+          {
+            xPercent: -6,
+            ease: "none",
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.8,
+            },
+          }
+        );
+        return () => {
+          drift.scrollTrigger?.kill();
+          drift.kill();
+        };
+      });
+
+      mm.add("(min-width: 1024px) and (pointer: fine)", () => {
         const track = rail.current!;
         const distance = () => track.scrollWidth - window.innerWidth + 96;
 

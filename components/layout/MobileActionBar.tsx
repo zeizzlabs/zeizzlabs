@@ -19,6 +19,47 @@ export function MobileActionBar() {
   const [show, setShow] = useState(false);
   // Read inside the scroll handler without re-subscribing it every render.
   const shown = useRef(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  /**
+   * Pin the bar to the VISUAL viewport.
+   *
+   * `position: fixed; bottom: 0` anchors to the layout viewport. On a phone the
+   * layout viewport stays the full height while the visual viewport shrinks and
+   * grows as the URL bar shows and hides — and browsers reposition fixed
+   * elements lazily during a scroll gesture. That mismatch is what makes a
+   * bottom bar float and lag behind the finger, and no amount of tuning the
+   * transition fixes it, because the element is anchored to the wrong box.
+   *
+   * visualViewport reports the real one. Offsetting by the difference keeps the
+   * bar welded to the bottom edge the user can actually see.
+   */
+  useEffect(() => {
+    const vv = window.visualViewport;
+    const el = ref.current;
+    if (!vv || !el) return;
+
+    let raf = 0;
+    const place = () => {
+      raf = 0;
+      const gap = window.innerHeight - vv.height - vv.offsetTop;
+      // Written straight to style: this must never be transitioned, or the bar
+      // animates every time the browser chrome moves.
+      el.style.bottom = `${Math.max(0, gap)}px`;
+    };
+    const onVV = () => {
+      if (!raf) raf = requestAnimationFrame(place);
+    };
+
+    place();
+    vv.addEventListener("resize", onVV);
+    vv.addEventListener("scroll", onVV);
+    return () => {
+      cancelAnimationFrame(raf);
+      vv.removeEventListener("resize", onVV);
+      vv.removeEventListener("scroll", onVV);
+    };
+  }, []);
 
   useEffect(() => {
     /**
@@ -75,6 +116,7 @@ export function MobileActionBar() {
 
   return (
     <div
+      ref={ref}
       aria-hidden={!show}
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:hidden",

@@ -60,7 +60,28 @@ export function Process() {
         />
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
-          {/* Sticky rail */}
+          {/* Sticky rail. Desktop gets the full stepper; touch gets a compact
+              progress bar pinned under the header, so the section reads as
+              moving there too instead of being a plain list. */}
+          <div className="lg:hidden">
+            <div className="sticky top-[calc(var(--nav-h)+0.5rem)] z-20 -mx-5 px-5 py-3">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-gold-400">
+                  {processSteps[active]?.title}
+                </span>
+                <span className="relative h-px flex-1 overflow-hidden bg-line-strong">
+                  <span
+                    className="absolute inset-y-0 left-0 [background:var(--gradient-brand)] transition-[width] duration-300"
+                    style={{ width: `${((active + 1) / processSteps.length) * 100}%` }}
+                  />
+                </span>
+                <span className="font-mono text-[10.5px] tabular-nums text-faint">
+                  {active + 1}/{processSteps.length}
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="hidden lg:block">
             <div className="sticky top-32">
               <div className="flex gap-6">
