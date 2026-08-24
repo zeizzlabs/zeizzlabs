@@ -23,7 +23,7 @@ export function PageHero({
   return (
     <header className="noise relative isolate overflow-hidden px-5 pb-16 pt-[calc(var(--nav-h)+5rem)] sm:px-8 sm:pb-24 sm:pt-[calc(var(--nav-h)+7rem)]">
       <Aurora intensity={0.55} />
-      <CircuitField className="opacity-80" />
+      <CircuitField className="opacity-30" />
 
       <div className="relative mx-auto max-w-[100rem]">
         <div className="flex items-center gap-4">

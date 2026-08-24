@@ -1,219 +1,113 @@
 import { cn } from "@/lib/cn";
 
 /**
- * The signature backdrop: a circuit board with charge running through it.
+ * The signature backdrop: orthogonal circuit traces with terminal pads, drawn
+ * to echo the ZeizzLabs brand board. Pure SVG so it stays crisp at any size and
+ * costs nothing to animate (dash offset + opacity only).
  *
- * Four rules shape it:
- *
- *  1. NOT SYMMETRICAL. Every trace is generated independently across the full
- *     width. An earlier version mirrored one half onto the other, which reads
- *     as wallpaper the moment the fold is noticed.
- *
- *  2. NO TWO TRACES CROSS. Each is confined to its own horizontal lane and
- *     never leaves it, so intersections are impossible by construction rather
- *     than by luck. Within its lane a trace still wanders, so the lanes are
- *     never visible as rows.
- *
- *  3. ROUTED AT 45°, NOT IN RIGHT ANGLES. Real boards turn on diagonals, and
- *     it is the difference between a graph and a circuit. Horizontal runs are
- *     joined by exact 45° chamfers with rounded joins.
- *
- *  4. NO TWO TRACES LOOK OR MOVE ALIKE. Weight, opacity, glow, colour and
- *     depth vary per trace; each carries one to three separate charges at
- *     different lengths and speeds, offset so they never line up. That
- *     layering of slow, unsynchronised motion is what makes it hold the eye —
- *     a single pulse per line just looks like a loading bar.
- *
- * Generated at module load from a fixed seed, so server and client produce
- * identical markup and the pattern is stable across reloads.
+ * Traces frame the left and right edges in a 1200x760 viewBox, the way the
+ * brand banner does. The two sides are authored separately rather than one
+ * being a reflection of the other — a mirrored field reads as wallpaper the
+ * moment the fold down the middle is noticed.
  */
 
-const W = 1440;
-const H = 640;
-const LANES = 24;
+type Trace = { d: string; tone: "blue" | "gold" | "steel"; dur: number; r?: number };
 
-/** mulberry32 — small, fast, deterministic. */
-function rng(seed: number) {
-  return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-type Pulse = { dash: number; dur: number; delay: number; width: number };
-
-type Trace = {
-  d: string;
-  stroke: string;
-  width: number;
-  opacity: number;
-  /** 0 means a hard, sharp line. */
-  glow: number;
-  pulses: Pulse[];
-  pads: { x: number; y: number; r: number; dur: number; delay: number }[];
-};
-
-const TONES = [
-  "var(--color-blue-500)",
-  "var(--color-blue-400)",
-  "var(--color-blue-300)",
-  "var(--color-gold-500)",
-  "var(--color-gold-400)",
-  "var(--color-steel-500)",
+const LEFT: Trace[] = [
+  { d: "M-10 70 H150 L210 130 H330", tone: "blue", dur: 5.5, r: 7 },
+  { d: "M-10 140 H90 L150 200 H250", tone: "gold", dur: 7, r: 6 },
+  { d: "M-10 220 H180 L230 270 H300", tone: "blue", dur: 6.2, r: 5 },
+  { d: "M-10 300 H120 L170 350 H270", tone: "gold", dur: 8, r: 7 },
+  { d: "M-10 400 H70 L130 460 H220", tone: "steel", dur: 9, r: 5 },
+  { d: "M-10 500 H200 L250 550 H320", tone: "blue", dur: 6.8, r: 6 },
+  { d: "M-10 600 H110 L160 650 H240", tone: "gold", dur: 7.6, r: 5 },
+  { d: "M-10 700 H260 L300 660 H360", tone: "blue", dur: 8.4, r: 6 },
 ];
 
-function build(): Trace[] {
-  const r = rng(20260826);
-  const traces: Trace[] = [];
-  const laneH = H / LANES;
+/** Different heights, lengths, tones and speeds — not a reflection of LEFT. */
+const RIGHT: Trace[] = [
+  { d: "M1210 40 H1080 L1030 100 H930", tone: "gold", dur: 6.4, r: 5 },
+  { d: "M1210 175 H1030 L980 235 H900", tone: "blue", dur: 9.2, r: 7 },
+  { d: "M1210 260 H1120 L1075 305 H985", tone: "steel", dur: 7.1, r: 4 },
+  { d: "M1210 355 H1010 L965 400 H880", tone: "blue", dur: 5.9, r: 6 },
+  { d: "M1210 465 H1105 L1050 520 H950", tone: "gold", dur: 8.8, r: 5 },
+  { d: "M1210 560 H1040 L995 605 H915", tone: "blue", dur: 6.6, r: 7 },
+  { d: "M1210 690 H1140 L1090 640 H1000", tone: "gold", dur: 7.9, r: 5 },
+];
 
-  for (let lane = 0; lane < LANES; lane++) {
-    const count = r() < 0.5 ? 2 : 1;
+const tones = {
+  blue: "var(--color-blue-500)",
+  gold: "var(--color-gold-500)",
+  steel: "var(--color-steel-500)",
+} as const;
 
-    for (let n = 0; n < count; n++) {
-      const top = lane * laneH;
-      const bandTop = top + laneH * (count === 2 ? (n === 0 ? 0.1 : 0.55) : 0.16);
-      const bandH = laneH * (count === 2 ? 0.32 : 0.62);
-
-      const ltr = r() < 0.5;
-      const step = ltr ? 1 : -1;
-      let x = ltr ? -60 : W + 60;
-      let y = bandTop + r() * bandH;
-
-      const d: string[] = [`M${x.toFixed(1)} ${y.toFixed(1)}`];
-      const turns = 2 + Math.floor(r() * 3);
-
-      for (let t = 0; t < turns; t++) {
-        // Straight run.
-        x += step * (90 + r() * 260);
-        d.push(`L${x.toFixed(1)} ${y.toFixed(1)}`);
-
-        // 45° chamfer: equal travel in x and y keeps the angle exact.
-        const ny = bandTop + r() * bandH;
-        const dy = ny - y;
-        x += step * Math.abs(dy);
-        y = ny;
-        d.push(`L${x.toFixed(1)} ${y.toFixed(1)}`);
-      }
-      x += step * (140 + r() * 320);
-      d.push(`L${x.toFixed(1)} ${y.toFixed(1)}`);
-
-      // Depth: a third of the traces sit far back — faint, soft, slow.
-      const far = r() < 0.34;
-      const bright = r();
-
-      const pulseCount = far ? 1 : 1 + Math.floor(r() * 3);
-      const pulses: Pulse[] = [];
-      for (let k = 0; k < pulseCount; k++) {
-        pulses.push({
-          dash: 10 + r() * 78,
-          dur: (far ? 16 : 7) + r() * (far ? 12 : 13),
-          delay: r() * 22,
-          width: 0.6 + r() * 1.0,
-        });
-      }
-
-      const pads: Trace["pads"] = [];
-      if (r() > 0.4) {
-        pads.push({ x, y, r: 2.5 + r() * 5, dur: 3 + r() * 5, delay: r() * 6 });
-      }
-
-      traces.push({
-        d: d.join(" "),
-        stroke: TONES[Math.floor(r() * TONES.length)],
-        width: far ? 0.35 + r() * 0.35 : 0.45 + r() * 0.8,
-        opacity: far ? 0.16 + bright * 0.22 : 0.32 + bright * 0.46,
-        glow: far ? 0 : bright > 0.5 ? 1.5 + r() * 4 : 0,
-        pulses,
-        pads,
-      });
-    }
-  }
-  return traces;
+function Side({ traces, side }: { traces: Trace[]; side: "l" | "r" }) {
+  return (
+    <g>
+      {traces.map((t, i) => {
+        const stroke = tones[t.tone];
+        // End pad sits at the last coordinate pair in the path string.
+        const nums = t.d.match(/-?\d+(\.\d+)?/g)!.map(Number);
+        const ex = nums[nums.length - 2];
+        const ey = nums[nums.length - 1];
+        return (
+          <g key={`${side}-${i}`}>
+            <path
+              d={t.d}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={1.4}
+              strokeOpacity={0.5}
+              strokeLinecap="square"
+            />
+            {/* Travelling pulse along the same path. */}
+            <path
+              d={t.d}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeDasharray="26 460"
+              style={{
+                animation: `dash-flow ${t.dur}s linear infinite`,
+                animationDelay: `${i * 0.55}s`,
+                filter: "drop-shadow(0 0 5px currentColor)",
+                color: stroke,
+              }}
+            />
+            <circle
+              cx={ex}
+              cy={ey}
+              r={t.r ?? 6}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={1.6}
+              strokeOpacity={0.75}
+            />
+            <circle cx={ex} cy={ey} r={1.8} fill={stroke} fillOpacity={0.9} />
+          </g>
+        );
+      })}
+    </g>
+  );
 }
-
-const TRACES = build();
 
 export function CircuitField({ className }: { className?: string }) {
   return (
     <svg
-      viewBox={`0 0 ${W} ${H}`}
+      viewBox="0 0 1200 760"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden
       className={cn("pointer-events-none absolute inset-0 h-full w-full", className)}
       style={{
         maskImage:
-          "radial-gradient(ellipse 38% 44% at 50% 46%, transparent 4%, #000 70%)",
+          "radial-gradient(ellipse 62% 62% at 50% 45%, transparent 8%, #000 72%)",
         WebkitMaskImage:
-          "radial-gradient(ellipse 38% 44% at 50% 46%, transparent 4%, #000 70%)",
+          "radial-gradient(ellipse 62% 62% at 50% 45%, transparent 8%, #000 72%)",
       }}
     >
-      {TRACES.map((t, i) => (
-        <g key={i} strokeLinejoin="round" strokeLinecap="round">
-          <path
-            d={t.d}
-            fill="none"
-            stroke={t.stroke}
-            strokeWidth={t.width}
-            strokeOpacity={t.opacity}
-            style={
-              t.glow ? { filter: `drop-shadow(0 0 ${t.glow}px ${t.stroke})` } : undefined
-            }
-          />
-
-          {/* Charges. Several per trace at different lengths and speeds, with
-              negative delays so they are already mid-flight on first paint. */}
-          {t.pulses.map((p, k) => (
-            <path
-              key={k}
-              d={t.d}
-              fill="none"
-              stroke={t.stroke}
-              strokeWidth={p.width}
-              strokeDasharray={`${p.dash} 2200`}
-              style={{
-                animation: `dash-flow ${p.dur}s linear infinite`,
-                animationDelay: `-${p.delay}s`,
-                // Charges are deliberately brighter and softer than the trace
-                // they run along — the movement is the subject, the board is
-                // the setting.
-                filter: `drop-shadow(0 0 ${4 + t.glow * 1.4}px ${t.stroke})`,
-                opacity: 0.7 + t.opacity * 0.3,
-              }}
-            />
-          ))}
-
-          {t.pads.map((pad, k) => (
-            <g
-              key={k}
-              style={{
-                animation: `node-breathe ${pad.dur}s ease-in-out infinite`,
-                animationDelay: `-${pad.delay}s`,
-              }}
-            >
-              <circle
-                cx={pad.x}
-                cy={pad.y}
-                r={pad.r}
-                fill="none"
-                stroke={t.stroke}
-                strokeWidth={Math.max(0.5, t.width * 0.85)}
-                strokeOpacity={t.opacity + 0.2}
-              />
-              <circle
-                cx={pad.x}
-                cy={pad.y}
-                r={Math.max(0.8, pad.r * 0.3)}
-                fill={t.stroke}
-                fillOpacity={t.opacity + 0.3}
-              />
-            </g>
-          ))}
-        </g>
-      ))}
+      <Side traces={LEFT} side="l" />
+      <Side traces={RIGHT} side="r" />
     </svg>
   );
 }
