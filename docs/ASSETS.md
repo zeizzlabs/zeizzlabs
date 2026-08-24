@@ -114,31 +114,77 @@ prompts only until the real thing exists.
 
 ---
 
-## 4. Video — optional, high impact
+## 4. Video — optional
 
-`Frame` accepts a clip. The still becomes the poster, so the frame is never
-empty while it buffers, and if autoplay is blocked the image simply stays.
+Any image on the site can have a short looping video play on top of it. This is
+optional. Skip the whole section if you only want still images.
 
-Add a clip next to any image with the same name, then pass it:
+### How to add one
 
-```tsx
-<Frame src="/media/work-vox.jpg" video="/media/work-vox.mp4" />
+**Step 1.** Pick an image you want to make move. Say this one:
+
+```
+public/media/work-voice-reception.jpg
 ```
 
-Specs: **MP4 (H.264) and WebM**, 2400 × 1000, **4–8 seconds, seamless loop**,
-**no audio**, under **3 MB**. Muted, looping and inline are already set; playback
-is paused whenever the frame is off screen and disabled entirely for visitors
-who ask for reduced motion.
+**Step 2.** Make a video for it, using the specs below.
 
-Prompts:
+**Step 3.** Name the video **exactly the same as the image**, but ending in
+`.mp4` instead of `.jpg`:
 
-- **Hero / studio loop** — Slow drift across a dark circuit-board surface,
-  pulses of blue and gold light travelling along traces, shallow depth of field,
-  seamless loop, no cuts.
-- **Per project** — A screen recording of the real product beats anything
-  generated. Crop to the interesting region, no cursor, no chrome.
+```
+work-voice-reception.jpg   <- the image that is already there
+work-voice-reception.mp4   <- your new video, same name
+```
 
----
+**Step 4.** Put the `.mp4` in the same folder, `public/media`.
+
+**Step 5.** Restart the site:
+
+```bash
+npm run dev
+```
+
+That is all. The video is found automatically because of its name. You do not
+edit any code.
+
+### What happens on the page
+
+- The image shows first, immediately. The video fades in once it has loaded.
+- If the video is slow or fails, the image just stays. Nothing breaks.
+- The video is silent and repeats forever.
+- It stops playing when you scroll past it, and does not play at all for
+  visitors who have asked their device to reduce animation.
+
+### Specs to give whoever makes the video
+
+| | |
+| --- | --- |
+| Format | MP4 |
+| Size | 2400 x 1000 pixels |
+| Length | 4 to 8 seconds |
+| Sound | None. Remove the audio track entirely |
+| File size | Under 3 MB |
+| Looping | The last frame should match the first, so the repeat is invisible |
+
+That last one matters most. A video that ends somewhere different from where it
+started will visibly jump every few seconds.
+
+### What to make a video of
+
+For the four project images, a **screen recording of the actual product** is far
+better than anything generated. Crop it to the interesting part, and do not
+include the mouse cursor or browser chrome.
+
+If you want a generated one instead, use this prompt:
+
+> Slow drift across a dark circuit-board surface, pulses of blue and gold light
+> travelling along the traces, shallow depth of field, seamless loop, no cuts,
+> no text.
+
+### To remove a video later
+
+Delete the `.mp4` and restart. The image takes over again on its own.
 
 ## 5. Brand assets — status
 

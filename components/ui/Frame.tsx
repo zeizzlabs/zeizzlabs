@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { MEDIA_VIDEOS } from "@/lib/media-manifest";
 import { cn } from "@/lib/cn";
 
 /**
@@ -34,9 +35,10 @@ export function Frame({
   /** Still image. Also used as the video poster when `video` is set. */
   src: string;
   /**
-   * Optional looping clip in /public/media. When present it plays over the
-   * still, which is how the reference studios carry most of their motion —
-   * Ramotion runs 22 of these on its home page alone.
+   * Optional looping clip. Normally you do not set this: a video sitting next
+   * to the image with the same name is picked up automatically, so adding
+   * motion to a frame is purely a matter of dropping a file in public/media.
+   * Set it only to point at a differently-named clip.
    */
   video?: string;
   alt?: string;
@@ -51,6 +53,12 @@ export function Frame({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // work-vox.jpg -> work-vox.mp4, but only if that file was actually there at
+  // build time. Guessing and letting it 404 would cost a failed request on
+  // every page load.
+  const auto = src.replace(/\.(jpe?g|png|webp|avif)$/i, ".mp4");
+  const clip = video ?? (MEDIA_VIDEOS.has(auto) ? auto : undefined);
 
   // Only play while the frame is on screen, and never for reduced motion — an
   // autoplaying loop that is scrolled past is pure battery and bandwidth.
@@ -67,7 +75,7 @@ export function Frame({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [video]);
+  }, [clip]);
 
   useGSAP(
     () => {
@@ -133,13 +141,13 @@ export function Frame({
           priority={priority}
           className={cn("object-cover", imageClassName)}
         />
-        {video && (
+        {clip && (
           /* The still stays underneath as the poster, so the frame is never
              empty while the clip buffers — and if the clip is blocked (data
              saver, autoplay policy) the image simply remains. */
           <video
             ref={videoRef}
-            src={video}
+            src={clip}
             poster={src}
             muted
             loop
