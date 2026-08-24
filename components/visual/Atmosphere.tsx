@@ -8,14 +8,16 @@ import { cn } from "@/lib/cn";
  * which is why this runs at full frame rate on a phone where a per-pixel fbm
  * shader does not. There is no JavaScript involved at all.
  *
- * Rendered only below `lg`; desktop keeps the WebGL field.
+ * Shown only where the shader is not: any device with a fine pointer hides it
+ * in CSS (see .atmosphere in globals.css), so the rule matches the shader's own
+ * pointer-based gate rather than a width breakpoint.
  */
 export function Atmosphere({ className }: { className?: string }) {
   return (
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 overflow-hidden lg:hidden",
+        "atmosphere pointer-events-none absolute inset-0 overflow-hidden",
         className
       )}
     >

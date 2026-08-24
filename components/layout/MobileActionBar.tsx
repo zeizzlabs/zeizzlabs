@@ -32,9 +32,9 @@ export function MobileActionBar() {
 
     const update = () => {
       raf = 0;
-      // Far enough that it does not cover the opening screen, close enough
-      // that a single flick brings it in.
-      const past = window.scrollY > window.innerHeight * 0.3;
+      // The same threshold the header uses, so the two arrive together rather
+      // than the bar trailing most of a viewport behind.
+      const past = window.scrollY > 24;
 
       // Hide it over the contact section: the form is right there, and a
       // floating bar on top of it is just in the way.

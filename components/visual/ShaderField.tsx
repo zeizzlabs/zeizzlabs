@@ -168,15 +168,11 @@ export function ShaderField({ className }: { className?: string }) {
     const canvas = ref.current;
     if (!canvas) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    // Phones get the CSS gradient underneath instead. A full-screen fbm shader
-    // is the single most expensive thing on the page and a mobile GPU spends
-    // real battery on it for a background nobody is looking at.
-    if (
-      window.matchMedia?.("(pointer: coarse)").matches ||
-      window.innerWidth < 1024
-    ) {
-      return;
-    }
+    // Touch devices get the CSS atmosphere instead: a full-screen fbm shader is
+    // the most expensive thing on the page and a mobile GPU cannot afford it.
+    // Gated on pointer type, NOT on width — a narrow desktop window still has a
+    // mouse and a real GPU, and resizing a browser should not strip the site.
+    if (window.matchMedia?.("(pointer: coarse)").matches) return;
 
     const gl = canvas.getContext("webgl2", {
       antialias: false,

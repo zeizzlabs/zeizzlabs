@@ -10,7 +10,7 @@ export function Ticker() {
   return (
     <section
       aria-label="What we build"
-      className="relative overflow-hidden border-y border-line bg-panel py-8"
+      className="relative overflow-hidden border-y border-line bg-panel py-6"
     >
       <Marquee items={marqueeWords} speed={70} />
       <div className="h-4" />

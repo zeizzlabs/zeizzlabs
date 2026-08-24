@@ -1,6 +1,7 @@
 import { Reveal } from "@/components/motion/Reveal";
 import { CircuitField } from "@/components/visual/CircuitField";
 import { Aurora } from "@/components/visual/Aurora";
+import { Atmosphere } from "@/components/visual/Atmosphere";
 
 /**
  * The opening block of every inner page. Deliberately asymmetric and
@@ -21,8 +22,11 @@ export function PageHero({
   meta?: { label: string; value: string }[];
 }) {
   return (
-    <header className="noise relative isolate overflow-hidden px-5 pb-16 pt-[calc(var(--nav-h)+5rem)] sm:px-8 sm:pb-24 sm:pt-[calc(var(--nav-h)+7rem)]">
+    <header className="noise relative isolate overflow-hidden px-5 pb-14 pt-[calc(var(--nav-h)+4rem)] sm:px-8 sm:pb-20 sm:pt-[calc(var(--nav-h)+6rem)]">
       <Aurora intensity={0.55} />
+      {/* Touch devices get the moving field here too, not just on the home
+          hero — an inner page header was otherwise completely static. */}
+      <Atmosphere />
       <CircuitField className="opacity-30" />
 
       <div className="relative mx-auto max-w-[100rem]">

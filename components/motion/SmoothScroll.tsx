@@ -20,9 +20,9 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
  * touch scrolling is already smooth; there is nothing to improve and a great
  * deal to break.
  *
- * Below the `lg` breakpoint Lenis is not started at all: on a phone it buys a
- * little easing on wheel events that do not exist, in exchange for running an
- * interpolation loop on every frame.
+ * On touch devices Lenis is not started at all: it buys a little easing on
+ * wheel events that do not exist there, in exchange for an interpolation loop
+ * on every frame.
  */
 export function SmoothScroll() {
   useEffect(() => {
@@ -36,11 +36,9 @@ export function SmoothScroll() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
 
-    // Pointer-coarse or narrow devices keep native scrolling.
-    const isTouch =
-      window.matchMedia("(pointer: coarse)").matches ||
-      window.innerWidth < 1024;
-    if (isTouch) {
+    // Touch devices keep native scrolling. Width is irrelevant here: what
+    // matters is whether a finger or a wheel is driving the page.
+    if (window.matchMedia("(pointer: coarse)").matches) {
       // ScrollTrigger still needs to run; it just listens to native scroll.
       ScrollTrigger.refresh();
       return;

@@ -783,7 +783,14 @@ header[data-over="light"] .wordmark {
    circuit traces. Both are cheap on a desktop GPU and expensive on a phone.
    Coarse-pointer devices get a solid surface and no shadows instead.
 ================================================================ */
-@media (pointer: coarse), (max-width: 1023px) {
+/* The CSS hero atmosphere stands in for the shader, so it hides wherever the
+   shader runs — same pointer test, not a width one. */
+@media (pointer: fine) {
+  .atmosphere { display: none; }
+}
+
+/* Pointer type only — a narrow desktop window is not a phone. */
+@media (pointer: coarse) {
   .glass {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

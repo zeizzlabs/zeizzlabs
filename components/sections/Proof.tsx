@@ -12,7 +12,7 @@ import { stats } from "@/content/offerings";
  */
 export function Proof() {
   return (
-    <section className="relative px-5 py-20 sm:px-8 sm:py-24">
+    <section className="relative px-5 py-12 sm:px-8 sm:py-14">
       <div className="mx-auto max-w-[100rem]">
         <Reveal>
           <p className="eyebrow mb-10">By the numbers</p>
