@@ -8,6 +8,7 @@ import { nav, site, whatsappLink, telLink, mailLink } from "@/content/site";
 import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
+import { PreviewCard } from "@/components/ui/PreviewCard";
 import { cn } from "@/lib/cn";
 
 /**
@@ -24,15 +25,63 @@ import { cn } from "@/lib/cn";
  *   footer — direct contact + the eight pillars as quick links
  */
 
-/** Per-route preview art, generated from brand tokens — no image assets. */
-const previews: Record<string, { a: string; b: string; label: string }> = {
-  "/": { a: "#1e7bff", b: "#dcb877", label: "Everything digital" },
-  "/services": { a: "#0f5bd6", b: "#4da3ff", label: "Eight pillars" },
-  "/work": { a: "#4da3ff", b: "#ecd3a0", label: "Selected work" },
-  "/process": { a: "#c9a15c", b: "#1e7bff", label: "Six steps" },
-  "/packages": { a: "#dcb877", b: "#0f5bd6", label: "Transparent pricing" },
-  "/about": { a: "#a4b3c9", b: "#1e7bff", label: "The studio" },
-  "/contact": { a: "#23c98b", b: "#dcb877", label: "Say hello" },
+/**
+ * Per-route preview content. Fully generated from brand tokens, so there are no
+ * image assets to go missing — add `image` to any entry to swap in real art.
+ */
+const previews: Record<
+  string,
+  { from: string; to: string; title: string; icon: string; tags: string[] }
+> = {
+  "/": {
+    from: "#0f5bd6",
+    to: "#dcb877",
+    title: "Everything digital",
+    icon: "Sparkles",
+    tags: ["Studio", "End to end"],
+  },
+  "/services": {
+    from: "#0b429e",
+    to: "#4da3ff",
+    title: "Eight pillars, one studio",
+    icon: "Boxes",
+    tags: ["Web", "AI", "Design"],
+  },
+  "/work": {
+    from: "#1e7bff",
+    to: "#ecd3a0",
+    title: "Selected work",
+    icon: "Layers",
+    tags: ["Prototypes", "Live builds"],
+  },
+  "/process": {
+    from: "#a37f42",
+    to: "#4da3ff",
+    title: "Six steps, no mystery",
+    icon: "Workflow",
+    tags: ["Fixed quote", "2–4 weeks"],
+  },
+  "/packages": {
+    from: "#c9a15c",
+    to: "#0f5bd6",
+    title: "Transparent pricing",
+    icon: "BadgeCheck",
+    tags: ["From ₹9,999", "Fixed scope"],
+  },
+  "/about": {
+    from: "#5b6880",
+    to: "#1e7bff",
+    title: "Who you'd work with",
+    icon: "Users",
+    tags: ["One team", "You own it"],
+  },
+  "/contact": {
+    from: "#23c98b",
+    to: "#dcb877",
+    title: "Start a project",
+    icon: "MessageCircle",
+    tags: ["Free call", "1-day reply"],
+  },
 };
 
 export function MenuOverlay({
@@ -126,6 +175,7 @@ export function MenuOverlay({
   }, [open]);
 
   const p = previews[hovered] ?? previews["/"];
+  const navIndex = Math.max(0, nav.findIndex((n) => n.href === hovered));
 
   return (
     <div
@@ -143,16 +193,18 @@ export function MenuOverlay({
         aria-hidden
         className="pointer-events-none absolute left-[62%] top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
       >
-        <div
-          className="relative h-[min(22rem,42vh)] w-[min(17rem,26vw)] overflow-hidden rounded-[1.5rem] opacity-70 transition-[background] duration-700"
-          style={{ background: `linear-gradient(150deg, ${p.a}, ${p.b})` }}
-        >
-          <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_30%_20%,#fff6,transparent_60%)]" />
-          <div className="grid-lines absolute inset-0 opacity-40" />
-          <span className="absolute bottom-6 left-6 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-950/80">
-            {p.label}
-          </span>
-        </div>
+        <PreviewCard
+          compact
+          className="h-[min(19rem,38vh)] w-[min(15.5rem,24vw)] transition-opacity duration-500"
+          data={{
+            index: String(navIndex + 1).padStart(2, "0"),
+            title: p.title,
+            icon: p.icon,
+            tags: p.tags,
+            from: p.from,
+            to: p.to,
+          }}
+        />
       </div>
 
       <div className="relative flex h-full flex-col justify-between overflow-y-auto px-5 pb-7 pt-[calc(var(--nav-h)+2rem)] sm:px-8">

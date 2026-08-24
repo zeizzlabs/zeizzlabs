@@ -6,6 +6,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
+import { PreviewCard } from "@/components/ui/PreviewCard";
 import { cn } from "@/lib/cn";
 
 /**
@@ -27,7 +28,7 @@ import { cn } from "@/lib/cn";
 const accents: Record<string, [string, string]> = {
   blue: ["#0f5bd6", "#4da3ff"],
   gold: ["#c9a15c", "#ecd3a0"],
-  steel: ["#5b6880", "#a4b3c9"],
+  steel: ["#3d4759", "#7d8da6"],
 };
 
 export function ServiceIndex() {
@@ -80,19 +81,19 @@ export function ServiceIndex() {
           current ? "opacity-100" : "opacity-0"
         )}
       >
-        <div
-          className="relative h-56 w-72 overflow-hidden rounded-2xl transition-[background] duration-500"
-          style={{ background: `linear-gradient(140deg, ${a}, ${b})` }}
-        >
-          <div className="grid-lines absolute inset-0 opacity-40" />
-          <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_28%_18%,#fff7,transparent_62%)]" />
-          {current && (
-            <span className="absolute bottom-5 left-5 flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.2em] text-ink-950/85">
-              <Icon name={current.icon} className="h-4 w-4" strokeWidth={2} />
-              {current.short}
-            </span>
-          )}
-        </div>
+        {current && (
+          <PreviewCard
+            className="h-60 w-[19rem]"
+            data={{
+              index: String((active ?? 0) + 1).padStart(2, "0"),
+              title: current.short,
+              icon: current.icon,
+              tags: current.deliverables,
+              from: a,
+              to: b,
+            }}
+          />
+        )}
       </div>
 
       <ul onMouseLeave={() => setActive(null)}>
