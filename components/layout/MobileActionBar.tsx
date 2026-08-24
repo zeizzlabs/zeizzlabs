@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { site, whatsappLink, telLink } from "@/content/site";
@@ -17,6 +17,8 @@ import { Icon } from "@/components/ui/Icon";
  */
 export function MobileActionBar() {
   const [show, setShow] = useState(false);
+  // Read inside the scroll handler without re-subscribing it every render.
+  const shown = useRef(false);
 
   useEffect(() => {
     /**
@@ -32,9 +34,11 @@ export function MobileActionBar() {
 
     const update = () => {
       raf = 0;
-      // The same threshold the header uses, so the two arrive together rather
-      // than the bar trailing most of a viewport behind.
-      const past = window.scrollY > 24;
+      // Matches the header's trigger so the two arrive together, but with a
+      // dead zone: a single threshold flaps on and off when the scroll position
+      // sits near it, which is what made the bar look unstable.
+      const y = window.scrollY;
+      const past = shown.current ? y > 8 : y > 24;
 
       // Hide it over the contact section: the form is right there, and a
       // floating bar on top of it is just in the way.
@@ -45,7 +49,9 @@ export function MobileActionBar() {
         overContact = r.top < window.innerHeight * 0.9 && r.bottom > 0;
       }
 
-      setShow(past && !overContact);
+      const next = past && !overContact;
+      shown.current = next;
+      setShow(next);
     };
 
     const onScroll = () => {
@@ -71,7 +77,16 @@ export function MobileActionBar() {
     <div
       aria-hidden={!show}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-300 ease-[var(--ease-out-quint)] will-change-transform sm:hidden",
+        "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:hidden",
+        // Only the slide and the fade animate. `transition-all` also animated
+        // the repositioning the mobile URL bar causes, which made it drift.
+        // Note `translate`, not `transform`: Tailwind v4's translate-y-*
+        // utilities set the standalone `translate` property, so naming
+        // `transform` here would leave the slide un-animated.
+        "transition-[translate,opacity] duration-300 ease-[var(--ease-out-quint)]",
+        // Promote to its own layer without writing `transform` here, which
+        // would fight the translate-y utilities below.
+        "[will-change:translate,opacity]",
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
       )}
     >
