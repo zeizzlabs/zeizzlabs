@@ -186,6 +186,44 @@ If you want a generated one instead, use this prompt:
 
 Delete the `.mp4` and restart. The image takes over again on its own.
 
+## Importing artwork you have generated
+
+Image generators hand you PNGs. PNG is the wrong format for this kind of
+artwork — it stores every pixel losslessly, so one frame is about 2 MB where the
+same picture as a JPEG is nearer 200 KB and looks identical. Fourteen of them is
+the difference between a 27 MB page and a 3 MB one.
+
+**Name each file after the row it replaces in the tables above**, drop them all
+in one folder, then run:
+
+```bash
+python3 scripts/import-media.py
+```
+
+It reads `~/Downloads` by default, converts every name it recognises, and leaves
+your originals untouched. Pass a folder to read from somewhere else:
+
+```bash
+python3 scripts/import-media.py ~/Desktop/artwork
+```
+
+Files whose names it does not recognise are listed and skipped rather than
+guessed at, and it tells you which images are still using placeholders.
+
+### After importing, restart properly
+
+```bash
+rm -rf .next/cache
+npm run dev
+```
+
+Next.js caches resized copies of every image. Replacing a file does not clear
+that cache, so without this step you will keep seeing the old picture and think
+the import failed. **Your browser caches them too** — use a hard refresh
+(**Cmd-Shift-R**) the first time.
+
+---
+
 ## 5. Brand assets — status
 
 | Path | Size | Status |
