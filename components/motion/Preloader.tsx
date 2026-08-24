@@ -35,6 +35,9 @@ export function Preloader() {
     }
 
     document.documentElement.classList.add("is-loading");
+    const lenis = (window as unknown as { lenis?: { stop: () => void; start: () => void } })
+      .lenis;
+    lenis?.stop();
 
     // Only count images that are actually being fetched now. Next.js lazy-loads
     // anything below the fold, and because this overlay blocks scrolling those
@@ -87,6 +90,7 @@ export function Preloader() {
         const tl = gsap.timeline({
           onComplete: () => {
             document.documentElement.classList.remove("is-loading");
+            lenis?.start();
             sessionStorage.setItem(SESSION_KEY, "1");
             setMounted(false);
             window.dispatchEvent(new CustomEvent("zeizz:intro-done"));

@@ -39,14 +39,19 @@ export function ServiceIndex() {
     () => {
       if (prefersReducedMotion()) return;
 
-      // Rows rise in sequence as the block enters.
-      gsap.from("[data-svc-row]", {
-        yPercent: 100,
-        autoAlpha: 0,
-        duration: 1,
-        stagger: 0.07,
-        scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
-      });
+      // Rows rise in sequence as the block enters. fromTo, not from — see the
+      // note in components/motion/Reveal.tsx.
+      gsap.fromTo(
+        "[data-svc-row]",
+        { yPercent: 100, autoAlpha: 0 },
+        {
+          yPercent: 0,
+          autoAlpha: 1,
+          duration: 1,
+          stagger: 0.07,
+          scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
+        }
+      );
 
       if (!window.matchMedia("(pointer: fine)").matches) return;
       const xTo = gsap.quickTo(preview.current, "x", { duration: 0.85, ease: "power3" });

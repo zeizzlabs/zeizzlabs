@@ -39,7 +39,7 @@ export function Contact() {
 
           <div className="mt-9 space-y-2">
             {channels.map((c, i) => (
-              <Reveal key={c.label} delay={i * 80}>
+              <Reveal key={c.label} delay={i * 0.08}>
                 <a
                   href={c.href}
                   target={c.href.startsWith("http") ? "_blank" : undefined}

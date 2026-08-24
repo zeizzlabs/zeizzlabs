@@ -21,6 +21,14 @@ export function SmoothScroll() {
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
+    // The browser restoring a mid-page scroll position on reload leaves Lenis
+    // initialised at 0 while the window is somewhere else. ScrollTrigger is
+    // driven by Lenis, so every trigger between the two positions is skipped
+    // and its content stays hidden. We own scrolling here, so own restoration
+    // too and always begin at the top.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
     const lenis = new Lenis({
       duration: 1.15,
       lerp: 0.1,
@@ -55,10 +63,17 @@ export function SmoothScroll() {
     };
     document.addEventListener("click", onClick);
 
-    // Recalculate after fonts land, or pinned sections measure the wrong height.
-    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    // Anything that changes document height after ScrollTriggers are created
+    // leaves every trigger measuring against a stale layout, so refresh on each
+    // of them: fonts settling, the intro finishing, and full page load.
+    const refresh = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(refresh);
+    window.addEventListener("zeizz:intro-done", refresh);
+    window.addEventListener("load", refresh);
 
     return () => {
+      window.removeEventListener("zeizz:intro-done", refresh);
+      window.removeEventListener("load", refresh);
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(raf);
       lenis.destroy();

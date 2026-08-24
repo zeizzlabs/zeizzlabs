@@ -86,14 +86,16 @@ export function MenuOverlay({
             { clipPath: "inset(0 0 100% 0)", autoAlpha: 1 },
             { clipPath: "inset(0 0 0% 0)", duration: 0.85, ease: "zeizz" }
           )
-          .from(
+          .fromTo(
             "[data-menu-row]",
-            { yPercent: 108, duration: 0.9, stagger: 0.055, ease: "zeizz" },
+            { yPercent: 108 },
+            { yPercent: 0, duration: 0.9, stagger: 0.055, ease: "zeizz" },
             "-=0.5"
           )
-          .from(
+          .fromTo(
             "[data-menu-fade]",
-            { autoAlpha: 0, y: 18, duration: 0.6, stagger: 0.05 },
+            { autoAlpha: 0, y: 18 },
+            { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.05 },
             "-=0.55"
           );
       } else {

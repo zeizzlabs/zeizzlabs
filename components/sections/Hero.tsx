@@ -30,18 +30,23 @@ export function Hero() {
 
       const intro = gsap.timeline({ paused: true });
       intro
-        .from("[data-hero-line]", {
-          yPercent: 118,
-          duration: 1.25,
-          stagger: 0.085,
-          ease: "zeizz",
-        })
-        .from(
+        .fromTo(
+          "[data-hero-line]",
+          { yPercent: 118 },
+          { yPercent: 0, duration: 1.25, stagger: 0.085, ease: "zeizz" }
+        )
+        .fromTo(
           "[data-hero-stagger]",
-          { y: 26, autoAlpha: 0, duration: 0.9, stagger: 0.08 },
+          { y: 26, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.08 },
           "-=0.85"
         )
-        .from("[data-hero-cue]", { autoAlpha: 0, duration: 0.6 }, "-=0.4");
+        .fromTo(
+          "[data-hero-cue]",
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.6 },
+          "-=0.4"
+        );
 
       // If the intro already ran this session the preloader never mounts, so
       // fall back to playing immediately on the next frame.

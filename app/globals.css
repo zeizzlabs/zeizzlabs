@@ -336,52 +336,6 @@ body {
 .tabular-nums { font-variant-numeric: tabular-nums; }
 
 /* ================================================================
-   Motion — scroll reveal (JS toggles .is-visible)
-================================================================ */
-[data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, 26px, 0);
-  transition:
-    opacity 0.85s var(--ease-out-expo),
-    transform 0.85s var(--ease-out-expo),
-    filter 0.85s var(--ease-out-expo);
-  filter: blur(6px);
-  will-change: opacity, transform;
-}
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
-[data-reveal="left"]  { transform: translate3d(-34px, 0, 0); }
-[data-reveal="right"] { transform: translate3d(34px, 0, 0); }
-[data-reveal="scale"] { transform: scale(0.94); }
-[data-reveal="clip"] {
-  opacity: 1;
-  filter: none;
-  transform: none;
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 1.1s var(--ease-out-expo);
-}
-[data-reveal="clip"].is-visible { clip-path: inset(0 0 0 0); }
-
-/* Word-by-word headline reveal (Kinetic component sets --i). */
-.kinetic-word {
-  display: inline-block;
-  opacity: 0;
-  transform: translate3d(0, 0.6em, 0) rotate(2deg);
-  transition:
-    opacity 0.8s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
-  transition-delay: calc(var(--i) * 55ms);
-}
-.is-visible .kinetic-word,
-.kinetic-run .kinetic-word {
-  opacity: 1;
-  transform: none;
-}
-
-/* ================================================================
    Keyframes
 ================================================================ */
 @keyframes drift {
@@ -490,11 +444,14 @@ body {
    Studio-tier motion layer
 ================================================================ */
 
-/* While the intro is on screen nothing behind it may scroll or paint. */
-html.is-loading,
-html.is-loading body {
+/* While the intro is on screen the page behind it must not scroll.
+   Only `overflow` is touched — an earlier version also set `height: 100%`,
+   which collapsed the document to one viewport. ScrollTrigger measured that
+   collapsed height and every trigger on the page got a start position near
+   zero, so nothing below the fold ever revealed. Never change document height
+   to lock scrolling. */
+html.is-loading {
   overflow: hidden;
-  height: 100%;
 }
 
 /* The custom cursor replaces the system one only once it is actually live,
@@ -602,13 +559,6 @@ header[data-over="light"] .wordmark {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    clip-path: none !important;
-  }
-  .kinetic-word { opacity: 1 !important; transform: none !important; }
   html.is-loading, html.is-loading body { overflow: auto; height: auto; }
   html.has-custom-cursor, html.has-custom-cursor * { cursor: auto !important; }
 }
