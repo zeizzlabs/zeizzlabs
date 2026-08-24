@@ -143,10 +143,10 @@ body {
 ================================================================ */
 .font-display { font-family: var(--font-display); }
 
-/* The brand name set as a logotype.
-   Poppins ExtraBold matches the real wordmark's geometric bowls and
-   single-storey "a"; the gradient fill + bevel shadow reproduce its brushed
-   3D metal finish. Used only for the brand name, never for copy. */
+/* Fallback logotype, used only if public/brand/zeizzlabs-wordmark.png is
+   removed. Poppins ExtraBold matches the real wordmark's geometric bowls and
+   single-storey "a"; the gradient fill and hard-edged bevel stand in for its
+   brushed 3D metal finish. Never used for copy. */
 .wordmark {
   font-family: var(--font-wordmark);
   font-weight: 800;
@@ -201,13 +201,6 @@ body {
   white-space: nowrap;
 }
 
-/* Oversized display use (the footer sign-off) — the same finish, but with the
-   brand gradient carrying the second half of the name. */
-.wordmark-xl {
-  font-family: var(--font-wordmark);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-}
 
 /* Headline scale — fluid, tight, display face. */
 .h-display {

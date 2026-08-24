@@ -29,6 +29,10 @@ const hasWordmarkImage = fs.existsSync(
   path.join(process.cwd(), "public", "brand", "zeizzlabs-wordmark.png")
 );
 
+/** Intrinsic size of zeizzlabs-wordmark.png, trimmed. Ratio ≈ 3.438 : 1. */
+const WORDMARK_W = 1200;
+const WORDMARK_H = 349;
+
 export function Logo({
   variant = "mark",
   className,
@@ -89,11 +93,14 @@ export function Logo({
     <Image
       src={WORDMARK_SRC}
       alt={site.brandName}
-      width={size * 8}
-      height={size * 2.6}
+      width={WORDMARK_W}
+      height={WORDMARK_H}
       priority={priority}
+      /* Served at 3x the rendered height so the bevel detail stays crisp on
+         high-DPR screens; the source is far larger than any use here. */
+      sizes={`${Math.round(size * 0.46 * (WORDMARK_W / WORDMARK_H) * 3)}px`}
       className="w-auto"
-      style={{ height: size * 0.44 }}
+      style={{ height: size * 0.46 }}
     />
   ) : (
     <span className="wordmark leading-none" style={{ fontSize: size * 0.46 }}>

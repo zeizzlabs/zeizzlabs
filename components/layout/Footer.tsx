@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
 import { services } from "@/content/services";
@@ -122,14 +123,16 @@ export function Footer() {
         </div>
 
         {/* Oversized wordmark — the closing brand beat. */}
+        {/* Closing brand beat — the official wordmark artwork, wiped in on scroll. */}
         <Reveal variant="clip" className="mt-16 select-none">
-          <div
-            aria-hidden
-            className="wordmark-xl text-[clamp(3.2rem,15vw,11rem)] leading-[0.82]"
-          >
-            <span className="text-steel-gradient opacity-70">Zeizz</span>
-            <span className="text-gradient opacity-90">Labs</span>
-          </div>
+          <Image
+            src="/brand/zeizzlabs-wordmark.png"
+            alt=""
+            width={1200}
+            height={349}
+            sizes="(max-width: 1024px) 92vw, 1100px"
+            className="h-auto w-full max-w-[68rem] opacity-90"
+          />
         </Reveal>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-line pt-7 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">

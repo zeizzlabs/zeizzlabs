@@ -16,9 +16,8 @@ import { Cursor } from "@/components/layout/Cursor";
  *  - Sora        → display. Wide, geometric, slightly squared — the closest
  *                  well-supported web face to the ZeizzLabs wordmark.
  *  - Inter       → body. Neutral and highly legible at small sizes.
- *  - Poppins     → logotype ONLY. Its geometric bowls and single-storey "a"
- *                  are the closest match to the real ZeizzLabs wordmark, so the
- *                  brand name is set in it wherever it appears as a logo.
+ *  - Poppins     → logotype fallback only, for if the wordmark artwork is
+ *                  ever removed. Closest match to the real letterforms.
  *  - JetBrains   → mono. Eyebrows, tags and technical labels: the "lab" voice.
  */
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
@@ -28,11 +27,14 @@ const sora = Sora({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
+/* Fallback only — the real wordmark artwork is used when present, so this is
+   not preloaded. */
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["800"],
   display: "swap",
+  preload: false,
 });
 const jet = JetBrains_Mono({
   variable: "--font-mono-jet",

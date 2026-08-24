@@ -7,19 +7,27 @@ The official ZeizzLabs artwork lives here and drives the whole site.
 | `zeizzlabs-mark.png` | 1024×1024, transparent | **Primary mark.** Navbar, footer, mobile menu, closing CTA, favicon |
 | `zeizzlabs-logo.png` | 1536×1024 | Full brand board — social/OG image |
 | `zeizzlabs-emblem.png` | 1254×1254 | Legacy circular badge (no longer used in the UI) |
-| `zeizzlabs-wordmark.png` | — | **Optional.** See below |
+| `zeizzlabs-wordmark.png` | 1200×349, transparent | **The wordmark.** Header lockup + footer sign-off |
+| `zeizzlabs-mark-alt.png` | 1183×946, transparent | Spare copy of the monogram — safe to delete |
 
-## Using the real wordmark image
+## The wordmark
 
-The site currently type-sets "ZeizzLabs" next to the mark. To use the actual
-wordmark artwork instead:
+`zeizzlabs-wordmark.png` is auto-detected — if the file is present it is used,
+and if it is removed the site falls back to type-setting the name in Poppins
+ExtraBold with a metallic gradient. No code change either way.
 
-1. Export the wordmark with a **transparent background** (a white-on-white PNG
-   will not work — the letters are white, so keying out the background erases
-   the letters too). A PNG with real alpha, or a light-on-dark export, is fine.
-2. Save it here as `zeizzlabs-wordmark.png`.
-3. In [`components/brand/Logo.tsx`](../../components/brand/Logo.tsx), set
-   `USE_WORDMARK_IMAGE = true`.
+Replacing it: the export **must have a real alpha channel**, and should be
+trimmed of transparent margin (the layout controls the spacing, not the file).
+To re-optimise any new export, run:
+
+```bash
+npm run brand:wordmark -- path/to/export.png
+```
+
+That trims, resizes to 1200px wide and writes it here. If the ratio changes
+noticeably from 3.438:1, update `WORDMARK_W` / `WORDMARK_H` in
+[`components/brand/Logo.tsx`](../../components/brand/Logo.tsx) so Next.js
+reserves the right box.
 
 ## Swapping any artwork (zero code changes)
 
