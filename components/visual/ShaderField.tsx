@@ -32,6 +32,10 @@ uniform vec2  uMouse;      // 0..1, eased
 uniform float uScroll;     // 0..1 through the hero
 uniform vec3  uGround;     // the page background this field sits on
 uniform float uDark;       // 1 on the dark theme, 0 on the light one
+uniform sampler2D uTex;    // the image revealed under the cursor
+uniform float uTexReady;   // 1 once the image has decoded
+uniform vec2  uTexAspect;  // cover-fit correction for the texture
+uniform float uReveal;     // 0..1, how open the aperture is
 
 // -- Brand palette (matches the CSS tokens exactly) ------------------
 const vec3 INK   = vec3(0.016, 0.024, 0.047);
@@ -139,6 +143,38 @@ void main() {
   col = mix(col, uGround, centre * 0.48);
   col = mix(col, uGround, smoothstep(0.55, 1.0, 1.0 - uv.y) * 0.92);
 
+  // ---- Cursor aperture -----------------------------------------------
+  // A hole torn in the surface, showing the layer underneath. The edge is
+  // pushed around by the same fbm that drives the field, so it is ragged and
+  // never the same shape twice — a clean circle reads as a spotlight, which is
+  // not what this is.
+  if (uTexReady > 0.5 && uReveal > 0.001) {
+    vec2 d = p - m;
+    float ang = atan(d.y, d.x);
+    float dist = length(d);
+
+    // Radius wobbles with angle and time, so the opening breathes.
+    float edge = fbm(vec2(cos(ang), sin(ang)) * 2.4 + uTime * 0.18);
+    float radius = (0.16 + edge * 0.085) * uReveal;
+
+    // Second, finer distortion so the rim is torn rather than merely wavy.
+    float rip = fbm(d * 9.0 + uTime * 0.25) * 0.022;
+
+    float mask = 1.0 - smoothstep(radius * 0.55, radius + rip, dist);
+
+    // Cover-fit the texture so it never stretches.
+    vec2 tuv = (gl_FragCoord.xy / uRes - 0.5) * uTexAspect + 0.5;
+    vec3 under = texture(uTex, vec2(tuv.x, 1.0 - tuv.y)).rgb;
+
+    // A hot rim where the surface is torn open.
+    float rim = smoothstep(radius + rip, radius * 0.82, dist)
+              - smoothstep(radius * 0.82, radius * 0.62, dist);
+    vec3 rimCol = mix(BLUE, GOLD, 0.5);
+
+    col = mix(col, under, mask);
+    col += rimCol * rim * 0.55;
+  }
+
   // Fade the whole field out as the hero scrolls away.
   col = mix(col, uGround, uScroll * 0.9);
 
@@ -161,7 +197,14 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string) {
   return sh;
 }
 
-export function ShaderField({ className }: { className?: string }) {
+export function ShaderField({
+  className,
+  revealImage,
+}: {
+  className?: string;
+  /** Shown through the aperture that follows the cursor. */
+  revealImage?: string;
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -198,6 +241,45 @@ export function ShaderField({ className }: { className?: string }) {
     const uScroll = gl.getUniformLocation(prog, "uScroll");
     const uGround = gl.getUniformLocation(prog, "uGround");
     const uDark = gl.getUniformLocation(prog, "uDark");
+    const uTex = gl.getUniformLocation(prog, "uTex");
+    const uTexReady = gl.getUniformLocation(prog, "uTexReady");
+    const uTexAspect = gl.getUniformLocation(prog, "uTexAspect");
+    const uReveal = gl.getUniformLocation(prog, "uReveal");
+
+    // --- the image behind the surface ---------------------------------
+    const texState = { ready: 0, w: 1, h: 1 };
+    const tex = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    // A single dark pixel until the real image lands, so the first frames have
+    // something valid bound rather than an incomplete texture.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+      new Uint8Array([4, 6, 12, 255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.uniform1i(uTex, 0);
+
+    let img: HTMLImageElement | null = null;
+    if (revealImage) {
+      img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img!);
+        texState.ready = 1;
+        texState.w = img!.naturalWidth;
+        texState.h = img!.naturalHeight;
+      };
+      img.src = revealImage;
+    }
+
+    // The aperture eases open on entry and closed on leave, so it never
+    // snaps into existence.
+    const reveal = { current: 0, target: 0 };
 
     // Track the active theme so the field composes on the right ground.
     const ground = { r: 0.016, g: 0.024, b: 0.047, dark: 1 };
@@ -243,6 +325,13 @@ export function ShaderField({ className }: { className?: string }) {
       const r = canvas.getBoundingClientRect();
       mouse.x = (e.clientX - r.left) / r.width;
       mouse.y = 1 - (e.clientY - r.top) / r.height;
+      const inside =
+        e.clientX >= r.left && e.clientX <= r.right &&
+        e.clientY >= r.top && e.clientY <= r.bottom;
+      reveal.target = inside && e.pointerType === "mouse" ? 1 : 0;
+    };
+    const onPointerOut = () => {
+      reveal.target = 0;
     };
 
     let raf = 0;
@@ -264,6 +353,19 @@ export function ShaderField({ className }: { className?: string }) {
       gl.uniform1f(uScroll, progress);
       gl.uniform3f(uGround, ground.r, ground.g, ground.b);
       gl.uniform1f(uDark, ground.dark);
+
+      reveal.current += (reveal.target - reveal.current) * 0.07;
+      gl.uniform1f(uReveal, reveal.current);
+      gl.uniform1f(uTexReady, texState.ready);
+
+      // Cover-fit: scale the shorter axis so the image fills without stretching.
+      const canvasAspect = w / Math.max(h, 1);
+      const imageAspect = texState.w / Math.max(texState.h, 1);
+      if (canvasAspect > imageAspect) {
+        gl.uniform2f(uTexAspect, 1, canvasAspect / imageAspect);
+      } else {
+        gl.uniform2f(uTexAspect, imageAspect / canvasAspect, 1);
+      }
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(frame);
     };
@@ -282,6 +384,7 @@ export function ShaderField({ className }: { className?: string }) {
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerleave", onPointerOut);
     document.addEventListener("visibilitychange", onVis);
     resize();
     raf = requestAnimationFrame(frame);
@@ -292,12 +395,15 @@ export function ShaderField({ className }: { className?: string }) {
       io.disconnect();
       themeObserver.disconnect();
       window.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerleave", onPointerOut);
       document.removeEventListener("visibilitychange", onVis);
+      if (img) img.onload = null;
+      gl.deleteTexture(tex);
       gl.deleteProgram(prog);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
     };
-  }, []);
+  }, [revealImage]);
 
   return <canvas ref={ref} aria-hidden className={className} />;
 }

@@ -12,7 +12,7 @@ import { site, whatsappLink } from "@/content/site";
 export function FinalCta() {
   return (
     <section className="noise relative isolate overflow-hidden px-5 py-24 text-center sm:px-6 sm:py-32">
-      <CircuitField className="opacity-40" />
+      <CircuitField className="opacity-70" />
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-[34rem] w-[52rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[130px]"

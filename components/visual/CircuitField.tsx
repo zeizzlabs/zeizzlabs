@@ -12,14 +12,17 @@ import { cn } from "@/lib/cn";
 type Trace = { d: string; tone: "blue" | "gold" | "steel"; dur: number; r?: number };
 
 const LEFT: Trace[] = [
-  { d: "M-10 70 H150 L210 130 H330", tone: "blue", dur: 5.5, r: 7 },
-  { d: "M-10 140 H90 L150 200 H250", tone: "gold", dur: 7, r: 6 },
-  { d: "M-10 220 H180 L230 270 H300", tone: "blue", dur: 6.2, r: 5 },
-  { d: "M-10 300 H120 L170 350 H270", tone: "gold", dur: 8, r: 7 },
-  { d: "M-10 400 H70 L130 460 H220", tone: "steel", dur: 9, r: 5 },
-  { d: "M-10 500 H200 L250 550 H320", tone: "blue", dur: 6.8, r: 6 },
-  { d: "M-10 600 H110 L160 650 H240", tone: "gold", dur: 7.6, r: 5 },
-  { d: "M-10 700 H260 L300 660 H360", tone: "blue", dur: 8.4, r: 6 },
+  { d: "M-10 60 H150 L210 120 H360 L400 90 H520", tone: "blue", dur: 5.5, r: 7 },
+  { d: "M-10 130 H90 L150 190 H270", tone: "gold", dur: 7, r: 6 },
+  { d: "M-10 195 H210 L255 240 H330 L370 205 H470", tone: "steel", dur: 9.5, r: 5 },
+  { d: "M-10 260 H130 L185 315 H300", tone: "blue", dur: 6.2, r: 5 },
+  { d: "M-10 330 H240 L285 375 H420", tone: "gold", dur: 8, r: 7 },
+  { d: "M-10 395 H70 L130 455 H250 L290 425 H400", tone: "blue", dur: 6.9, r: 6 },
+  { d: "M-10 460 H175 L215 500 H310", tone: "steel", dur: 10.5, r: 5 },
+  { d: "M-10 530 H200 L250 580 H360", tone: "blue", dur: 6.8, r: 6 },
+  { d: "M-10 600 H110 L160 650 H280 L320 620 H430", tone: "gold", dur: 7.6, r: 5 },
+  { d: "M-10 675 H160 L205 720 H320", tone: "blue", dur: 8.4, r: 6 },
+  { d: "M-10 740 H260 L300 700 H400", tone: "steel", dur: 11, r: 4 },
 ];
 
 const tones = {
@@ -44,7 +47,7 @@ function Side({ mirror }: { mirror?: boolean }) {
               fill="none"
               stroke={stroke}
               strokeWidth={1.4}
-              strokeOpacity={0.5}
+              strokeOpacity={0.42}
               strokeLinecap="square"
             />
             {/* Travelling pulse along the same path. */}
@@ -54,11 +57,11 @@ function Side({ mirror }: { mirror?: boolean }) {
               stroke={stroke}
               strokeWidth={2}
               strokeLinecap="round"
-              strokeDasharray="26 460"
+              strokeDasharray="34 520"
               style={{
                 animation: `dash-flow ${t.dur}s linear infinite`,
-                animationDelay: `${i * 0.55}s`,
-                filter: "drop-shadow(0 0 5px currentColor)",
+                animationDelay: `${i * 0.42}s`,
+                filter: "drop-shadow(0 0 6px currentColor)",
                 color: stroke,
               }}
             />
@@ -87,10 +90,12 @@ export function CircuitField({ className }: { className?: string }) {
       aria-hidden
       className={cn("pointer-events-none absolute inset-0 h-full w-full", className)}
       style={{
+        // Opened up: at 62% the mask cleared almost the whole viewport and the
+        // field only survived as a thin frame at the edges.
         maskImage:
-          "radial-gradient(ellipse 62% 62% at 50% 45%, transparent 8%, #000 72%)",
+          "radial-gradient(ellipse 46% 50% at 50% 45%, transparent 4%, #000 68%)",
         WebkitMaskImage:
-          "radial-gradient(ellipse 62% 62% at 50% 45%, transparent 8%, #000 72%)",
+          "radial-gradient(ellipse 46% 50% at 50% 45%, transparent 4%, #000 68%)",
       }}
     >
       <Side />

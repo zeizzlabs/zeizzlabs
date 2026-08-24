@@ -6,6 +6,7 @@ export const MEDIA_VIDEOS: ReadonlySet<string> = new Set([]);
 const VERSIONS: Record<string, string> = {
   "/media/about-studio.jpg": "eqz8kg",
   "/media/contact-signal.jpg": "eqze1n",
+  "/media/hero-reveal.jpg": "eunnrs",
   "/media/service-ai-intelligence.jpg": "eqzviy",
   "/media/service-automation-workflows.jpg": "er9r92",
   "/media/service-cloud-infrastructure.jpg": "er09gl",
