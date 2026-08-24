@@ -96,7 +96,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       <div
         ref={curtain}
         aria-hidden
-        className="fixed inset-0 z-[180] hidden bg-ink-950"
+        className="fixed inset-0 z-[180] hidden bg-canvas"
         style={{ clipPath: "inset(100% 0 0 0)" }}
       >
         <div className="grid-lines absolute inset-0 opacity-25" />

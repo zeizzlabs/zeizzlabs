@@ -131,7 +131,7 @@ export function Preloader() {
     <div
       ref={root}
       aria-hidden
-      className="fixed inset-0 z-[200] grid place-items-center bg-ink-950"
+      className="fixed inset-0 z-[200] grid place-items-center bg-canvas"
       style={{ clipPath: "inset(0 0 0% 0)" }}
     >
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" />

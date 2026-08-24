@@ -15,9 +15,9 @@ import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 
 const field =
-  "w-full min-h-[48px] rounded-xl border border-line bg-white/[0.025] px-4 py-3 text-[15px] text-ink " +
+  "w-full min-h-[48px] rounded-xl border border-line bg-raised px-4 py-3 text-[15px] text-ink " +
   "placeholder:text-faint transition-colors duration-200 " +
-  "focus:border-blue-500/60 focus:bg-white/[0.05] focus:outline-none";
+  "focus:border-blue-500/60 focus:bg-raised-strong focus:outline-none";
 
 const labelCls = "mb-2 block text-[13px] font-medium text-steel-300";
 

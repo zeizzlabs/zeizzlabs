@@ -96,7 +96,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
               </ul>
             </Reveal>
             <Reveal delay={0.15}>
-              <div className="mt-10 flex items-center gap-6 rounded-2xl border border-line bg-white/[0.02] p-6">
+              <div className="mt-10 flex items-center gap-6 rounded-2xl border border-line bg-raised p-6">
                 <CircleCta href="/contact" label="Build something" size={110} />
                 <p className="text-[14px] leading-relaxed text-muted">
                   Want one of these for your business? Tell us the goal.

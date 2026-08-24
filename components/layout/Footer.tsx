@@ -20,7 +20,7 @@ export function Footer() {
   const socials = Object.entries(site.social).filter(([, url]) => Boolean(url));
 
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-ink-950">
+    <footer className="relative overflow-hidden border-t border-line bg-canvas">
       {/* The brand gradient hairline that starts the footer. */}
       <div className="h-px w-full [background:var(--gradient-brand)] opacity-70" />
       <div className="dot-matrix pointer-events-none absolute inset-0 opacity-40" />

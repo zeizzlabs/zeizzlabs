@@ -26,8 +26,8 @@ const variants: Record<Variant, string> = {
   gold:
     "text-ink-950 bg-gold-400 hover:bg-gold-300 shadow-[0_10px_30px_-12px_rgba(220,184,119,0.8)]",
   secondary:
-    "text-ink border border-line-strong bg-white/[0.035] backdrop-blur-sm " +
-    "hover:bg-white/[0.08] hover:border-white/35",
+    "text-ink border border-line-strong bg-raised backdrop-blur-sm " +
+    "hover:bg-raised-strong hover:border-white/35",
   ghost: "text-muted hover:text-ink",
 };
 

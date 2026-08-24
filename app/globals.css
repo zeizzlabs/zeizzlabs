@@ -26,7 +26,13 @@
   --color-ink-750: #141c33;
   --color-ink-700: #1b2542;
 
-  /* --- Surfaces & hairlines ------------------------------------- */
+  /* --- Surfaces & hairlines -------------------------------------
+     Semantic, not literal: components reference canvas/panel/raised so a
+     theme swap is a token change rather than a find-and-replace. */
+  --color-canvas: #04060c;
+  --color-panel: #090e1b;
+  --color-raised: #ffffff08;
+  --color-raised-strong: #ffffff14;
   --color-surface: #090e1b;
   --color-surface-2: #0d1424;
   --color-line: #ffffff14;
@@ -441,6 +447,118 @@ body {
   background: linear-gradient(90deg, transparent, #ffffff1a, transparent);
   animation: shimmer-line 2.4s var(--ease-out-quint) infinite;
 }
+
+/* ================================================================
+   Light theme
+   ----------------------------------------------------------------
+   Set data-theme="light" on <html> for the whole site, or on a single
+   <Section> to invert just that block. Accents are darkened rather than
+   reused: #1E7BFF and #DCB877 are tuned for a near-black ground and fall
+   under 4.5:1 on white, so the light theme uses deeper stops of the same
+   hues to stay accessible without changing the brand.
+================================================================ */
+[data-theme="light"] {
+  --color-canvas: #f6f7fa;
+  --color-panel: #ffffff;
+  --color-raised: #0a0f1c07;
+  --color-raised-strong: #0a0f1c0f;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f3f7;
+
+  --color-ink: #080d18;
+  --color-muted: #4d586b;
+  --color-faint: #6d7889;
+
+  --color-line: #0a0f1c14;
+  --color-line-strong: #0a0f1c26;
+  --color-line-gold: #8a6a2f33;
+
+  --color-blue-300: #1e7bff;
+  --color-blue-400: #0f5bd6;
+  --color-blue-500: #0b429e;
+
+  --color-gold-300: #6b5122;
+  --color-gold-400: #74571f;
+  --color-gold-500: #5d461c;
+
+  --color-steel-300: #3f4a5e;
+  --color-steel-400: #55617a;
+  --color-steel-500: #6d7889;
+
+  --color-status-live: #0b7a54;
+
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+
+  color-scheme: light;
+}
+
+/* The brand gradient needs deeper stops to stay legible as text on white. */
+[data-theme="light"] {
+  --gradient-brand: linear-gradient(
+    100deg in oklab,
+    #0b429e 0%,
+    #0f5bd6 26%,
+    #2f7fd8 52%,
+    #8a6a2f 84%,
+    #6d5324 100%
+  );
+}
+
+[data-theme="light"] body,
+html[data-theme="light"] {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+[data-theme="light"] .plate {
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%);
+  border-color: var(--color-line);
+  box-shadow: 0 1px 2px #0a0f1c0a, 0 12px 32px -24px #0a0f1c33;
+}
+
+[data-theme="light"] .glass {
+  background: color-mix(in oklab, #ffffff 78%, transparent);
+}
+
+[data-theme="light"] .text-steel-gradient {
+  background: linear-gradient(160deg, #1c2536 10%, #46536b 55%, #0a0f1c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* The wordmark artwork is white; invert it to brushed dark metal on light. */
+[data-theme="light"] .wordmark-clip img {
+  filter: invert(1) brightness(0.92);
+}
+[data-theme="light"] .wordmark {
+  background: linear-gradient(170deg, #1c2536 0%, #46536b 52%, #0a0f1c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: none;
+}
+
+/* Scrollbar and selection follow the theme. */
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--color-surface-2); }
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #0a0f1c26;
+  border-color: var(--color-surface-2);
+}
+[data-theme="light"] ::selection {
+  background: color-mix(in oklab, var(--color-blue-400) 28%, transparent);
+  color: #04060c;
+}
+
+/* Grids and dot matrices are drawn with white hairlines; flip them. */
+[data-theme="light"] .grid-lines {
+  background-image:
+    linear-gradient(#0a0f1c12 1px, transparent 1px),
+    linear-gradient(90deg, #0a0f1c12 1px, transparent 1px);
+}
+[data-theme="light"] .dot-matrix {
+  background-image: radial-gradient(#0a0f1c1f 1px, transparent 1px);
+}
+[data-theme="light"] .noise::before { mix-blend-mode: multiply; opacity: 0.05; }
 
 /* ================================================================
    Studio-tier motion layer

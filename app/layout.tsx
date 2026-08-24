@@ -141,6 +141,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${sora.variable} ${poppins.variable} ${jet.variable} h-full antialiased`}
     >
+      <head>
+        {/*
+          Applied before first paint. Reading the stored theme in an effect
+          would repaint the whole page one frame in, which is a visible flash on
+          every single load. ?theme=light or ?theme=dark overrides the stored
+          preference, which makes a theme shareable as a link and testable in a
+          headless browser.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var q=new URLSearchParams(location.search).get("theme");var t=q||localStorage.getItem("zeizz.theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t;if(q)localStorage.setItem("zeizz.theme",t);}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full">
         <script
           type="application/ld+json"

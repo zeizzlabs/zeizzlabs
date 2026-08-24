@@ -122,7 +122,7 @@ export function Frame({
   return (
     <div
       ref={root}
-      className={cn("relative overflow-hidden bg-ink-900", rounded, className)}
+      className={cn("relative overflow-hidden bg-panel", rounded, className)}
     >
       <div data-frame-img className="absolute inset-x-0 -inset-y-[10%] will-change-transform">
         <Image
@@ -150,7 +150,12 @@ export function Frame({
           />
         )}
       </div>
-      {/* Ground tint so type laid over the picture always has contrast. */}
+      {/*
+        Ground tint so type laid over the picture always has contrast. Fixed to
+        ink rather than the canvas token: the artwork is saturated and dark in
+        both themes, so a light scrim would wash it out and leave overlay text
+        unreadable on the light theme.
+      */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent" />
       {children}
     </div>

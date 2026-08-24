@@ -7,6 +7,7 @@ import { whatsappLink } from "@/content/site";
 import { MenuOverlay } from "./MenuOverlay";
 import { ScrollProgress } from "./ScrollProgress";
 import { TransitionLink } from "@/components/motion/PageTransition";
+import { ThemeToggle } from "./ThemeToggle";
 
 /**
  * The bar itself is deliberately almost nothing: mark, one action, one menu
@@ -92,6 +93,8 @@ export function Navbar({ logo }: { logo: ReactNode }) {
             >
               WhatsApp
             </a>
+
+            <ThemeToggle />
 
             {/* Menu trigger — the label swaps and the rules morph into an X. */}
             <button

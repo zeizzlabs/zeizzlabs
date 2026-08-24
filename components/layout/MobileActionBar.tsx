@@ -61,7 +61,7 @@ export function MobileActionBar() {
             href={it.href}
             target={it.href.startsWith("http") ? "_blank" : undefined}
             rel="noopener noreferrer"
-            className="flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-white/[0.03] px-3 text-[13px] font-medium text-ink active:scale-[0.97] transition-transform"
+            className="flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-raised px-3 text-[13px] font-medium text-ink active:scale-[0.97] transition-transform"
           >
             <Icon name={it.icon} className="h-4 w-4 text-blue-400" strokeWidth={1.8} />
             {it.label}

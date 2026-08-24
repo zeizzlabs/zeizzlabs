@@ -149,8 +149,8 @@ export function Packages() {
               key={t.id}
               delay={i * 0.09}
               className={cn(
-                "relative flex flex-col bg-ink-950 p-8 sm:p-10",
-                t.featured && "bg-ink-900"
+                "relative flex flex-col bg-canvas p-8 sm:p-10",
+                t.featured && "bg-panel"
               )}
             >
               {t.featured && (

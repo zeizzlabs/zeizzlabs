@@ -67,7 +67,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             <Reveal mode="stagger">
               <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
                 {service.deliverables.map((d) => (
-                  <li key={d} className="flex items-center gap-3 bg-ink-950 p-5">
+                  <li key={d} className="flex items-center gap-3 bg-canvas p-5">
                     <Icon name="Check" className="h-4 w-4 shrink-0 text-status-live" strokeWidth={2.2} />
                     <span className="text-[15px] text-ink">{d}</span>
                   </li>
@@ -92,7 +92,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </Reveal>
 
             <Reveal delay={0.15}>
-              <div className="mt-10 flex items-center gap-6 rounded-2xl border border-line bg-white/[0.02] p-6">
+              <div className="mt-10 flex items-center gap-6 rounded-2xl border border-line bg-raised p-6">
                 <CircleCta href="/contact" label="Start a project" size={110} />
                 <p className="text-[14px] leading-relaxed text-muted">
                   Free 20-minute call. You leave with a scope and a fixed price,

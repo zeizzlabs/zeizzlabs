@@ -38,7 +38,7 @@ const capabilities = [
  */
 export function AiSystems() {
   return (
-    <Section id="ai" className="relative overflow-hidden border-y border-line bg-ink-900/40">
+    <Section id="ai" className="relative overflow-hidden border-y border-line bg-panel">
       <Aurora intensity={0.7} />
 
       <div className="relative">
@@ -55,7 +55,7 @@ export function AiSystems() {
             <ul className="space-y-2">
               {capabilities.map((c, i) => (
                 <Reveal key={c.title} delay={i * 0.08} as="li">
-                  <div className="group flex gap-4 rounded-card border border-transparent p-4 transition-colors hover:border-line hover:bg-white/[0.02]">
+                  <div className="group flex gap-4 rounded-card border border-transparent p-4 transition-colors hover:border-line hover:bg-raised">
                     <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-gold-500/25 bg-gold-500/[0.07] text-gold-300 transition-transform duration-500 group-hover:-translate-y-0.5">
                       <Icon name={c.icon} className="h-5 w-5" />
                     </span>
@@ -72,7 +72,7 @@ export function AiSystems() {
 
             {/* Connected systems */}
             <Reveal delay={0.34}>
-              <div className="mt-8 rounded-card border border-line bg-white/[0.02] p-5">
+              <div className="mt-8 rounded-card border border-line bg-raised p-5">
                 <p className="eyebrow mb-4">Plugs into</p>
                 <ul className="flex flex-wrap gap-2">
                   {systemNodes.map((n) => (

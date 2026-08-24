@@ -110,7 +110,7 @@ export function Process() {
                 </ol>
               </div>
 
-              <div className="mt-10 rounded-card border border-line bg-white/[0.02] p-5">
+              <div className="mt-10 rounded-card border border-line bg-raised p-5">
                 <p className="text-sm leading-relaxed text-muted">
                   Most projects go live in{" "}
                   <span className="font-medium text-ink">2 to 4 weeks</span>.
@@ -131,7 +131,7 @@ export function Process() {
                   className={cn(
                     "plate group relative overflow-hidden rounded-card p-6 transition-all duration-500 sm:p-8",
                     i === active
-                      ? "border-white/20 bg-white/[0.02] shadow-[0_24px_60px_-40px_rgba(30,123,255,0.7)]"
+                      ? "border-white/20 bg-raised shadow-[0_24px_60px_-40px_rgba(30,123,255,0.7)]"
                       : ""
                   )}
                 >
@@ -149,7 +149,7 @@ export function Process() {
                         "grid h-12 w-12 shrink-0 place-items-center rounded-xl border transition-colors duration-500",
                         i === active
                           ? "border-blue-500/40 bg-blue-500/10 text-blue-300"
-                          : "border-line bg-white/[0.02] text-muted"
+                          : "border-line bg-raised text-muted"
                       )}
                     >
                       <Icon name={s.icon} className="h-5 w-5" />
@@ -164,7 +164,7 @@ export function Process() {
                       <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
                         {s.body}
                       </p>
-                      <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.02] px-3.5 py-1.5 text-[12.5px] text-steel-300">
+                      <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-raised px-3.5 py-1.5 text-[12.5px] text-steel-300">
                         <Icon
                           name="BadgeCheck"
                           className="h-3.5 w-3.5 text-status-live"

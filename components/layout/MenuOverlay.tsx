@@ -182,7 +182,7 @@ export function MenuOverlay({
       ref={root}
       id="menu-overlay"
       aria-hidden={!open}
-      className="fixed inset-0 z-[120] bg-ink-950 opacity-0"
+      className="fixed inset-0 z-[120] bg-canvas opacity-0"
       style={{ clipPath: "inset(0 0 100% 0)", pointerEvents: "none" }}
     >
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" />

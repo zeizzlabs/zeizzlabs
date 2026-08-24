@@ -122,12 +122,12 @@ export function WorkRail() {
               >
                 {p.label}
               </span>
-              <h3 className="absolute bottom-5 left-6 right-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-none tracking-[-0.04em] text-ink">
+              <h3 className="absolute bottom-5 left-6 right-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-none tracking-[-0.04em] text-white">
                 {p.name}
               </h3>
             </Frame>
 
-            <div className="bg-ink-950 p-6 sm:p-7">
+            <div className="bg-canvas p-6 sm:p-7">
               <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
                 {p.category}
               </p>

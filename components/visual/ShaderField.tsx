@@ -30,6 +30,8 @@ uniform vec2  uRes;
 uniform float uTime;
 uniform vec2  uMouse;      // 0..1, eased
 uniform float uScroll;     // 0..1 through the hero
+uniform vec3  uGround;     // the page background this field sits on
+uniform float uDark;       // 1 on the dark theme, 0 on the light one
 
 // -- Brand palette (matches the CSS tokens exactly) ------------------
 const vec3 INK   = vec3(0.016, 0.024, 0.047);
@@ -102,37 +104,43 @@ void main() {
   float n2 = fbm(q * 2.2 + vec2(n1 * 1.4 - t * 0.5, n1 * 1.1 + t * 0.3));
   float field = n2 * 0.5 + 0.5;
 
-  // Colour ramp. The ground stays near-black on purpose — this is atmosphere
-  // behind type, not the subject. Energy only appears in the top decile of the
-  // field, which keeps headline contrast well clear of the AA floor.
-  vec3 col = INK;
-  col = mix(col, BLUE * 0.58, smoothstep(0.48, 0.84, field));
-  col = mix(col, SKY  * 0.60, smoothstep(0.72, 0.96, field));
-  col = mix(col, GOLD * 0.72, smoothstep(0.86, 1.00, field));
+  // Colour ramp, composed against whatever ground the theme is using.
+  // Energy is mixed toward the accents rather than added, so the same maths
+  // works on a near-white page — additive light on white just blows out.
+  vec3 accentLo = mix(BLUE * 0.32, BLUE, uDark);
+  vec3 accentHi = mix(SKY  * 0.42, SKY,  uDark);
+  vec3 accentTop = mix(GOLD * 0.55, GOLD, uDark);
 
-  // Circuit traces — sparse, and gold-biased so the brand's second colour
-  // actually reads instead of drowning in blue.
+  float e1 = smoothstep(0.48, 0.84, field);
+  float e2 = smoothstep(0.72, 0.96, field);
+  float e3 = smoothstep(0.86, 1.00, field);
+
+  vec3 col = uGround;
+  col = mix(col, accentLo,  e1 * mix(0.30, 0.58, uDark));
+  col = mix(col, accentHi,  e2 * mix(0.26, 0.60, uDark));
+  col = mix(col, accentTop, e3 * mix(0.30, 0.72, uDark));
+
+  // Circuit traces.
   float tr = traces(q + vec2(0.0, t * 0.12), uTime * 0.4);
-  vec3 traceCol = mix(BLUE * 1.1, GOLD * 1.35, smoothstep(0.42, 0.80, field));
-  col += traceCol * tr * 0.60;
+  vec3 traceCol = mix(accentLo * 1.1, accentTop * 1.25, smoothstep(0.42, 0.80, field));
+  col = mix(col, traceCol, clamp(tr * mix(0.55, 0.85, uDark), 0.0, 1.0));
 
-  // A soft glow that follows the cursor.
-  col += mix(BLUE, GOLD, 0.45) * 0.16 / (1.0 + md * md * 26.0);
+  // Cursor glow: additive on dark, a gentle darkening on light.
+  float halo = 0.16 / (1.0 + md * md * 26.0);
+  vec3 haloCol = mix(BLUE * 0.5, mix(BLUE, GOLD, 0.45), uDark);
+  col = mix(col, haloCol, halo * mix(0.55, 1.0, uDark));
 
-  // Steel sheen across the top, so the hero reads lit from above.
-  col += STEEL * 0.022 * smoothstep(0.4, 1.0, uv.y);
-
-  // Vignette, then a hard fade to the page ground behind the headline block
-  // and at the bottom edge so the section joins the next one invisibly.
+  // Vignette, then fade to the page ground behind the headline and at the
+  // bottom edge so the section joins the next one invisibly.
   float vig = smoothstep(1.15, 0.15, length(p * vec2(0.8, 1.0)));
-  col *= vig;
+  col = mix(uGround, col, mix(0.55, 1.0, vig));
 
   float centre = smoothstep(0.62, 0.12, length(p * vec2(0.62, 1.25)));
-  col = mix(col, INK, centre * 0.48);
-  col = mix(col, INK, smoothstep(0.55, 1.0, 1.0 - uv.y) * 0.92);
+  col = mix(col, uGround, centre * 0.48);
+  col = mix(col, uGround, smoothstep(0.55, 1.0, 1.0 - uv.y) * 0.92);
 
   // Fade the whole field out as the hero scrolls away.
-  col = mix(col, INK, uScroll * 0.9);
+  col = mix(col, uGround, uScroll * 0.9);
 
   // Dither: 8-bit output over a smooth gradient bands badly without it.
   float d = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
@@ -188,6 +196,31 @@ export function ShaderField({ className }: { className?: string }) {
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uMouse = gl.getUniformLocation(prog, "uMouse");
     const uScroll = gl.getUniformLocation(prog, "uScroll");
+    const uGround = gl.getUniformLocation(prog, "uGround");
+    const uDark = gl.getUniformLocation(prog, "uDark");
+
+    // Track the active theme so the field composes on the right ground.
+    const ground = { r: 0.016, g: 0.024, b: 0.047, dark: 1 };
+    const readTheme = () => {
+      const light = document.documentElement.dataset.theme === "light";
+      ground.dark = light ? 0 : 1;
+      // Matches --color-canvas in globals.css for each theme.
+      if (light) {
+        ground.r = 0.965;
+        ground.g = 0.969;
+        ground.b = 0.98;
+      } else {
+        ground.r = 0.016;
+        ground.g = 0.024;
+        ground.b = 0.047;
+      }
+    };
+    readTheme();
+    const themeObserver = new MutationObserver(readTheme);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
     const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
     let w = 0;
@@ -229,6 +262,8 @@ export function ShaderField({ className }: { className?: string }) {
       gl.uniform1f(uTime, (now - start) / 1000);
       gl.uniform2f(uMouse, eased.x, eased.y);
       gl.uniform1f(uScroll, progress);
+      gl.uniform3f(uGround, ground.r, ground.g, ground.b);
+      gl.uniform1f(uDark, ground.dark);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(frame);
     };
@@ -255,6 +290,7 @@ export function ShaderField({ className }: { className?: string }) {
       running = false;
       cancelAnimationFrame(raf);
       io.disconnect();
+      themeObserver.disconnect();
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("visibilitychange", onVis);
       gl.deleteProgram(prog);

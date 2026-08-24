@@ -142,7 +142,7 @@ export function CallDemo() {
                   "max-w-[85%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed transition-all duration-300",
                   isAgent
                     ? "rounded-tl-sm border border-blue-500/25 bg-blue-500/[0.09] text-ink"
-                    : "rounded-tr-sm border border-line bg-white/[0.03] text-steel-300"
+                    : "rounded-tr-sm border border-line bg-raised text-steel-300"
                 )}
               >
                 <span className={cn(i === step && !done && "caret")}>{text}</span>

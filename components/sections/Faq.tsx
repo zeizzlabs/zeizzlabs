@@ -18,7 +18,7 @@ export function Faq() {
             lede="The things people actually ask before hiring us — answered honestly, including the parts other agencies leave vague."
           />
           <Reveal delay={0.22}>
-            <div className="mt-8 rounded-card border border-line bg-white/[0.02] p-6">
+            <div className="mt-8 rounded-card border border-line bg-raised p-6">
               <p className="text-sm leading-relaxed text-muted">
                 Still unsure? Send us a message — we&apos;ll tell you what we&apos;d
                 do, even if the answer is &ldquo;you don&apos;t need us yet&rdquo;.

@@ -63,7 +63,7 @@ export function PageHero({
           <Reveal mode="stagger" delay={0.28}>
             <dl className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
               {meta.map((m) => (
-                <div key={m.label} className="bg-ink-950 p-5">
+                <div key={m.label} className="bg-canvas p-5">
                   <dt className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-gold-400">
                     {m.label}
                   </dt>

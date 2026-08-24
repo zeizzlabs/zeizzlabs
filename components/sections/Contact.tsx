@@ -44,9 +44,9 @@ export function Contact() {
                   href={c.href}
                   target={c.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  className="group flex min-h-[64px] items-center gap-4 rounded-card border border-line bg-white/[0.02] px-5 transition-all duration-400 hover:border-white/20 hover:bg-white/[0.05]"
+                  className="group flex min-h-[64px] items-center gap-4 rounded-card border border-line bg-raised px-5 transition-all duration-400 hover:border-white/20 hover:bg-raised-strong"
                 >
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-line bg-white/[0.03] ${c.tone}`}>
+                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-line bg-raised ${c.tone}`}>
                     <Icon name={c.icon} className="h-5 w-5" />
                   </span>
                   <span className="min-w-0 flex-1">

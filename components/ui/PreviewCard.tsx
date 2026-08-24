@@ -99,7 +99,7 @@ export function PreviewCard({
                 </span>
               )}
               {data.icon && (
-                <span className="grid h-9 w-9 place-items-center rounded-lg bg-ink-950/25 text-white/90 backdrop-blur-sm">
+                <span className="grid h-9 w-9 place-items-center rounded-lg bg-canvas/25 text-white/90 backdrop-blur-sm">
                   <Icon name={data.icon} className="h-4.5 w-4.5" strokeWidth={1.8} />
                 </span>
               )}
@@ -120,7 +120,7 @@ export function PreviewCard({
                   {data.tags.slice(0, compact ? 2 : 3).map((t) => (
                     <li
                       key={t}
-                      className="rounded-full bg-ink-950/35 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-white/85 backdrop-blur-sm"
+                      className="rounded-full bg-canvas/35 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-white/85 backdrop-blur-sm"
                     >
                       {t}
                     </li>
