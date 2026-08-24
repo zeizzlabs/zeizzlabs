@@ -61,16 +61,6 @@ export function Navbar({ logo }: { logo: ReactNode }) {
 
   const light = over === "light" && !open;
 
-  /**
-   * On the home page the bar stays out of the way until the visitor starts
-   * scrolling, so the hero opens on a clean full-bleed frame. Inner pages keep
-   * it from the first pixel — those are documents, and hiding navigation on
-   * them just makes the site harder to move around.
-   *
-   * It is hidden with a transform rather than removed, and comes straight back
-   * on keyboard focus, so tabbing into the page can always reach the menu.
-   */
-  const hideAtTop = pathname === "/" && !scrolled && !open;
 
   return (
     <>
@@ -82,14 +72,13 @@ export function Navbar({ logo }: { logo: ReactNode }) {
           "transition-[background,backdrop-filter,border-color,color,transform,opacity] duration-500 ease-[var(--ease-out-quint)]",
           // Always present, just quieter at rest — a bar that only appears once
           // you scroll reads as missing when you are at the top of the page.
-          open
-            ? "border-b border-transparent"
-            : scrolled
-              ? "glass border-b border-line shadow-[0_10px_40px_-28px_rgba(4,6,12,0.55)]"
-              : "border-b border-transparent",
-          hideAtTop
-            ? "-translate-y-full opacity-0 focus-within:translate-y-0 focus-within:opacity-100"
-            : "translate-y-0 opacity-100",
+          // At the top the bar has no line and no background — the logo,
+          // theme switch, CTA and menu simply sit over the hero. The divider
+          // and glass only arrive once there is content scrolling underneath
+          // for them to separate.
+          scrolled && !open
+            ? "glass border-b border-line shadow-[0_10px_40px_-28px_rgba(4,6,12,0.55)]"
+            : "border-b border-transparent",
           light ? "text-ink-950" : "text-ink"
         )}
         style={{ height: "var(--nav-h)" }}

@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { CircleCta } from "@/components/ui/CircleCta";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { offerings, tiers } from "@/content/offerings";
+import { addOnGroups } from "@/content/addons";
 import { cn } from "@/lib/cn";
 
 /**
@@ -96,35 +97,67 @@ export function Packages() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="grid gap-8 pb-9 sm:grid-cols-[1fr_1fr] lg:grid-cols-[1.2fr_1fr_auto]">
-                    <p className="max-w-md text-[15px] leading-relaxed text-muted">
-                      {o.description}
-                    </p>
-                    <ul className="space-y-2">
-                      {o.points.map((pt) => (
-                        <li
-                          key={pt}
-                          className="flex items-start gap-2 text-[14px] text-steel-300"
-                        >
-                          <Icon
-                            name="Check"
-                            className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-live"
-                            strokeWidth={2.4}
-                          />
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                    <TransitionLink
-                      href="/contact"
-                      className="group/link inline-flex h-11 items-center gap-2 self-start rounded-full border border-line-strong px-5 text-[13.5px] font-medium text-ink transition-colors hover:border-gold-500/60"
-                    >
-                      Enquire
-                      <Icon
-                        name="ArrowUpRight"
-                        className="h-4 w-4 transition-transform duration-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                      />
-                    </TransitionLink>
+                  <div className="pb-9">
+                    <div className="grid gap-8 sm:grid-cols-[1fr_1fr] lg:grid-cols-[1.2fr_1fr_auto]">
+                      <p className="max-w-md text-[15px] leading-relaxed text-muted">
+                        {o.description}
+                      </p>
+                      <ul className="space-y-2">
+                        {o.points.map((pt) => (
+                          <li
+                            key={pt}
+                            className="flex items-start gap-2 text-[14px] text-steel-300"
+                          >
+                            <Icon
+                              name="Check"
+                              className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-live"
+                              strokeWidth={2.4}
+                            />
+                            {pt}
+                          </li>
+                        ))}
+                      </ul>
+                      <TransitionLink
+                        href="/contact"
+                        className="group/link inline-flex h-11 items-center gap-2 self-start rounded-full border border-line-strong px-5 text-[13.5px] font-medium text-ink transition-colors hover:border-gold-500/60"
+                      >
+                        Enquire
+                        <Icon
+                          name="ArrowUpRight"
+                          className="h-4 w-4 transition-transform duration-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                        />
+                      </TransitionLink>
+                    </div>
+
+                    {/* What people most often add to this specific package. The
+                        full catalogue is further down the page; this is the
+                        shortlist relevant to what they just opened. */}
+                    {o.addOns && o.addOns.length > 0 && (
+                      <div className="mt-8 border-t border-line pt-6">
+                        <p className="eyebrow mb-4">Commonly added to this</p>
+                        <ul className="flex flex-wrap gap-2">
+                          {o.addOns.map((id) => {
+                            const g = addOnGroups.find((x) => x.id === id);
+                            if (!g) return null;
+                            return (
+                              <li key={id}>
+                                <a
+                                  href="#addons"
+                                  className="inline-flex items-center gap-2 rounded-full border border-line bg-raised px-3.5 py-2 text-[13px] text-steel-300 transition-colors hover:border-gold-500/50 hover:text-ink"
+                                >
+                                  <Icon
+                                    name={g.icon}
+                                    className="h-3.5 w-3.5 text-blue-400"
+                                    strokeWidth={1.8}
+                                  />
+                                  {g.title}
+                                </a>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -163,7 +196,8 @@ export function Packages() {
               </div>
               <p className="mt-2 text-[14px] text-muted">{t.tagline}</p>
 
-              <div className="mt-8 flex items-end gap-2">
+              <div className="mt-8 flex items-end gap-2.5">
+                <span className="pb-1.5 text-[13px] text-faint">from</span>
                 <span
                   className={cn(
                     "font-display text-[clamp(2.2rem,4vw,3rem)] font-bold leading-none tracking-[-0.04em]",
@@ -172,7 +206,7 @@ export function Packages() {
                 >
                   {t.price}
                 </span>
-                <span className="pb-1 text-[12.5px] text-faint">{t.priceNote}</span>
+                <span className="pb-1.5 text-[12.5px] text-faint">· {t.priceNote}</span>
               </div>
 
               <ul className="mt-9 space-y-3 border-t border-line pt-7">

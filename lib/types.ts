@@ -48,8 +48,10 @@ export interface Offering {
   icon: IconName;
   /** Bullet outcomes. */
   points: string[];
-  /** Optional "from" price line, e.g. "from ₹24,999". */
+  /** Optional "from" price line, e.g. "₹24,999". */
   from?: string;
+  /** Ids from content/addons.ts that are most often added to this offering. */
+  addOns?: string[];
   featured?: boolean;
 }
 
@@ -82,6 +84,7 @@ export interface Tier {
   name: string;
   tagline: string;
   price: string;
+  /** Billing cadence shown after the price, e.g. "one-time". */
   priceNote: string;
   features: string[];
   cta: string;

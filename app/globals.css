@@ -209,7 +209,6 @@ body {
   white-space: nowrap;
 }
 
-
 /* Headline scale — fluid, tight, display face. */
 .h-display {
   font-family: var(--font-display);
@@ -261,9 +260,9 @@ body {
    Surfaces
 ================================================================ */
 .glass {
-  background: color-mix(in oklab, var(--color-ink-880) 62%, transparent);
-  backdrop-filter: blur(18px) saturate(150%);
+  background: rgba(9, 13, 26, 0.62);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
 }
 
 /* Standard card plate: subtle top-lit gradient + hairline. */
@@ -511,7 +510,7 @@ body {
   box-shadow: none;
 }
 [data-theme="dark"] .glass {
-  background: color-mix(in oklab, var(--color-ink-880) 62%, transparent);
+  background: rgba(9, 13, 26, 0.62);
 }
 [data-theme="dark"] .grid-lines {
   background-image:
@@ -715,16 +714,15 @@ html.has-custom-cursor * {
   background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
   border-color: #0a0f1c14;
 }
-[data-theme="light"] .glass {
-  background: color-mix(in oklab, #ffffff 70%, transparent);
-}
-
 /* The navbar reads the section under it and inverts to match. */
 header[data-over="light"] {
   color: #0a0f1c;
 }
-header[data-over="light"] .glass,
-header[data-over="light"] {
+/* Only once the bar is scrolled. An element+attribute selector outranks a
+   utility class, so an unscoped rule here beat `border-transparent` and left a
+   hairline under the header at the top of the page. */
+header[data-over="light"][data-scrolled="true"] .glass,
+header[data-over="light"][data-scrolled="true"] {
   border-color: #0a0f1c1f;
 }
 /* The wordmark artwork is white, so it vanishes on a light section. Inverting

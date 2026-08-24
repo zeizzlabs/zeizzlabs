@@ -51,13 +51,11 @@ export function SectionHeading({
 
       {/* Title and aside share a row so the circular CTA reads as part of the
           heading rather than as something stranded under the lede. */}
-      {/* The aside sits immediately beside the title and centred against it,
-          rather than pushed to the far edge of the container — at the edge it
-          reads as a separate element floating in the margin. */}
+      {/* Title left, aside pushed to the far edge of the heading block. */}
       <div
         className={cn(
-          "flex flex-wrap items-center gap-x-10 gap-y-6 sm:gap-x-14",
-          centered ? "justify-center" : "justify-start"
+          "flex items-start gap-6 sm:gap-10",
+          centered ? "justify-center" : "justify-between"
         )}
       >
         <h2 className="text-balance">

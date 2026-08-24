@@ -17,6 +17,7 @@ export const offerings: Offering[] = [
       "A fast, modern, mobile-first website that turns visitors into enquiries.",
     points: ["Custom design", "SEO + speed built in", "Contact & WhatsApp flows", "You own everything"],
     from: "₹24,999",
+    addOns: ["cms", "seo", "analytics", "messaging", "crm", "payments", "ops"],
   },
   {
     id: "ai-calling-agent",
@@ -27,6 +28,7 @@ export const offerings: Offering[] = [
       "A voice AI that answers and makes calls in your brand's voice — 24/7, never misses one.",
     points: ["Books appointments", "Qualifies leads", "Calls back missed enquiries", "Full call transcripts"],
     from: "₹19,999",
+    addOns: ["booking", "crm", "messaging", "analytics"],
     featured: true,
   },
   {
@@ -38,6 +40,7 @@ export const offerings: Offering[] = [
       "Auto-replies, broadcasts, catalogues and chatbots on the WhatsApp Business API.",
     points: ["Instant replies 24/7", "Bulk broadcasts", "Catalogue & orders", "CRM sync"],
     from: "₹14,999",
+    addOns: ["crm", "messaging", "commerce", "ai"],
   },
   {
     id: "brand-identity",
@@ -48,6 +51,7 @@ export const offerings: Offering[] = [
       "A logo and full identity system that makes a new business look established.",
     points: ["Logo + variants", "Colour & type system", "Social media kit", "Brand guidelines PDF"],
     from: "₹9,999",
+    addOns: ["cms", "seo"],
   },
   {
     id: "ecommerce",
@@ -57,6 +61,7 @@ export const offerings: Offering[] = [
     description: "An online store with payments, inventory and automated order flows.",
     points: ["Payments (UPI/cards)", "Inventory & orders", "Abandoned-cart flows", "Analytics"],
     from: "₹39,999",
+    addOns: ["commerce", "payments", "auth", "messaging", "analytics", "ops"],
   },
   {
     id: "custom-ai-agent",
@@ -67,6 +72,7 @@ export const offerings: Offering[] = [
       "An assistant trained on your own documents, products and policies.",
     points: ["Answers from your data", "Cited, grounded replies", "Site + WhatsApp embed", "Human handoff"],
     from: "₹29,999",
+    addOns: ["ai", "backend", "auth", "messaging"],
   },
 ];
 
@@ -80,7 +86,7 @@ export const tiers: Tier[] = [
     name: "Launch",
     tagline: "Get online, properly.",
     price: "₹24,999",
-    priceNote: "one-time · from",
+    priceNote: "one-time",
     features: [
       "Up to 6 custom pages",
       "Mobile-first responsive build",
@@ -96,7 +102,7 @@ export const tiers: Tier[] = [
     name: "Growth",
     tagline: "A website that also works for you.",
     price: "₹64,999",
-    priceNote: "one-time · from",
+    priceNote: "one-time",
     features: [
       "Everything in Launch",
       "Custom web app or store",
@@ -113,7 +119,7 @@ export const tiers: Tier[] = [
     name: "Digital Partner",
     tagline: "We become your tech team.",
     price: "₹18,999",
-    priceNote: "per month · from",
+    priceNote: "per month",
     features: [
       "Dedicated monthly build hours",
       "Ongoing features & improvements",
