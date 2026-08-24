@@ -1,23 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
+type Variant = "up" | "left" | "right" | "scale" | "clip";
+
 /**
- * Scroll-reveal wrapper. Uses a single IntersectionObserver per instance and
- * toggles a CSS class (all animation lives in globals.css, GPU-friendly).
- * prefers-reduced-motion is respected by the CSS, which shows content instantly.
+ * Scroll reveal. One IntersectionObserver per instance; all motion lives in
+ * globals.css so it stays on the compositor. Reduced-motion users get the
+ * content immediately (handled in CSS, not here).
  */
 export function Reveal({
   children,
   delay = 0,
+  variant = "up",
   className,
   as: Tag = "div",
+  once = true,
 }: {
   children: ReactNode;
   delay?: number;
+  variant?: Variant;
   className?: string;
-  as?: "div" | "span" | "li";
+  as?: ElementType;
+  once?: boolean;
 }) {
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -26,24 +32,24 @@ export function Reveal({
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setVisible(true);
-            io.unobserve(e.target);
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          if (once) io.unobserve(entry.target);
+        } else if (!once) {
+          setVisible(false);
+        }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [once]);
 
   return (
     <Tag
-      ref={ref as React.Ref<HTMLDivElement & HTMLSpanElement & HTMLLIElement>}
-      data-reveal=""
+      ref={ref}
+      data-reveal={variant === "up" ? "" : variant}
       className={cn(visible && "is-visible", className)}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >

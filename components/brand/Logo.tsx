@@ -1,41 +1,60 @@
+import fs from "node:fs";
+import path from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { site } from "@/content/site";
 
 /**
- * ZeizzLabs logo — uses the OFFICIAL artwork in /public/brand.
- * Swap those files (see public/brand/README.md) to update the whole site;
- * if you change file extensions, update only these two constants.
+ * ZeizzLabs logo lockup — the Z monogram plus the "ZeizzLabs" wordmark.
  *
- *  - "emblem": the circular badge (self-contained brand mark). Rendered inside a
- *    rounded mask so its black canvas corners never show on the dark UI. Used in
- *    the navbar, mobile menu, and footer at every size.
- *  - "board":  the full rectangular brand board. Reserved for the hero, where the
- *    detailed logo is the visual anchor.
+ *  MARK_SRC      the transparent Z monogram. Primary mark, used at every size.
+ *  WORDMARK_SRC  the wordmark artwork. OPTIONAL and auto-detected: drop a file
+ *                at public/brand/zeizzlabs-wordmark.png and it is used
+ *                automatically, no code change. It must have a real alpha
+ *                channel — a white-wordmark-on-white-background export cannot
+ *                be used on this dark UI, because keying out the white
+ *                background would erase the (also white) letterforms.
+ *                Until then the type-set wordmark below stands in: Poppins
+ *                ExtraBold with a brushed-metal fill and a bevel, matching the
+ *                geometric bowls and single-storey "a" of the real logotype.
+ *  BOARD_SRC     the full rectangular brand board, for social/OG imagery.
  */
-const EMBLEM_SRC = "/brand/zeizzlabs-emblem.png"; // 1254 x 1254
-const BOARD_SRC = "/brand/zeizzlabs-logo.png"; //   1536 x 1024
+const MARK_SRC = "/brand/zeizzlabs-mark.png"; // 1024 x 1024, transparent
+const WORDMARK_SRC = "/brand/zeizzlabs-wordmark.png";
+const BOARD_SRC = "/brand/zeizzlabs-logo.png"; // 1536 x 1024
+
+/** Resolved once on the server at build time. */
+const hasWordmarkImage = fs.existsSync(
+  path.join(process.cwd(), "public", "brand", "zeizzlabs-wordmark.png")
+);
 
 export function Logo({
-  variant = "emblem",
+  variant = "mark",
   className,
   priority,
   href = "/",
-  size = 42,
+  size = 40,
   showWordmark = true,
+  /**
+   * Start collapsed to just the monogram and reveal the wordmark once an
+   * ancestor with `group/nav` carries `data-scrolled="true"`.
+   *
+   * Driven by CSS rather than a prop so this stays a server component — it
+   * reads the filesystem above, which a client component cannot do.
+   */
+  revealOnScroll = false,
 }: {
-  variant?: "emblem" | "board";
+  variant?: "mark" | "board";
   className?: string;
   priority?: boolean;
-  href?: string;
-  /** Rendered height in px for the emblem variant. */
+  href?: string | null;
+  /** Rendered height of the mark, in px. */
   size?: number;
-  /** Show the "ZeizzLabs" text beside the emblem. */
   showWordmark?: boolean;
+  revealOnScroll?: boolean;
 }) {
   if (variant === "board") {
-    // Un-linked showpiece for the hero.
     return (
       <Image
         src={BOARD_SRC}
@@ -43,53 +62,66 @@ export function Logo({
         width={1536}
         height={1024}
         priority={priority}
-        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 70vw, 620px"
+        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 66vw, 560px"
         className={cn("h-auto w-full max-w-full", className)}
       />
     );
   }
 
   const mark = (
-    <span
-      className="relative inline-grid place-items-center overflow-hidden rounded-full ring-1 ring-line-strong transition-[filter,transform] duration-300 group-hover:scale-[1.04] group-hover:ring-white/25"
-      style={{ height: size, width: size }}
-    >
-      <Image
-        src={EMBLEM_SRC}
-        alt={`${site.brandName} emblem`}
-        width={size * 2}
-        height={size * 2}
-        priority={priority}
-        className="h-full w-full object-cover"
-      />
+    <Image
+      src={MARK_SRC}
+      alt=""
+      width={size * 2}
+      height={size * 2}
+      priority={priority}
+      className="shrink-0 transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-[1.06]"
+      style={{
+        height: size,
+        width: size,
+        filter:
+          "saturate(1.15) brightness(1.12) drop-shadow(0 2px 12px rgba(30,123,255,0.45))",
+      }}
+    />
+  );
+
+  const wordmark = hasWordmarkImage ? (
+    <Image
+      src={WORDMARK_SRC}
+      alt={site.brandName}
+      width={size * 8}
+      height={size * 2.6}
+      priority={priority}
+      className="w-auto"
+      style={{ height: size * 0.44 }}
+    />
+  ) : (
+    <span className="wordmark leading-none" style={{ fontSize: size * 0.46 }}>
+      {site.brandName}
     </span>
   );
 
-  const wrapCls = cn(
-    "group inline-flex items-center gap-2.5 transition-transform",
-    "hover:drop-shadow-[0_0_20px_rgba(108,53,255,0.5)]",
-    className
+  const wrapCls = cn("group inline-flex items-center", className);
+
+  const inner = (
+    <>
+      {mark}
+      {showWordmark && (
+        /* 0fr → 1fr collapses the width with no JS measurement and no layout
+           jump anywhere else in the bar. See globals.css for why this is not
+           written with Tailwind utilities. */
+        <span className={revealOnScroll ? "wordmark-reveal" : "wordmark-static"}>
+          <span className="wordmark-clip">{wordmark}</span>
+        </span>
+      )}
+    </>
   );
 
-  const wordmark = (
-    <span className="font-display text-[17px] font-bold leading-none tracking-tight text-ink">
-      Zeizz<span className="text-gradient">Labs</span>
-    </span>
-  );
-
-  if (!href) {
-    return (
-      <span className={wrapCls}>
-        {mark}
-        {showWordmark && wordmark}
-      </span>
-    );
-  }
+  if (!href) return <span className={wrapCls}>{inner}</span>;
 
   return (
     <Link href={href} aria-label={`${site.brandName} home`} className={wrapCls}>
-      {mark}
-      {showWordmark && wordmark}
+      {inner}
     </Link>
   );
 }

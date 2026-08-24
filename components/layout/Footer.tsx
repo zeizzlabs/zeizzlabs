@@ -1,97 +1,142 @@
 import Link from "next/link";
-import { site, nav } from "@/content/site";
+import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
+import { services } from "@/content/services";
 import { Logo } from "@/components/brand/Logo";
+import { Icon } from "@/components/ui/Icon";
+import { Reveal } from "@/components/ui/Reveal";
 
-const socials: Array<{ key: keyof typeof site.social; label: string }> = [
-  { key: "instagram", label: "Instagram" },
-  { key: "linkedin", label: "LinkedIn" },
-  { key: "x", label: "X" },
-  { key: "facebook", label: "Facebook" },
-  { key: "github", label: "GitHub" },
-  { key: "whatsapp", label: "WhatsApp" },
-];
+const socialIcons: Record<string, string> = {
+  whatsapp: "MessageCircle",
+  instagram: "Sparkles",
+  facebook: "Users",
+  linkedin: "Users",
+  x: "X",
+  github: "Code2",
+};
 
 export function Footer() {
   const year = new Date().getFullYear();
-  const activeSocials = socials.filter((s) => site.social[s.key]);
-  return (
-    <footer className="relative mt-24 border-t border-line">
-      {/* Animated gradient hairline */}
-      <div className="h-px w-full [background:var(--gradient-brand)] bg-[length:200%_auto] animate-sweep opacity-70" />
+  const socials = Object.entries(site.social).filter(([, url]) => Boolean(url));
 
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div
-          className={
-            activeSocials.length
-              ? "grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]"
-              : "grid gap-12 md:grid-cols-[1.6fr_1fr]"
-          }
-        >
-          <div className="flex flex-col gap-4">
-            <Logo variant="emblem" size={44} />
-            <p className="max-w-xs text-sm leading-relaxed text-muted">
-              <span className="uppercase tracking-[0.18em] text-faint">
-                {site.positioning}
-              </span>
-              <br />
+  return (
+    <footer className="relative overflow-hidden border-t border-line bg-ink-950">
+      {/* The brand gradient hairline that starts the footer. */}
+      <div className="h-px w-full [background:var(--gradient-brand)] opacity-70" />
+      <div className="dot-matrix pointer-events-none absolute inset-0 opacity-40" />
+
+      <div className="relative mx-auto max-w-7xl px-5 pb-28 pt-16 sm:px-6 sm:pb-10 sm:pt-20">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1.1fr]">
+          <div>
+            <Logo size={48} />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
+              {site.subline}. We build websites, apps, AI agents and automation
+              for businesses that want to grow online.
+            </p>
+            <p className="mt-5 font-display text-lg font-semibold tracking-tight text-gradient">
               {site.tagline}
             </p>
-            <div className="flex flex-col gap-1">
-              <a
-                href={`mailto:${site.email}`}
-                className="w-fit text-sm font-medium text-ink transition-colors hover:text-blue"
-              >
-                {site.email}
-              </a>
-              <a
-                href={`tel:${site.phone.replace(/\s/g, "")}`}
-                className="w-fit text-sm font-medium text-ink tabular-nums transition-colors hover:text-blue"
-              >
-                {site.phone}
-              </a>
-            </div>
           </div>
 
-          <nav className="flex flex-col gap-3" aria-label="Footer">
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-faint">
-              Explore
-            </span>
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="w-fit text-sm text-muted transition-colors hover:text-ink"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div>
+            <h3 className="eyebrow mb-4">Services</h3>
+            <ul className="space-y-1">
+              {services.slice(0, 6).map((s) => (
+                <li key={s.id}>
+                  <Link
+                    href="/#services"
+                    className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink"
+                  >
+                    {s.short}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {activeSocials.length > 0 && (
-            <div className="flex flex-col gap-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-faint">
-                Connect
-              </span>
-              {activeSocials.map((s) => (
+          <div>
+            <h3 className="eyebrow mb-4">Company</h3>
+            <ul className="space-y-1">
+              {nav.map((n) => (
+                <li key={n.label}>
+                  <Link
+                    href={n.href}
+                    className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink"
+                  >
+                    {n.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/#contact" className="-my-1 inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-ink">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="eyebrow mb-4">Get in touch</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href={mailLink} className="group flex min-h-[40px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-ink">
+                  <Icon name="Mail" className="h-4 w-4 text-blue-400" />
+                  {site.email}
+                </a>
+              </li>
+              <li>
+                <a href={telLink} className="group flex min-h-[40px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-ink">
+                  <Icon name="Phone" className="h-4 w-4 text-blue-400" />
+                  {site.phone}
+                </a>
+              </li>
+              <li>
                 <a
-                  key={s.key}
-                  href={site.social[s.key]}
+                  href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-fit text-sm text-muted transition-colors hover:text-ink"
+                  className="group flex min-h-[40px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-ink"
                 >
-                  {s.label}
+                  <Icon name="MessageCircle" className="h-4 w-4 text-status-live" />
+                  Chat on WhatsApp
                 </a>
-              ))}
-            </div>
-          )}
+              </li>
+            </ul>
+
+            {socials.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {socials.map(([key, url]) => (
+                  <a
+                    key={key}
+                    href={url as string}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={key}
+                    className="grid h-11 w-11 place-items-center rounded-full border border-line text-muted transition-all hover:border-gold-500/50 hover:text-gold-300"
+                  >
+                    <Icon name={socialIcons[key] ?? "Sparkles"} className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-line pt-6 text-xs text-faint sm:flex-row sm:items-center">
+        {/* Oversized wordmark — the closing brand beat. */}
+        <Reveal variant="clip" className="mt-16 select-none">
+          <div
+            aria-hidden
+            className="wordmark-xl text-[clamp(3.2rem,15vw,11rem)] leading-[0.82]"
+          >
+            <span className="text-steel-gradient opacity-70">Zeizz</span>
+            <span className="text-gradient opacity-90">Labs</span>
+          </div>
+        </Reveal>
+
+        <div className="mt-10 flex flex-col gap-3 border-t border-line pt-7 text-xs text-faint sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {site.brandName}. Everything digital. Endless possibilities.
+            © {year} {site.brandName}. All rights reserved.
           </p>
-          <p className="text-faint/80">Built in the lab.</p>
+          <p className="font-mono tracking-wider">{site.subline.toUpperCase()}</p>
         </div>
       </div>
     </footer>

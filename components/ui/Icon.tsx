@@ -1,70 +1,29 @@
 import {
-  Activity,
-  AppWindow,
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Boxes,
-  BrainCircuit,
-  Check,
-  Code2,
-  Database,
-  Layers,
-  Menu,
-  MessageCircle,
-  Package,
-  PenTool,
-  Phone,
-  Plug,
-  Rocket,
-  Server,
-  ShoppingCart,
-  Sparkles,
-  TrendingUp,
-  Users,
-  Workflow,
-  X,
+  Activity, AppWindow, ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck,
+  BarChart3, BrainCircuit, Boxes, Check, ChevronDown, Clock, Cloud, Code2,
+  Database, Globe, Layers, Lock, Mail, Menu, MessageCircle, Minus, Phone,
+  PhoneCall, PenTool, Plug, Plus, Rocket, Search, Server, ShieldCheck,
+  ShoppingCart, Sparkles, TrendingUp, Users, Workflow, X, Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { IconName } from "@/lib/types";
 
 /**
- * Central icon registry. Content files reference icons by string name; this map
- * is the single place lucide-react is imported, so the bundle only ships the
- * icons actually used. Add a new icon here to make it available to content.
+ * Central icon registry. Content files reference icons by string name, so this
+ * is the only place lucide-react is imported — the bundle ships exactly these.
  */
 const registry: Record<string, LucideIcon> = {
-  Activity,
-  AppWindow,
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Boxes,
-  BrainCircuit,
-  Check,
-  Code2,
-  Database,
-  Layers,
-  Menu,
-  MessageCircle,
-  Package,
-  PenTool,
-  Phone,
-  Plug,
-  Rocket,
-  Server,
-  ShoppingCart,
-  Sparkles,
-  TrendingUp,
-  Users,
-  Workflow,
-  X,
+  Activity, AppWindow, ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck,
+  BarChart3, BrainCircuit, Boxes, Check, ChevronDown, Clock, Cloud, Code2,
+  Database, Globe, Layers, Lock, Mail, Menu, MessageCircle, Minus, Phone,
+  PhoneCall, PenTool, Plug, Plus, Rocket, Search, Server, ShieldCheck,
+  ShoppingCart, Sparkles, TrendingUp, Users, Workflow, X, Zap,
 };
 
 export function Icon({
   name,
   className,
-  strokeWidth = 1.6,
+  strokeWidth = 1.5,
 }: {
   name: IconName;
   className?: string;

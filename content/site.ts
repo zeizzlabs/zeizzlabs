@@ -1,28 +1,25 @@
 import type { NavItem, SiteConfig } from "@/lib/types";
+import { services } from "./services";
 
 /**
- * Global brand configuration for ZeizzLabs.
- *
- * Contact values prefer environment variables so they aren't hard-committed;
- * the fallbacks are the real business defaults. Social URLs are only shown when
- * set (the footer filters out empties).
+ * Global brand configuration.
+ * Contact values prefer env vars; fallbacks are the real business defaults.
+ * Social links render only when set (the footer filters empties).
  */
 export const site: SiteConfig = {
   brandName: "ZeizzLabs",
-  positioning: "Digital Services & AI Automation",
-  tagline: "We build the digital that grows your business.",
+  positioning: "Digital Creation & Innovation",
+  tagline: "Everything digital. Endless possibilities.",
+  subline: "Digital Creation & Innovation",
   description:
-    "ZeizzLabs is a digital services studio. We build websites and web apps, WhatsApp and business automation, AI agents, and AI calling agents — everything a business needs to run and grow online.",
+    "ZeizzLabs is a digital creation and innovation studio. Websites, apps and digital products, design and branding, AI agents and AI calling agents, automation, cloud, analytics and immersive digital experiences — everything a business needs to grow online.",
 
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "zeizzlabs@gmail.com",
   phone: process.env.NEXT_PUBLIC_PHONE || "+91 70175 96468",
-  // Digits only (with country code) for wa.me / tel links.
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917017596468",
 
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://zeizzlabs.com",
 
-  // Only profiles with a real URL are shown. WhatsApp defaults to a wa.me link
-  // built from the number above so it works out of the box.
   social: {
     whatsapp:
       process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/917017596468",
@@ -34,15 +31,31 @@ export const site: SiteConfig = {
   },
 };
 
-/** Convenience: a ready-to-use WhatsApp chat link with a prefilled message. */
+/** Ready-to-use WhatsApp chat link with a prefilled message. */
 export const whatsappLink = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(
-  "Hi ZeizzLabs, I'd like to know more about your services."
+  "Hi ZeizzLabs — I'd like to discuss a project."
 )}`;
 
-/** Primary navigation. Add/remove items freely. */
+export const telLink = `tel:${site.phone.replace(/[^\d+]/g, "")}`;
+export const mailLink = `mailto:${site.email}`;
+
+/**
+ * Primary navigation. "Services" carries a mega-menu built straight from the
+ * eight pillars, so adding a pillar updates the nav automatically.
+ */
 export const nav: NavItem[] = [
-  { label: "Services", href: "/#services" },
-  { label: "What We Offer", href: "/#offerings" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  {
+    label: "Services",
+    href: "/#services",
+    children: services.map((s) => ({
+      label: s.short,
+      href: `/#services`,
+      desc: s.blurb,
+      icon: s.icon,
+    })),
+  },
+  { label: "How we work", href: "/#process" },
+  { label: "AI Systems", href: "/#ai" },
+  { label: "Packages", href: "/#packages" },
+  { label: "FAQ", href: "/#faq" },
 ];

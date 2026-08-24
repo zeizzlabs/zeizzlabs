@@ -3,13 +3,13 @@
 import { useRef, type ReactNode } from "react";
 
 /**
- * Magnetic hover: the child gently follows the cursor within a small radius,
- * then springs back. Pointer-only and disabled for reduced-motion users.
- * Cheap — mutates transform directly, no re-renders.
+ * Magnetic hover — the child eases toward the cursor inside its own box, then
+ * springs back. Mouse-only, skipped for reduced motion, and it mutates
+ * transform directly so React never re-renders.
  */
 export function Magnetic({
   children,
-  strength = 0.35,
+  strength = 0.3,
   className,
 }: {
   children: ReactNode;
@@ -18,12 +18,9 @@ export function Magnetic({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
 
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
   function onMove(e: React.PointerEvent) {
-    if (reduced || e.pointerType !== "mouse") return;
+    if (e.pointerType !== "mouse") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
@@ -43,7 +40,10 @@ export function Magnetic({
       onPointerMove={onMove}
       onPointerLeave={reset}
       className={className}
-      style={{ display: "inline-block", transition: "transform 0.35s cubic-bezier(0.22,1,0.36,1)" }}
+      style={{
+        display: "inline-block",
+        transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1)",
+      }}
     >
       {children}
     </span>

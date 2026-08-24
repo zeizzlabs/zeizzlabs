@@ -4,8 +4,104 @@
     {
       "name": "zeizzlabs-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "shreekishori",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/ShreeKishori-Realty",
+        "run",
+        "dev"
+      ],
+      "port": 3200,
+      "autoPort": true
+    },
+    {
+      "name": "kridha",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Kridha-Properties",
+        "run",
+        "dev"
+      ],
+      "port": 3300,
+      "autoPort": true
+    },
+    {
+      "name": "savora",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Savora-Restaurant",
+        "run",
+        "dev"
+      ],
+      "port": 3400,
+      "autoPort": true
+    },
+    {
+      "name": "krave",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Krave-FastFood",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3500"
+      ],
+      "port": 3500,
+      "autoPort": true
+    },
+    {
+      "name": "aurelia",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Aurelia-Salon-Spa",
+        "run",
+        "dev"
+      ],
+      "port": 3500,
+      "autoPort": true
+    },
+    {
+      "name": "cascara",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Cascara-Cafe",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3600"
+      ],
+      "port": 3600,
+      "autoPort": true
+    },
+    {
+      "name": "aarohan",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Aarohan-Developers",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3600"
+      ],
+      "port": 3600,
       "autoPort": true
     }
   ]

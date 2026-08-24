@@ -1,56 +1,76 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { Reveal } from "./Reveal";
+import { Kinetic } from "./Kinetic";
 
 /**
- * Standard section header: a small gradient eyebrow, an editorial headline,
- * and optional supporting copy. Keeps hierarchy consistent across sections.
+ * Section header: mono eyebrow with a hairline, kinetic display title, and an
+ * optional lede. `align` switches between the standard left rail and centred.
  */
 export function SectionHeading({
   eyebrow,
   title,
-  intro,
+  accent,
+  lede,
   align = "left",
-  as: Heading = "h2",
+  className,
+  children,
 }: {
-  eyebrow?: string;
-  title: ReactNode;
-  intro?: ReactNode;
+  eyebrow: string;
+  title: string;
+  /** Trailing words rendered in the brand gradient. */
+  accent?: string;
+  lede?: string;
   align?: "left" | "center";
-  as?: "h1" | "h2" | "h3";
+  className?: string;
+  children?: ReactNode;
 }) {
+  const centered = align === "center";
   return (
     <div
       className={cn(
-        "flex flex-col gap-4",
-        align === "center" && "items-center text-center mx-auto max-w-2xl"
+        "relative",
+        centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl",
+        className
       )}
     >
-      {eyebrow && (
-        <Reveal>
-          <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-muted">
-            <span className="h-1.5 w-1.5 rounded-full [background:var(--gradient-brand)]" />
-            {eyebrow}
-          </span>
+      <Reveal>
+        <div
+          className={cn(
+            "mb-5 flex items-center gap-3",
+            centered && "justify-center"
+          )}
+        >
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold-500/70" />
+          <span className="eyebrow">{eyebrow}</span>
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold-500/70" />
+        </div>
+      </Reveal>
+
+      <Kinetic
+        as="h2"
+        text={title}
+        className="h-section text-balance text-ink"
+      />
+      {accent && (
+        <Reveal delay={120}>
+          <span className="h-section text-gradient block text-balance">{accent}</span>
         </Reveal>
       )}
-      <Reveal delay={80}>
-        <Heading className="font-display text-balance text-3xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-4xl md:text-5xl">
-          {title}
-        </Heading>
-      </Reveal>
-      {intro && (
-        <Reveal delay={140}>
+
+      {lede && (
+        <Reveal delay={160}>
           <p
             className={cn(
-              "text-pretty text-base leading-relaxed text-muted sm:text-lg",
-              align === "center" ? "max-w-2xl" : "max-w-2xl"
+              "mt-6 text-pretty text-base leading-relaxed text-muted sm:text-lg",
+              centered && "mx-auto"
             )}
           >
-            {intro}
+            {lede}
           </p>
         </Reveal>
       )}
+      {children}
     </div>
   );
 }

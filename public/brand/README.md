@@ -2,25 +2,38 @@
 
 The official ZeizzLabs artwork lives here and drives the whole site.
 
-| File | Used for |
-| --- | --- |
-| `zeizzlabs-logo.png` | Full brand board — the hero centerpiece (1536×1024) |
-| `zeizzlabs-emblem.png` | Circular badge — navbar, mobile menu, footer, favicon (1254×1254) |
+| File | Size | Used for |
+| --- | --- | --- |
+| `zeizzlabs-mark.png` | 1024×1024, transparent | **Primary mark.** Navbar, footer, mobile menu, closing CTA, favicon |
+| `zeizzlabs-logo.png` | 1536×1024 | Full brand board — social/OG image |
+| `zeizzlabs-emblem.png` | 1254×1254 | Legacy circular badge (no longer used in the UI) |
+| `zeizzlabs-wordmark.png` | — | **Optional.** See below |
 
-## Swapping the artwork (zero code changes)
+## Using the real wordmark image
 
-Overwrite either file, keeping the **exact same filename**. To change file type
-or path, update the two constants at the top of
-[`components/brand/Logo.tsx`](../../components/brand/Logo.tsx):
+The site currently type-sets "ZeizzLabs" next to the mark. To use the actual
+wordmark artwork instead:
+
+1. Export the wordmark with a **transparent background** (a white-on-white PNG
+   will not work — the letters are white, so keying out the background erases
+   the letters too). A PNG with real alpha, or a light-on-dark export, is fine.
+2. Save it here as `zeizzlabs-wordmark.png`.
+3. In [`components/brand/Logo.tsx`](../../components/brand/Logo.tsx), set
+   `USE_WORDMARK_IMAGE = true`.
+
+## Swapping any artwork (zero code changes)
+
+Overwrite a file keeping the **exact same filename**. To change the file type or
+path, update the constants at the top of `components/brand/Logo.tsx`:
 
 ```ts
-const EMBLEM_SRC = "/brand/zeizzlabs-emblem.png";
-const BOARD_SRC  = "/brand/zeizzlabs-logo.png";
+const MARK_SRC     = "/brand/zeizzlabs-mark.png";
+const WORDMARK_SRC = "/brand/zeizzlabs-wordmark.png";
+const BOARD_SRC    = "/brand/zeizzlabs-logo.png";
 ```
 
-### Tips
-- The badge is clipped to a circle in the UI, so its black canvas corners never
-  show. A transparent-background export is nice-to-have but not required.
-- These sources are ~1.2 MB each; Next.js optimizes and resizes them per use, so
-  the browser never downloads the full file. For best Lighthouse scores you can
-  export smaller/transparent versions later — no code change needed.
+## Favicons
+
+`app/icon.png` and `app/apple-icon.png` are the mark composited onto the site's
+`#04060c` ground. Regenerate them if the mark changes — a transparent favicon
+disappears on light browser chrome.

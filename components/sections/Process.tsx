@@ -1,40 +1,185 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { processSteps } from "@/content/products";
+import { Icon } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/Button";
+import { processSteps } from "@/content/process";
+import { cn } from "@/lib/cn";
 
+/**
+ * PROCESS — a sticky rail on the left, steps scrolling past on the right.
+ *
+ * The rail's fill and the active step are driven by one rAF-throttled scroll
+ * read of the section's bounding box, so there's a single measurement per frame
+ * and no per-step observers. On mobile the rail collapses to a simple
+ * numbered timeline and every step is shown fully.
+ */
 export function Process() {
-  return (
-    <Section id="process">
-      <SectionHeading
-        eyebrow="Process"
-        title={
-          <>
-            From idea to <span className="text-gradient">launch — and beyond.</span>
-          </>
-        }
-        intro="A clear path, not a black box. Every project we take on moves through these seven stages."
-      />
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
 
-      <ol className="mt-12 space-y-px">
-        {processSteps.map((step, i) => (
-          <Reveal as="li" key={step.no} delay={(i % 4) * 50}>
-            <div className="group relative grid grid-cols-[auto_1fr] items-start gap-5 border-t border-line py-6 transition-colors last:border-b sm:grid-cols-[6rem_1fr_2fr] sm:gap-8">
-              <span className="font-display text-2xl font-semibold tabular-nums text-faint transition-colors group-hover:text-ink sm:text-3xl">
-                {step.no}
-              </span>
-              <h3 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-                {step.title}
-              </h3>
-              <p className="col-span-2 text-sm leading-relaxed text-muted sm:col-span-1 sm:text-base">
-                {step.body}
-              </p>
-              {/* left edge illumination on hover */}
-              <span className="pointer-events-none absolute left-0 top-0 h-full w-px scale-y-0 [background:var(--gradient-brand)] transition-transform duration-500 group-hover:scale-y-100" />
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const el = sectionRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 when the section's top reaches mid-screen, 1 when its bottom does.
+      const total = r.height - vh * 0.5;
+      const p = Math.max(0, Math.min(1, (vh * 0.5 - r.top) / Math.max(total, 1)));
+      if (fillRef.current) fillRef.current.style.transform = `scaleY(${p})`;
+      setActive(Math.min(processSteps.length - 1, Math.floor(p * processSteps.length)));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return (
+    <Section id="process" className="relative">
+      <div ref={sectionRef}>
+        <SectionHeading
+          eyebrow="How we work"
+          title="Six steps."
+          accent="No mystery, no surprises."
+          lede="You always know what stage the project is at, what you'll get at the end of it, and what it costs. Here's exactly how a ZeizzLabs build runs."
+        />
+
+        <div className="mt-16 grid gap-10 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
+          {/* Sticky rail */}
+          <div className="hidden lg:block">
+            <div className="sticky top-32">
+              <div className="flex gap-6">
+                {/* Track + fill */}
+                <div className="relative w-px bg-line">
+                  <div
+                    ref={fillRef}
+                    className="absolute inset-x-0 top-0 h-full origin-top [background:var(--gradient-brand)]"
+                    style={{ transform: "scaleY(0)" }}
+                  />
+                </div>
+
+                <ol className="flex-1 space-y-5">
+                  {processSteps.map((s, i) => (
+                    <li key={s.no}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          document
+                            .getElementById(`step-${s.no}`)
+                            ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                        }
+                        className={cn(
+                          "flex w-full items-center gap-3 text-left transition-all duration-400",
+                          i === active ? "opacity-100" : "opacity-40 hover:opacity-70"
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "font-mono text-[11px] tracking-[0.2em] transition-colors",
+                            i === active ? "text-gold-300" : "text-faint"
+                          )}
+                        >
+                          {s.no}
+                        </span>
+                        <span
+                          className={cn(
+                            "h-card text-lg transition-colors",
+                            i === active ? "text-ink" : "text-muted"
+                          )}
+                        >
+                          {s.title}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="mt-10 rounded-card border border-line bg-white/[0.02] p-5">
+                <p className="text-sm leading-relaxed text-muted">
+                  Most projects go live in{" "}
+                  <span className="font-medium text-ink">2 to 4 weeks</span>.
+                </p>
+                <Button href="/#contact" size="sm" arrow className="mt-4">
+                  Book a free call
+                </Button>
+              </div>
             </div>
-          </Reveal>
-        ))}
-      </ol>
+          </div>
+
+          {/* Steps */}
+          <ol className="space-y-4">
+            {processSteps.map((s, i) => (
+              <Reveal key={s.no} as="li" delay={40}>
+                <div
+                  id={`step-${s.no}`}
+                  className={cn(
+                    "plate group relative overflow-hidden rounded-card p-6 transition-all duration-500 sm:p-8",
+                    i === active
+                      ? "border-white/20 bg-white/[0.02] shadow-[0_24px_60px_-40px_rgba(30,123,255,0.7)]"
+                      : ""
+                  )}
+                >
+                  {/* Big ghost number */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -right-2 -top-6 font-display text-[6rem] font-bold leading-none text-white/[0.025] sm:text-[8rem]"
+                  >
+                    {s.no}
+                  </span>
+
+                  <div className="relative flex items-start gap-4">
+                    <span
+                      className={cn(
+                        "grid h-12 w-12 shrink-0 place-items-center rounded-xl border transition-colors duration-500",
+                        i === active
+                          ? "border-blue-500/40 bg-blue-500/10 text-blue-300"
+                          : "border-line bg-white/[0.02] text-muted"
+                      )}
+                    >
+                      <Icon name={s.icon} className="h-5 w-5" />
+                    </span>
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-3">
+                        <span className="font-mono text-[11px] tracking-[0.2em] text-gold-400">
+                          {s.no}
+                        </span>
+                        <h3 className="h-card text-xl text-ink sm:text-2xl">{s.title}</h3>
+                      </div>
+                      <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
+                        {s.body}
+                      </p>
+                      <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.02] px-3.5 py-1.5 text-[12.5px] text-steel-300">
+                        <Icon
+                          name="BadgeCheck"
+                          className="h-3.5 w-3.5 text-status-live"
+                          strokeWidth={1.8}
+                        />
+                        You get: {s.deliverable}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </div>
     </Section>
   );
 }

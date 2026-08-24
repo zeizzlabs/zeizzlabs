@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "brand:wordmark": "python3 scripts/prepare-wordmark.py"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

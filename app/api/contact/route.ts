@@ -47,12 +47,13 @@ export async function POST(req: Request) {
         from,
         to,
         replyTo: data.email,
-        subject: `New project inquiry — ${data.name}${data.company ? ` (${data.company})` : ""}`,
+        subject: `New enquiry — ${data.name}${data.company ? ` (${data.company})` : ""}`,
         text: [
           `Name: ${data.name}`,
           `Email: ${data.email}`,
-          `Company/Brand: ${data.company || "—"}`,
-          `Building: ${data.building}`,
+          `Phone: ${data.phone || "—"}`,
+          `Business: ${data.company || "—"}`,
+          `Service: ${data.service || "—"}`,
           `Budget: ${data.budget || "—"}`,
           `Timeline: ${data.timeline || "—"}`,
           "",
@@ -68,10 +69,10 @@ export async function POST(req: Request) {
     }
   } else {
     // No provider configured — log for local dev.
-    console.info("[contact] inquiry received (email not configured):", {
+    console.info("[contact] enquiry received (email not configured):", {
       name: data.name,
       email: data.email,
-      building: data.building,
+      service: data.service,
     });
   }
 

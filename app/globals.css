@@ -1,253 +1,504 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   ZeizzLabs — Design token system
-   Digital creation & innovation studio. Dark, premium, restrained.
-   The LOGO is the colour; the UI is dark surfaces + white type +
-   subtle borders + occasional gradient energy. All values live here
-   as tokens — no magic hex in components. Tailwind v4 exposes every
-   --color-* as a utility (bg-bg-950, text-ink, border-line, etc.).
+   ZeizzLabs — Design System
+   ------------------------------------------------------------------
+   Palette is derived directly from the brand mark: a deep navy-black
+   circuit board, electric blue traces, champagne-gold conductors and
+   brushed-steel highlights. Blue = technology. Gold = craft/premium.
+   Steel = structure. Nothing else. No magic hex in components.
 ================================================================== */
 
 @theme {
-  /* Fonts (wired to next/font CSS variables in app/layout.tsx) */
+  /* --- Type ------------------------------------------------------ */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-mono-jet), ui-monospace, "SFMono-Regular", monospace;
+  /* Logotype only — see components/brand/Logo.tsx. */
+  --font-wordmark: var(--font-poppins), var(--font-sora), ui-sans-serif, sans-serif;
 
-  /* Backgrounds — very dark, near-black, subtly blue-cool */
-  --color-bg-950: #050508;
-  --color-bg-900: #080a12;
-  --color-bg-850: #0b0d18;
-  --color-bg-800: #101322;
-  --color-bg-750: #161a2c;
+  /* --- Ground: deep navy-black (the board) ----------------------- */
+  --color-ink-950: #04060c;
+  --color-ink-900: #070a14;
+  --color-ink-880: #090d1a;
+  --color-ink-850: #0b1020;
+  --color-ink-800: #0f1526;
+  --color-ink-750: #141c33;
+  --color-ink-700: #1b2542;
 
-  /* Surfaces / lines */
-  --color-surface: #0c0f1a;
-  --color-surface-2: #11152260;
-  --color-line: #ffffff14; /* hairline borders */
-  --color-line-strong: #ffffff26;
+  /* --- Surfaces & hairlines ------------------------------------- */
+  --color-surface: #090e1b;
+  --color-surface-2: #0d1424;
+  --color-line: #ffffff14;
+  --color-line-strong: #ffffff28;
+  --color-line-gold: #c9a15c33;
 
-  /* Brand spectrum */
-  --color-blue: #149bff;
-  --color-violet: #6c35ff;
-  --color-magenta: #d52bff;
-  --color-orange: #ff7a18;
+  /* --- Brand: electric blue (traces) ---------------------------- */
+  --color-blue-300: #8cc4ff;
+  --color-blue-400: #4da3ff;
+  --color-blue-500: #1e7bff;
+  --color-blue-600: #0f5bd6;
+  --color-blue-700: #0b429e;
+  --color-blue-950: #061a3d;
 
-  /* Text */
-  --color-ink: #f7f7fa;
-  --color-muted: #9296a5;
-  --color-faint: #6a6e7e;
+  /* --- Brand: champagne gold (conductors) ----------------------- */
+  --color-gold-200: #f6e6c4;
+  --color-gold-300: #ecd3a0;
+  --color-gold-400: #dcb877;
+  --color-gold-500: #c9a15c;
+  --color-gold-600: #a37f42;
 
-  /* Semantic aliases */
-  --color-background: var(--color-bg-950);
+  /* --- Brand: brushed steel ------------------------------------- */
+  --color-steel-300: #cdd8e8;
+  --color-steel-400: #a4b3c9;
+  --color-steel-500: #7d8da6;
+
+  /* --- Text ------------------------------------------------------ */
+  --color-ink: #f4f7fc;
+  --color-muted: #939eb2;
+  --color-faint: #7d8a9f;
+
+  --color-background: var(--color-ink-950);
   --color-foreground: var(--color-ink);
 
-  /* Status */
-  --color-status-live: #16c784;
-  --color-status-dev: #149bff;
-  --color-status-experimental: #d52bff;
-  --color-status-soon: #ff7a18;
+  /* --- Status ---------------------------------------------------- */
+  --color-status-live: #23c98b;
+  --color-status-dev: #4da3ff;
+  --color-status-experimental: #dcb877;
+  --color-status-soon: #7d8da6;
 
-  /* Radii */
-  --radius-card: 1rem;
-  --radius-lg: 1.5rem;
+  /* --- Radii ----------------------------------------------------- */
+  --radius-card: 1.25rem;
+  --radius-xl2: 1.75rem;
 
-  /* Gradient energy (used sparingly, as accents) */
-  --gradient-brand: linear-gradient(
-    90deg,
-    var(--color-blue),
-    var(--color-violet),
-    var(--color-magenta),
-    var(--color-orange)
-  );
-  --gradient-brand-135: linear-gradient(
-    135deg,
-    var(--color-blue),
-    var(--color-violet) 42%,
-    var(--color-magenta) 72%,
-    var(--color-orange)
-  );
+  /* --- Motion easing --------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-/* Base ------------------------------------------------------------ */
+/* The one brand gradient — blue → sky → champagne. Used for CTAs,
+   headline accents, hairlines and glows. Never for large fills. */
+:root {
+  --gradient-brand: linear-gradient(
+    100deg in oklab,
+    var(--color-blue-600) 0%,
+    var(--color-blue-500) 22%,
+    var(--color-blue-300) 52%,
+    var(--color-gold-400) 82%,
+    var(--color-gold-300) 100%
+  );
+  --gradient-brand-soft: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-blue-500) 22%, transparent),
+    color-mix(in oklab, var(--color-gold-400) 18%, transparent)
+  );
+  --glow-blue: 0 0 60px -12px color-mix(in oklab, var(--color-blue-500) 70%, transparent);
+  --glow-gold: 0 0 60px -14px color-mix(in oklab, var(--color-gold-400) 60%, transparent);
+  --nav-h: 4.5rem;
+}
+
+/* ================================================================
+   Base
+================================================================ */
 html {
-  scroll-behavior: smooth;
-  background: var(--color-bg-950);
+  background: var(--color-ink-950);
   color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--color-bg-950);
+  background: var(--color-ink-950);
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-violet) 45%, transparent);
+  background: color-mix(in oklab, var(--color-blue-500) 55%, transparent);
   color: #fff;
 }
 
-/* Custom scrollbar (subtle) */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg-900);
-}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-ink-900); }
 ::-webkit-scrollbar-thumb {
-  background: #ffffff1a;
+  background: #ffffff1f;
   border-radius: 999px;
-  border: 2px solid var(--color-bg-900);
+  border: 2px solid var(--color-ink-900);
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #ffffff33;
+::-webkit-scrollbar-thumb:hover { background: var(--color-blue-600); }
+
+:focus-visible {
+  outline: 2px solid var(--color-blue-400);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* Utilities ------------------------------------------------------- */
+/* ================================================================
+   Type helpers
+================================================================ */
+.font-display { font-family: var(--font-display); }
 
-/* Gradient text — the brand energy, used only on select headline spans */
+/* The brand name set as a logotype.
+   Poppins ExtraBold matches the real wordmark's geometric bowls and
+   single-storey "a"; the gradient fill + bevel shadow reproduce its brushed
+   3D metal finish. Used only for the brand name, never for copy. */
+.wordmark {
+  font-family: var(--font-wordmark);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  background: linear-gradient(
+    170deg,
+    #ffffff 0%,
+    #f2f5fa 26%,
+    #b9c4d4 52%,
+    #ffffff 66%,
+    #cfd8e6 88%,
+    #9aa7bb 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* The bevel: a bright top edge and a dark bottom edge, as on the artwork.
+     Hard-edged only (0 blur radius) so the letterforms stay razor sharp. */
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6))
+    drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.45));
+  text-rendering: geometricPrecision;
+}
+
+/* Navbar reveal: at the top of the page only the monogram shows; the wordmark
+   opens out once the header is scrolled.
+   Written as plain CSS rather than Tailwind utilities on purpose — an
+   unprefixed `blur-[3px]` and a variant `blur-0` both set the same
+   `--tw-blur` custom property, and the arbitrary value wins the cascade
+   regardless of the variant, which left the wordmark permanently blurred. */
+.wordmark-reveal {
+  display: grid;
+  grid-template-columns: 0fr;
+  padding-left: 0;
+  opacity: 0;
+  transition: grid-template-columns 0.55s var(--ease-out-expo),
+    padding-left 0.55s var(--ease-out-expo), opacity 0.4s ease;
+}
+[data-scrolled="true"] .wordmark-reveal {
+  grid-template-columns: 1fr;
+  padding-left: 0.625rem;
+  opacity: 1;
+}
+.wordmark-static {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding-left: 0.625rem;
+}
+.wordmark-clip {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Oversized display use (the footer sign-off) — the same finish, but with the
+   brand gradient carrying the second half of the name. */
+.wordmark-xl {
+  font-family: var(--font-wordmark);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+/* Headline scale — fluid, tight, display face. */
+.h-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  font-size: clamp(2.6rem, 7.2vw, 6.25rem);
+}
+.h-section {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+}
+.h-card {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* Technical mono eyebrow — the "lab" voice. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+}
+
 .text-gradient {
-  background: var(--gradient-brand-135);
+  background: var(--gradient-brand);
+  background-size: 100% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
-/* Hairline border helper */
-.border-line {
-  border-color: var(--color-line);
+.text-steel-gradient {
+  background: linear-gradient(160deg, #ffffff 10%, var(--color-steel-400) 55%, #6d7c93 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Glass surface — used sparingly (nav, some cards) */
+/* ================================================================
+   Surfaces
+================================================================ */
 .glass {
-  background: color-mix(in oklab, var(--color-bg-850) 72%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: color-mix(in oklab, var(--color-ink-880) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
 }
 
-/* Gradient hairline border on hover (border illumination) */
-.border-glow {
-  position: relative;
+/* Standard card plate: subtle top-lit gradient + hairline. */
+.plate {
+  background:
+    linear-gradient(180deg, #ffffff0a 0%, #ffffff02 40%, transparent 100%),
+    var(--color-surface);
+  border: 1px solid var(--color-line);
 }
-.border-glow::before {
+
+/* Gradient hairline that lights up on hover/focus. */
+.edge-glow { position: relative; }
+.edge-glow::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: var(--gradient-brand-135);
+  background: var(--gradient-brand);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.45s var(--ease-out-quint);
   pointer-events: none;
 }
-.border-glow:hover::before,
-.border-glow:focus-within::before {
-  opacity: 1;
-}
+.edge-glow:hover::before,
+.edge-glow:focus-within::before { opacity: 1; }
 
-/* Section grid backdrop — faint technical grid */
+/* Cursor-tracking spotlight. Components set --mx/--my in px. */
+.spotlight { position: relative; }
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--color-blue-500) 16%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.spotlight:hover::after { opacity: 1; }
+
+/* Faint technical grid backdrop, radially masked. */
 .grid-lines {
-  background-image: linear-gradient(var(--color-line) 1px, transparent 1px),
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 40%,
-    #000 40%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 40%,
-    #000 40%,
-    transparent 100%
-  );
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 60% at 50% 40%, #000 25%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 40%, #000 25%, transparent 100%);
 }
 
-/* Tabular numerics */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+/* Fine dot matrix — used behind darker sections. */
+.dot-matrix {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 50%, #000 10%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 50%, #000 10%, transparent 100%);
 }
 
-/* ---- Motion (CSS only, GPU-friendly) ---- */
-
-/* Slow drifting gradient blobs in the hero background */
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(4%, -6%, 0) scale(1.08);
-  }
-  66% {
-    transform: translate3d(-5%, 4%, 0) scale(0.96);
-  }
-}
-.animate-drift {
-  animation: drift 22s ease-in-out infinite;
-}
-.animate-drift-slow {
-  animation: drift 34s ease-in-out infinite reverse;
+/* Film grain — kills banding on the big gradients. */
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Animated brand gradient sweep (footer line, underlines) */
-@keyframes sweep {
-  to {
-    background-position: 200% center;
-  }
-}
-.animate-sweep {
-  background-size: 200% auto;
-  animation: sweep 6s linear infinite;
-}
+.tabular-nums { font-variant-numeric: tabular-nums; }
 
-/* Scroll-reveal — toggled by the Reveal client component */
+/* ================================================================
+   Motion — scroll reveal (JS toggles .is-visible)
+================================================================ */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.85s var(--ease-out-expo),
+    transform 0.85s var(--ease-out-expo),
+    filter 0.85s var(--ease-out-expo);
+  filter: blur(6px);
   will-change: opacity, transform;
 }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  filter: none;
+}
+[data-reveal="left"]  { transform: translate3d(-34px, 0, 0); }
+[data-reveal="right"] { transform: translate3d(34px, 0, 0); }
+[data-reveal="scale"] { transform: scale(0.94); }
+[data-reveal="clip"] {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.1s var(--ease-out-expo);
+}
+[data-reveal="clip"].is-visible { clip-path: inset(0 0 0 0); }
+
+/* Word-by-word headline reveal (Kinetic component sets --i). */
+.kinetic-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 0.6em, 0) rotate(2deg);
+  transition:
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--i) * 55ms);
+}
+.is-visible .kinetic-word,
+.kinetic-run .kinetic-word {
+  opacity: 1;
+  transform: none;
 }
 
-/* Circuit trace dash animation */
-@keyframes dash-flow {
-  to {
-    stroke-dashoffset: -32;
-  }
+/* ================================================================
+   Keyframes
+================================================================ */
+@keyframes drift {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  33%      { transform: translate3d(5%, -7%, 0) scale(1.12); }
+  66%      { transform: translate3d(-6%, 5%, 0) scale(0.94); }
 }
-.animate-dash {
-  stroke-dasharray: 6 10;
-  animation: dash-flow 1.6s linear infinite;
+.animate-drift      { animation: drift 26s ease-in-out infinite; }
+.animate-drift-slow { animation: drift 40s ease-in-out infinite reverse; }
+
+@keyframes sweep { to { background-position: 200% center; } }
+.animate-sweep { background-size: 200% auto; animation: sweep 7s linear infinite; }
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.animate-float { animation: float-y 6s ease-in-out infinite; }
+
+@keyframes dash-flow { to { stroke-dashoffset: -40; } }
+.animate-dash { stroke-dasharray: 5 11; animation: dash-flow 1.9s linear infinite; }
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.85); opacity: 0.75; }
+  100% { transform: scale(2.1);  opacity: 0; }
+}
+.animate-ring { animation: pulse-ring 2.8s var(--ease-out-quint) infinite; }
+
+@keyframes marquee-x { to { transform: translate3d(-50%, 0, 0); } }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--dur, 42s) linear infinite;
+}
+.marquee-track.reverse { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 26s linear infinite; }
+
+/* Rotating conic border (used on the AI core + featured tiles). */
+@keyframes conic-spin { to { --angle: 360deg; } }
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.conic-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0deg,
+    var(--color-blue-500) 55deg,
+    var(--color-gold-400) 120deg,
+    transparent 190deg,
+    transparent 360deg
+  );
+  animation: conic-spin 6s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
 }
 
-/* Focus ring — accessible, brand-tinted */
-:focus-visible {
-  outline: 2px solid var(--color-blue);
-  outline-offset: 2px;
-  border-radius: 4px;
+/* Voice waveform bars (AI calling agent). */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.24); }
+  50%      { transform: scaleY(1); }
+}
+.wave-bar {
+  transform-origin: center;
+  animation: wave 1s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 90ms);
 }
 
-/* Respect reduced-motion everywhere */
+@keyframes caret { 50% { opacity: 0; } }
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.12em;
+  background: var(--color-gold-400);
+  animation: caret 1s step-end infinite;
+}
+
+@keyframes shimmer-line {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, #ffffff1a, transparent);
+  animation: shimmer-line 2.4s var(--ease-out-quint) infinite;
+}
+
+/* ================================================================
+   Reduced motion
+================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
@@ -255,5 +506,8 @@ body {
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
   }
+  .kinetic-word { opacity: 1 !important; transform: none !important; }
 }

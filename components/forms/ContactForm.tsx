@@ -9,19 +9,40 @@ import {
   timelineOptions,
   type ContactInput,
 } from "@/lib/contact-schema";
+import { services } from "@/content/services";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 
-const fieldCls =
-  "w-full rounded-xl border border-line-strong bg-white/[0.02] px-4 py-3 text-sm text-ink placeholder:text-faint outline-none transition-colors focus:border-white/30 focus:bg-white/[0.04]";
-const labelCls = "mb-1.5 block text-sm font-medium text-ink";
-const errCls = "mt-1 text-xs text-[#ff6b6b]";
+const field =
+  "w-full min-h-[48px] rounded-xl border border-line bg-white/[0.025] px-4 py-3 text-[15px] text-ink " +
+  "placeholder:text-faint transition-colors duration-200 " +
+  "focus:border-blue-500/60 focus:bg-white/[0.05] focus:outline-none";
 
-export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
+const labelCls = "mb-2 block text-[13px] font-medium text-steel-300";
+
+function Err({ msg }: { msg?: string }) {
+  if (!msg) return null;
+  return (
+    <p role="alert" className="mt-1.5 flex items-center gap-1.5 text-[12.5px] text-red-400">
+      <Icon name="X" className="h-3.5 w-3.5" strokeWidth={2.4} />
+      {msg}
+    </p>
   );
+}
+
+/**
+ * Project enquiry form.
+ *
+ * Deliberately low-friction: only name, email and a message are required. The
+ * qualifying fields (service, budget, timeline) are optional selects so nobody
+ * bounces on a long form. Validation runs on blur, errors sit under their own
+ * field, and the submit button reports its own state.
+ */
+export function ContactForm() {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [serverError, setServerError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -29,155 +50,202 @@ export function ContactForm() {
     formState: { errors },
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { budget: "Not sure yet", timeline: "Flexible" },
+    mode: "onBlur",
   });
 
-  async function onSubmit(data: ContactInput) {
+  async function onSubmit(values: ContactInput) {
     setStatus("sending");
+    setServerError("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values),
       });
-      if (!res.ok) throw new Error("Request failed");
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong.");
       setStatus("sent");
       reset();
-    } catch {
+    } catch (e) {
       setStatus("error");
+      setServerError(
+        e instanceof Error ? e.message : "Could not send. Please email us directly."
+      );
     }
   }
 
   if (status === "sent") {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-line-strong bg-surface/60 p-10 text-center">
-        <span className="grid h-14 w-14 place-items-center rounded-full [background:var(--gradient-brand-135)] text-white">
-          <Icon name="Check" className="h-7 w-7" strokeWidth={2.2} />
+      <div
+        role="status"
+        className="plate flex flex-col items-center rounded-xl2 p-10 text-center"
+      >
+        <span className="grid h-16 w-16 place-items-center rounded-full border border-status-live/40 bg-status-live/10 text-status-live">
+          <Icon name="Check" className="h-8 w-8" strokeWidth={2} />
         </span>
-        <h3 className="mt-5 font-display text-2xl font-semibold text-ink">
-          Message received.
-        </h3>
-        <p className="mt-2 max-w-sm text-sm text-muted">
-          Thanks for reaching out. We&apos;ll get back to you shortly to figure
-          out what to build.
+        <h3 className="h-card mt-6 text-2xl text-ink">Message received.</h3>
+        <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-muted">
+          Thanks — we&apos;ll get back to you within one working day, usually much
+          sooner. If it&apos;s urgent, WhatsApp is the fastest way to reach us.
         </p>
-        <Button
-          variant="secondary"
-          className="mt-6"
+        <button
+          type="button"
           onClick={() => setStatus("idle")}
+          className="mt-6 text-sm text-blue-400 underline-offset-4 hover:underline"
         >
-          Send another
-        </Button>
+          Send another message
+        </button>
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-      className="rounded-lg border border-line-strong bg-surface/60 p-6 sm:p-8"
-    >
-      {/* Honeypot — visually hidden, not tab-reachable */}
-      <div aria-hidden className="absolute left-[-9999px] top-[-9999px]">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="plate rounded-xl2 p-6 sm:p-8">
+      {/* Honeypot — visually and semantically hidden from humans. */}
+      <div aria-hidden className="absolute left-[-9999px]">
         <label htmlFor="website">Website</label>
-        <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+        <input id="website" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelCls}>
-            Name
+            Your name <span className="text-gold-400">*</span>
           </label>
-          <input id="name" className={fieldCls} placeholder="Your name" {...register("name")} />
-          {errors.name && <p className={errCls}>{errors.name.message}</p>}
+          <input
+            id="name"
+            className={cn(field, errors.name && "border-red-500/60")}
+            placeholder="Priya Sharma"
+            autoComplete="name"
+            aria-invalid={!!errors.name}
+            {...register("name")}
+          />
+          <Err msg={errors.name?.message} />
         </div>
+
         <div>
           <label htmlFor="email" className={labelCls}>
-            Email
+            Email <span className="text-gold-400">*</span>
           </label>
           <input
             id="email"
             type="email"
-            className={fieldCls}
+            inputMode="email"
+            className={cn(field, errors.email && "border-red-500/60")}
             placeholder="you@company.com"
+            autoComplete="email"
+            aria-invalid={!!errors.email}
             {...register("email")}
           />
-          {errors.email && <p className={errCls}>{errors.email.message}</p>}
+          <Err msg={errors.email?.message} />
         </div>
-      </div>
 
-      <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="company" className={labelCls}>
-            Company / Brand <span className="text-faint">(optional)</span>
-          </label>
-          <input id="company" className={fieldCls} placeholder="ZeizzLabs" {...register("company")} />
-        </div>
-        <div>
-          <label htmlFor="building" className={labelCls}>
-            What do you need?
+          <label htmlFor="phone" className={labelCls}>
+            Phone / WhatsApp
           </label>
           <input
-            id="building"
-            className={fieldCls}
-            placeholder="A website, WhatsApp automation, an AI agent…"
-            {...register("building")}
+            id="phone"
+            type="tel"
+            inputMode="tel"
+            className={field}
+            placeholder="+91 98765 43210"
+            autoComplete="tel"
+            {...register("phone")}
           />
-          {errors.building && <p className={errCls}>{errors.building.message}</p>}
         </div>
-      </div>
 
-      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="company" className={labelCls}>
+            Business name
+          </label>
+          <input
+            id="company"
+            className={field}
+            placeholder="Optional"
+            autoComplete="organization"
+            {...register("company")}
+          />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="service" className={labelCls}>
+            What do you need?
+          </label>
+          <select id="service" className={field} defaultValue="" {...register("service")}>
+            <option value="">Not sure yet — help me decide</option>
+            {services.map((s) => (
+              <option key={s.id} value={s.short}>
+                {s.short}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label htmlFor="budget" className={labelCls}>
             Budget range
           </label>
-          <select id="budget" className={cn(fieldCls, "appearance-none")} {...register("budget")}>
-            {budgetOptions.map((o) => (
-              <option key={o} value={o} className="bg-bg-900">
-                {o}
+          <select id="budget" className={field} defaultValue="" {...register("budget")}>
+            <option value="">Select a range</option>
+            {budgetOptions.map((b) => (
+              <option key={b} value={b}>
+                {b}
               </option>
             ))}
           </select>
         </div>
+
         <div>
           <label htmlFor="timeline" className={labelCls}>
             Timeline
           </label>
-          <select id="timeline" className={cn(fieldCls, "appearance-none")} {...register("timeline")}>
-            {timelineOptions.map((o) => (
-              <option key={o} value={o} className="bg-bg-900">
-                {o}
+          <select id="timeline" className={field} defaultValue="" {...register("timeline")}>
+            <option value="">Select a timeline</option>
+            {timelineOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
               </option>
             ))}
           </select>
         </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="message" className={labelCls}>
+            Tell us about the project <span className="text-gold-400">*</span>
+          </label>
+          <textarea
+            id="message"
+            rows={5}
+            className={cn(field, "resize-y", errors.message && "border-red-500/60")}
+            placeholder="What are you trying to achieve? Even a couple of sentences is enough to start."
+            aria-invalid={!!errors.message}
+            {...register("message")}
+          />
+          <Err msg={errors.message?.message} />
+        </div>
       </div>
 
-      <div className="mt-5">
-        <label htmlFor="message" className={labelCls}>
-          Message
-        </label>
-        <textarea
-          id="message"
-          rows={4}
-          className={cn(fieldCls, "resize-y")}
-          placeholder="Tell us about the idea, the problem, or where you're stuck."
-          {...register("message")}
-        />
-        {errors.message && <p className={errCls}>{errors.message.message}</p>}
-      </div>
+      {serverError && (
+        <p role="alert" className="mt-5 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-[13.5px] text-red-300">
+          {serverError}
+        </p>
+      )}
 
-      <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Button type="submit" size="lg" arrow disabled={status === "sending"}>
-          {status === "sending" ? "Sending…" : "Send request"}
+      <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Button
+          type="submit"
+          size="lg"
+          disabled={status === "sending"}
+          arrow={status !== "sending"}
+          className="w-full sm:w-auto"
+        >
+          {status === "sending" ? "Sending…" : "Send enquiry"}
         </Button>
-        {status === "error" && (
-          <p className="text-sm text-[#ff6b6b]">
-            Something went wrong. Email us at the address on the left instead.
-          </p>
-        )}
+        <p className="text-[12.5px] leading-relaxed text-faint">
+          We reply within one working day.
+          <br className="hidden sm:block" /> No spam, no sales sequences.
+        </p>
       </div>
     </form>
   );
