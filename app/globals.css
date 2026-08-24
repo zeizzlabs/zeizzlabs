@@ -761,6 +761,43 @@ header[data-over="light"] .wordmark {
 }
 
 /* ================================================================
+   Mobile performance
+   ----------------------------------------------------------------
+   Measured on the deployed site: 11 elements running backdrop-filter
+   (including the fixed navbar, which recomposites on every scroll frame)
+   and 66 running CSS filters, most of them drop-shadows on the animated
+   circuit traces. Both are cheap on a desktop GPU and expensive on a phone.
+   Coarse-pointer devices get a solid surface and no shadows instead.
+================================================================ */
+@media (pointer: coarse), (max-width: 1023px) {
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in oklab, var(--color-canvas) 92%, transparent);
+  }
+
+  /* Drop-shadow on an animating SVG path forces a repaint of the filter
+     region every frame. The traces read fine without the glow. */
+  .circuit-field path,
+  .circuit-field circle {
+    filter: none !important;
+  }
+
+  /* The drifting blurred blobs are 40rem elements with a 120px blur. */
+  .animate-drift,
+  .animate-drift-slow {
+    animation: none;
+  }
+
+  /* Tailwind's backdrop utilities on buttons and chips. Each one is its own
+     compositing layer sampling what is behind it. */
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* ================================================================
    Reduced motion
 ================================================================ */
 @media (prefers-reduced-motion: reduce) {

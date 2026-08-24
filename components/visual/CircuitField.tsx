@@ -85,7 +85,7 @@ export function CircuitField({ className }: { className?: string }) {
       viewBox="0 0 1200 760"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden
-      className={cn("pointer-events-none absolute inset-0 h-full w-full", className)}
+      className={cn("circuit-field pointer-events-none absolute inset-0 h-full w-full", className)}
       style={{
         maskImage:
           "radial-gradient(ellipse 62% 62% at 50% 45%, transparent 8%, #000 72%)",

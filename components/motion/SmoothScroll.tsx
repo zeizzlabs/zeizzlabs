@@ -13,9 +13,16 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
  * every ScrollTrigger update happen in the same frame — mixing the two loops is
  * what produces the classic one-frame jitter on pinned sections.
  *
- * `syncTouch` extends the same feel to touch devices. That is a deliberate
- * choice here (the brief asked for an identical experience on phones); it is
- * the one knob to turn off first if mid-range Android ever feels heavy.
+ * Touch is deliberately NOT synced. `syncTouch` routes finger scrolling through
+ * the same interpolation as the wheel, which means every touchmove waits on a
+ * JS frame before the page moves — it is the single biggest cause of a phone
+ * feeling unresponsive and of scrolls that do not track the finger. Native
+ * touch scrolling is already smooth; there is nothing to improve and a great
+ * deal to break.
+ *
+ * Below the `lg` breakpoint Lenis is not started at all: on a phone it buys a
+ * little easing on wheel events that do not exist, in exchange for running an
+ * interpolation loop on every frame.
  */
 export function SmoothScroll() {
   useEffect(() => {
@@ -29,12 +36,21 @@ export function SmoothScroll() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
 
+    // Pointer-coarse or narrow devices keep native scrolling.
+    const isTouch =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.innerWidth < 1024;
+    if (isTouch) {
+      // ScrollTrigger still needs to run; it just listens to native scroll.
+      ScrollTrigger.refresh();
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.15,
       lerp: 0.1,
       smoothWheel: true,
-      syncTouch: true,
-      touchMultiplier: 1.6,
+      syncTouch: false,
       wheelMultiplier: 1,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });

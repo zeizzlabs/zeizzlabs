@@ -3,8 +3,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { Observer } from "gsap/Observer";
-import { Flip } from "gsap/Flip";
 import { CustomEase } from "gsap/CustomEase";
 
 /**
@@ -17,7 +15,9 @@ import { CustomEase } from "gsap/CustomEase";
 let registered = false;
 
 if (typeof window !== "undefined" && !registered) {
-  gsap.registerPlugin(ScrollTrigger, SplitText, Observer, Flip, CustomEase);
+  // Only what is actually used. Observer and Flip were registered here and never
+  // referenced anywhere, shipping their weight to every page for nothing.
+  gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
 
   // The house easing curve — a long, confident settle. Everything on the site
   // that isn't a micro-interaction uses this, so the whole page shares a feel.
@@ -40,4 +40,4 @@ export function prefersReducedMotion(): boolean {
   );
 }
 
-export { gsap, ScrollTrigger, SplitText, Observer, Flip };
+export { gsap, ScrollTrigger, SplitText };

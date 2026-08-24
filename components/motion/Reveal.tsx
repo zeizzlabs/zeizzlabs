@@ -107,13 +107,17 @@ mask: mode === "lines" ? "lines" : undefined,
         return;
       }
 
+      // The blur is desktop-only: animating a filter re-rasterises the element
+      // every frame, and on a phone that cost lands on dozens of elements at
+      // once for an effect the y/opacity change already carries.
+      const heavyOk = !window.matchMedia("(pointer: coarse)").matches;
       gsap.fromTo(
         el,
-        { y: 34, opacity: 0, filter: "blur(8px)" },
+        { y: 34, opacity: 0, ...(heavyOk ? { filter: "blur(8px)" } : null) },
         {
           y: 0,
           opacity: 1,
-          filter: "blur(0px)",
+          ...(heavyOk ? { filter: "blur(0px)" } : null),
           duration: 1.05,
           delay,
           scrollTrigger: trigger,
