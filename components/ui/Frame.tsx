@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
@@ -21,6 +21,7 @@ import { cn } from "@/lib/cn";
  */
 export function Frame({
   src,
+  video,
   alt = "",
   className,
   imageClassName,
@@ -30,7 +31,14 @@ export function Frame({
   rounded = "rounded-[1.5rem]",
   children,
 }: {
+  /** Still image. Also used as the video poster when `video` is set. */
   src: string;
+  /**
+   * Optional looping clip in /public/media. When present it plays over the
+   * still, which is how the reference studios carry most of their motion —
+   * Ramotion runs 22 of these on its home page alone.
+   */
+  video?: string;
   alt?: string;
   className?: string;
   imageClassName?: string;
@@ -42,6 +50,24 @@ export function Frame({
   children?: React.ReactNode;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Only play while the frame is on screen, and never for reduced motion — an
+  // autoplaying loop that is scrolled past is pure battery and bandwidth.
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [video]);
 
   useGSAP(
     () => {
@@ -107,6 +133,22 @@ export function Frame({
           priority={priority}
           className={cn("object-cover", imageClassName)}
         />
+        {video && (
+          /* The still stays underneath as the poster, so the frame is never
+             empty while the clip buffers — and if the clip is blocked (data
+             saver, autoplay policy) the image simply remains. */
+          <video
+            ref={videoRef}
+            src={video}
+            poster={src}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden
+            className={cn("absolute inset-0 h-full w-full object-cover", imageClassName)}
+          />
+        )}
       </div>
       {/* Ground tint so type laid over the picture always has contrast. */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/10 to-transparent" />

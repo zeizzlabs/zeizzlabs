@@ -78,15 +78,13 @@ export const metadata: Metadata = {
     siteName: site.brandName,
     title,
     description: site.description,
-    images: [
-      { url: "/brand/zeizzlabs-logo.png", width: 1536, height: 1024, alt: title },
-    ],
+    images: [{ url: "/brand/og-image.jpg", width: 1200, height: 630, alt: title }],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description: site.description,
-    images: ["/brand/zeizzlabs-logo.png"],
+    images: ["/brand/og-image.jpg"],
   },
   robots: { index: true, follow: true },
 };
@@ -112,7 +110,7 @@ const jsonLd = {
       description: site.description,
       slogan: site.tagline,
       logo: `${site.url}/brand/zeizzlabs-emblem.png`,
-      image: `${site.url}/brand/zeizzlabs-logo.png`,
+      image: `${site.url}/brand/og-image.jpg`,
       email: site.email,
       telephone: site.phone,
       areaServed: "Worldwide",
