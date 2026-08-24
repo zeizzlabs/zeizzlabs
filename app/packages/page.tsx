@@ -20,7 +20,7 @@ export default function PackagesPage() {
         accent="We shape the rest."
         lede="No hourly invoices you cannot predict. If your project needs less than a package, we will tell you."
       />
-      <Packages />
+      <Packages showHeading={false} />
       <AddOns />
       <Faq />
       <FinalCta />

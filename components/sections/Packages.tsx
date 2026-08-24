@@ -20,20 +20,31 @@ import { cn } from "@/lib/cn";
  * actually needs — six equal cards force a scan of six separate blocks to
  * answer one question.
  */
-export function Packages() {
+export function Packages({
+  /**
+   * The /packages page already leads with this exact heading, so it is
+   * suppressed there. On the home page the section still needs to introduce
+   * itself.
+   */
+  showHeading = true,
+}: {
+  showHeading?: boolean;
+} = {}) {
   const [open, setOpen] = useState<string | null>(offerings[0]?.id ?? null);
 
   return (
     <Section id="packages" className="relative" inner="max-w-[100rem]">
-      <div className="mb-14">
-        <SectionHeading
-          eyebrow="Packages & pricing"
-          title="Pick a starting point."
-          accent="We shape the rest."
-          lede="Clear starting prices and a fixed quote before any work begins. If your project needs less than a package, we will say so."
-          aside={<CircleCta href="/contact" label="Get a quote" size={132} />}
-        />
-      </div>
+      {showHeading && (
+        <div className="mb-14">
+          <SectionHeading
+            eyebrow="Packages & pricing"
+            title="Pick a starting point."
+            accent="We shape the rest."
+            lede="Clear starting prices and a fixed quote before any work begins. If your project needs less than a package, we will say so."
+            aside={<CircleCta href="/contact" label="Get a quote" size={132} />}
+          />
+        </div>
+      )}
 
       {/* Price index */}
       <div className="border-t border-line">

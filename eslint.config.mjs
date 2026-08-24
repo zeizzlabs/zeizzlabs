@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Netlify's build output: bundled server code and generated manifests.
+    // Not ours to lint, and it buries real findings under thousands of hits.
+    ".netlify/**",
   ]),
 ]);
 
