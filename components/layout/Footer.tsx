@@ -15,7 +15,12 @@ const socialIcons: Record<string, string> = {
 
 export function Footer() {
   const year = new Date().getFullYear();
-  const socials = Object.entries(site.social).filter(([, url]) => Boolean(url));
+  // WhatsApp, email and phone already appear as labelled links above, so the
+  // icon row only earns its place once there are other profiles to show.
+  // Without this it renders as a single unexplained bubble under the links.
+  const socials = Object.entries(site.social).filter(
+    ([key, url]) => Boolean(url) && key !== "whatsapp"
+  );
 
   return (
     <footer className="relative overflow-hidden border-t border-line bg-canvas">

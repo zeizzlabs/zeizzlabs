@@ -13,6 +13,7 @@ export function SectionHeading({
   lede,
   align = "left",
   className,
+  aside,
   children,
 }: {
   eyebrow: string;
@@ -22,6 +23,8 @@ export function SectionHeading({
   lede?: string;
   align?: "left" | "center";
   className?: string;
+  /** Rendered beside the title — used for the circular call to action. */
+  aside?: ReactNode;
   children?: ReactNode;
 }) {
   const centered = align === "center";
@@ -29,7 +32,7 @@ export function SectionHeading({
     <div
       className={cn(
         "relative",
-        centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl",
+        centered ? "mx-auto max-w-3xl text-center" : aside ? "max-w-5xl" : "max-w-3xl",
         className
       )}
     >
@@ -46,16 +49,26 @@ export function SectionHeading({
         </div>
       </Reveal>
 
-      <h2 className="text-balance">
-        <Reveal mode="lines" className="h-section block text-ink">
-          {title}
-        </Reveal>
-        {accent && (
-          <Reveal mode="lines" delay={0.1} className="h-section text-gradient block">
-            {accent}
-          </Reveal>
+      {/* Title and aside share a row so the circular CTA reads as part of the
+          heading rather than as something stranded under the lede. */}
+      <div
+        className={cn(
+          "flex items-start gap-6 sm:gap-10",
+          centered ? "justify-center" : "justify-between"
         )}
-      </h2>
+      >
+        <h2 className="text-balance">
+          <Reveal mode="lines" className="h-section block text-ink">
+            {title}
+          </Reveal>
+          {accent && (
+            <Reveal mode="lines" delay={0.1} className="h-section text-gradient block">
+              {accent}
+            </Reveal>
+          )}
+        </h2>
+        {aside && <div className="shrink-0">{aside}</div>}
+      </div>
 
       {lede && (
         <Reveal delay={0.16}>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projects } from "@/content/work";
+import { projects, workLabels } from "@/content/work";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
@@ -38,10 +38,10 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         title={project.name}
         lede={project.summary}
         meta={[
-          { label: "Stage", value: project.label },
+          { label: "Stage", value: workLabels[project.label] },
           { label: "Discipline", value: project.category },
-          { label: "Stack", value: project.tech.slice(0, 2).join(", ") },
-          { label: "Status", value: project.outcome.split(":")[0] },
+          { label: "Stack", value: project.tech.slice(0, 3).join(", ") },
+          { label: "Built for", value: "Our own R&D" },
         ]}
       />
 
@@ -61,28 +61,78 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
       </div>
 
       <Section inner="max-w-[100rem]">
-        <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
+        <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
           <div>
+            <Reveal>
+              <p className="eyebrow mb-5">The idea</p>
+            </Reveal>
             <Reveal mode="lines">
-              <p className="text-pretty text-xl leading-relaxed text-steel-300 sm:text-2xl">
+              <p className="text-pretty text-xl leading-relaxed text-steel-300 sm:text-[1.4rem]">
                 {project.summary}
               </p>
             </Reveal>
-            <Reveal delay={0.15}>
-              <p className="mt-8 flex items-start gap-3 rounded-2xl border border-gold-500/20 bg-gold-500/[0.05] p-6 text-[15px] leading-relaxed text-steel-300">
-                <Icon
-                  name="Activity"
-                  className="mt-0.5 h-5 w-5 shrink-0 text-gold-300"
-                  strokeWidth={1.8}
-                />
-                {project.outcome}
+            <Reveal delay={0.12}>
+              <p className="mt-7 max-w-2xl text-[16.5px] leading-[1.75] text-muted">
+                {project.vision}
               </p>
+            </Reveal>
+
+            <Reveal delay={0.18}>
+              <h2 className="eyebrow mb-5 mt-14">How we are building it</h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="max-w-2xl text-[16.5px] leading-[1.75] text-muted">
+                {project.approach}
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.24}>
+              <h2 className="eyebrow mb-5 mt-14">What is being built</h2>
+            </Reveal>
+            <Reveal mode="stagger">
+              <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line">
+                {project.building.map((b) => (
+                  <li key={b} className="flex items-start gap-3 bg-canvas p-5">
+                    <Icon
+                      name="Check"
+                      className="mt-0.5 h-4 w-4 shrink-0 text-status-live"
+                      strokeWidth={2.2}
+                    />
+                    <span className="text-[15.5px] leading-relaxed text-ink">{b}</span>
+                  </li>
+                ))}
+              </ul>
             </Reveal>
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
+            {/* The honest bit: what exists today, stated before anything else. */}
             <Reveal>
-              <h2 className="eyebrow mb-5">Built with</h2>
+              <div className="rounded-2xl border border-gold-500/25 bg-gold-500/[0.06] p-6">
+                <p className="eyebrow mb-3">Where it actually is</p>
+                <p className="text-[15.5px] leading-relaxed text-steel-300">
+                  {project.stage}
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.12}>
+              <h2 className="eyebrow mb-5 mt-10">What comes next</h2>
+              <ol className="space-y-4">
+                {project.next.map((n) => (
+                  <li key={n} className="flex gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-400/80"
+                    />
+                    <span className="text-[15.5px] leading-relaxed text-muted">{n}</span>
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+
+            <Reveal delay={0.18}>
+              <h2 className="eyebrow mb-4 mt-10">Built with</h2>
               <ul className="flex flex-wrap gap-2">
                 {project.tech.map((t) => (
                   <li
@@ -94,11 +144,13 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                 ))}
               </ul>
             </Reveal>
-            <Reveal delay={0.15}>
+
+            <Reveal delay={0.24}>
               <div className="mt-10 flex items-center gap-6 rounded-2xl border border-line bg-raised p-6">
                 <CircleCta href="/contact" label="Build something" size={110} />
-                <p className="text-[14px] leading-relaxed text-muted">
-                  Want one of these for your business? Tell us the goal.
+                <p className="text-[14.5px] leading-relaxed text-muted">
+                  Want something like this for your business? Tell us the goal and
+                  we will tell you honestly what it takes.
                 </p>
               </div>
             </Reveal>

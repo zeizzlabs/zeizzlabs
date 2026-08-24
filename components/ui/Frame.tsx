@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { MEDIA_VIDEOS } from "@/lib/media-manifest";
+import { MEDIA_VIDEOS, mediaSrc } from "@/lib/media-manifest";
 import { cn } from "@/lib/cn";
 
 /**
@@ -59,6 +59,11 @@ export function Frame({
   // every page load.
   const auto = src.replace(/\.(jpe?g|png|webp|avif)$/i, ".mp4");
   const clip = video ?? (MEDIA_VIDEOS.has(auto) ? auto : undefined);
+
+  // Content-stamped URLs, so swapping a file is picked up instead of being
+  // served from the previous cache entry.
+  const stillSrc = mediaSrc(src);
+  const clipSrc = clip ? mediaSrc(clip) : undefined;
 
   // Only play while the frame is on screen, and never for reduced motion — an
   // autoplaying loop that is scrolled past is pure battery and bandwidth.
@@ -134,7 +139,7 @@ export function Frame({
     >
       <div data-frame-img className="absolute inset-x-0 -inset-y-[10%] will-change-transform">
         <Image
-          src={src}
+          src={stillSrc}
           alt={alt}
           fill
           sizes={sizes}
@@ -147,8 +152,8 @@ export function Frame({
              saver, autoplay policy) the image simply remains. */
           <video
             ref={videoRef}
-            src={clip}
-            poster={src}
+            src={clipSrc}
+            poster={stillSrc}
             muted
             loop
             playsInline

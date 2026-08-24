@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { projects } from "@/content/work";
+import { projects, workLabels } from "@/content/work";
 import { Icon } from "@/components/ui/Icon";
 import { Frame } from "@/components/ui/Frame";
 import { TransitionLink } from "@/components/motion/PageTransition";
@@ -26,9 +26,9 @@ import type { WorkLabel } from "@/lib/types";
  */
 
 const labelStyle: Record<WorkLabel, string> = {
-  live: "border-status-live/50 text-status-live",
+  "in-development": "border-status-live/50 text-status-live",
   prototype: "border-blue-500/50 text-blue-300",
-  experiment: "border-gold-500/50 text-gold-300",
+  research: "border-gold-500/50 text-gold-300",
   concept: "border-line-strong text-steel-400",
 };
 
@@ -115,7 +115,7 @@ export function WorkRail() {
                   labelStyle[p.label]
                 )}
               >
-                {p.label}
+                {workLabels[p.label]}
               </span>
               <h3 className="absolute bottom-5 left-6 right-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-none tracking-[-0.04em] text-white">
                 {p.name}
@@ -135,7 +135,7 @@ export function WorkRail() {
                   className="mt-0.5 h-4 w-4 shrink-0 text-gold-400"
                   strokeWidth={1.8}
                 />
-                {p.outcome}
+                {p.stage}
               </p>
               <ul className="mt-5 flex flex-wrap gap-1.5">
                 {p.tech.map((t) => (

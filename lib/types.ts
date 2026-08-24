@@ -88,16 +88,31 @@ export interface Tier {
   featured?: boolean;
 }
 
-export type WorkLabel = "concept" | "prototype" | "experiment" | "live";
+/**
+ * Where a piece of work actually is. None of these mean "shipped for a client" —
+ * this is the studio's own R&D shelf, and the labels say so plainly.
+ */
+export type WorkLabel = "concept" | "in-development" | "prototype" | "research";
 
 export interface Project {
   slug: string;
   name: string;
+  /** Short discipline line, e.g. "AI Calling Agent · Voice". */
   category: string;
   label: WorkLabel;
+  /** One line: what it is meant to become. */
   summary: string;
+  /** Why it should exist — the problem, in plain terms. */
+  vision: string;
+  /** What is being built, concretely. */
+  building: string[];
+  /** How it is being approached technically. */
+  approach: string;
+  /** Honest statement of what exists today versus what does not. */
+  stage: string;
+  /** What comes next, in order. */
+  next: string[];
   tech: string[];
-  outcome: string;
   /** Two brand stops for the card's preview gradient. */
   accent: [string, string];
   /** Artwork in /public/media. Replace the file to change the image. */

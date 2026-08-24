@@ -20,10 +20,13 @@ export function Proof() {
 
         <dl className="grid divide-y divide-line border-y border-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
           {stats.map((s, i) => (
+            /* Padding on the right only, so every cell's content starts at its
+               own column edge. `first:pl-0` lined column one up but left the
+               third stat indented under it in the two-column layout. */
             <Reveal
               key={s.label}
               delay={i * 0.08}
-              className="relative py-9 sm:px-8 sm:first:pl-0 lg:border-l lg:border-line lg:first:border-l-0"
+              className="relative py-9 sm:pr-8 lg:border-l lg:border-line lg:pl-8 lg:first:border-l-0 lg:first:pl-0"
             >
               <dd className="font-display text-[clamp(3rem,7vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.05em] text-gradient">
                 <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} />

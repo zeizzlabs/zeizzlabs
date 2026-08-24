@@ -20,12 +20,8 @@ export function ProcessTeaser() {
             title="Six steps."
             accent="No mystery."
             lede="A fixed quote before anything starts, a live link from week one, and something concrete handed over at every stage."
+            aside={<CircleCta href="/process" label="The full process" size={124} />}
           />
-          <Reveal delay={0.2}>
-            <div className="mt-10">
-              <CircleCta href="/process" label="The full process" size={132} />
-            </div>
-          </Reveal>
         </div>
 
         <ol>

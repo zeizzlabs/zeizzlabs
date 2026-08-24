@@ -8,6 +8,7 @@ import {
   useRef,
   type ReactNode,
 } from "react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
@@ -104,7 +105,13 @@ export function PageTransition({ children }: { children: ReactNode }) {
           ref={markRef}
           className="absolute inset-0 grid place-items-center opacity-0"
         >
-          <span className="wordmark text-3xl sm:text-5xl">ZeizzLabs</span>
+          <Image
+            src="/brand/zeizzlabs-mark.png"
+            alt=""
+            width={240}
+            height={240}
+            className="h-20 w-20 sm:h-24 sm:w-24"
+          />
         </div>
       </div>
     </Ctx.Provider>

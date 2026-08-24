@@ -24,14 +24,14 @@ export function Packages() {
 
   return (
     <Section id="packages" className="relative" inner="max-w-[100rem]">
-      <div className="mb-14 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+      <div className="mb-14">
         <SectionHeading
           eyebrow="Packages & pricing"
           title="Pick a starting point."
           accent="We shape the rest."
           lede="Clear starting prices and a fixed quote before any work begins. If your project needs less than a package, we will say so."
+          aside={<CircleCta href="/contact" label="Get a quote" size={132} />}
         />
-        <CircleCta href="/contact" label="Get a quote" />
       </div>
 
       {/* Price index */}
