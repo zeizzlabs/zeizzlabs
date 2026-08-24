@@ -675,7 +675,9 @@ html.has-custom-cursor * {
      sliced off by the mask; the negative margin keeps the extra room from
      changing the line's layout height. */
   padding-bottom: 0.22em;
-  margin-bottom: -0.22em;
+  /* Not the full -0.22em: cancelling all of it lets the following line sit on
+     top of this one's descenders. */
+  margin-bottom: -0.13em;
 }
 
 /* background-clip:text needs the background on the same element as the text.

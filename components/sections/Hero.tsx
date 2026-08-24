@@ -102,14 +102,16 @@ export function Hero() {
 
         <h1 className="max-w-5xl text-balance">
           {/* Each line rides inside its own mask so it rises out of nothing. */}
-          {/* pb/-mb pair: the mask needs room for descenders (y, g, p) without
-              that room adding to the line height. */}
-          <span className="block overflow-hidden pb-[0.22em] -mb-[0.22em]">
+          {/* The mask needs room below the baseline for descenders (y, g, p).
+              The negative margin claws most of that back so the two lines stay
+              tight — but not all of it, or the second line rides up over the
+              first line's tails and clips them again. */}
+          <span className="block overflow-hidden pb-[0.22em] -mb-[0.13em]">
             <span data-hero-line className="h-display block text-ink">
               Everything digital.
             </span>
           </span>
-          <span className="block overflow-hidden pb-[0.22em] -mb-[0.22em]">
+          <span className="block overflow-hidden pb-[0.22em] -mb-[0.13em]">
             <span data-hero-line className="h-display block text-gradient">
               Endless possibilities.
             </span>
