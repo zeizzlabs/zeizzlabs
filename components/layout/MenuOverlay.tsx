@@ -31,7 +31,7 @@ import { cn } from "@/lib/cn";
  */
 const previews: Record<
   string,
-  { from: string; to: string; title: string; icon: string; tags: string[] }
+  { from: string; to: string; title: string; icon: string; tags: string[]; image: string }
 > = {
   "/": {
     from: "#0f5bd6",
@@ -39,6 +39,7 @@ const previews: Record<
     title: "Everything digital",
     icon: "Sparkles",
     tags: ["Studio", "End to end"],
+    image: "/media/service-digital-experiences.jpg",
   },
   "/services": {
     from: "#0b429e",
@@ -46,13 +47,15 @@ const previews: Record<
     title: "Eight pillars, one studio",
     icon: "Boxes",
     tags: ["Web", "AI", "Design"],
+    image: "/media/service-software-development.jpg",
   },
   "/work": {
     from: "#1e7bff",
     to: "#ecd3a0",
     title: "Selected work",
     icon: "Layers",
-    tags: ["Prototypes", "Live builds"],
+    tags: ["Prototypes", "In development"],
+    image: "/media/work-voice-reception.jpg",
   },
   "/process": {
     from: "#a37f42",
@@ -60,6 +63,7 @@ const previews: Record<
     title: "Six steps, no mystery",
     icon: "Workflow",
     tags: ["Fixed quote", "2–4 weeks"],
+    image: "/media/service-automation-workflows.jpg",
   },
   "/packages": {
     from: "#c9a15c",
@@ -67,6 +71,7 @@ const previews: Record<
     title: "Transparent pricing",
     icon: "BadgeCheck",
     tags: ["From ₹9,999", "Fixed scope"],
+    image: "/media/service-digital-products.jpg",
   },
   "/about": {
     from: "#5b6880",
@@ -74,6 +79,7 @@ const previews: Record<
     title: "Who you'd work with",
     icon: "Users",
     tags: ["One team", "You own it"],
+    image: "/media/about-studio.jpg",
   },
   "/contact": {
     from: "#23c98b",
@@ -81,6 +87,7 @@ const previews: Record<
     title: "Start a project",
     icon: "MessageCircle",
     tags: ["Free call", "1-day reply"],
+    image: "/media/contact-signal.jpg",
   },
 };
 
@@ -93,7 +100,7 @@ export function MenuOverlay({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const preview = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState<string>("/");
+  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
 
   // Close on route change and on Escape; lock the page behind the overlay.
@@ -174,7 +181,7 @@ export function MenuOverlay({
     return () => window.removeEventListener("pointermove", onMove);
   }, [open]);
 
-  const p = previews[hovered] ?? previews["/"];
+  const p = hovered ? previews[hovered] : null;
 
   return (
     <div
@@ -190,25 +197,33 @@ export function MenuOverlay({
       <div
         ref={preview}
         aria-hidden
-        className="pointer-events-none absolute left-[62%] top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+        className={cn(
+          "pointer-events-none absolute left-[62%] top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transition-opacity duration-400 lg:block",
+          // Only while a route is actually hovered. Previously the last hovered
+          // card stayed on screen even with the pointer well away from the list.
+          p ? "opacity-100" : "opacity-0"
+        )}
       >
-        <PreviewCard
-          compact
-          className="h-[min(19rem,38vh)] w-[min(15.5rem,24vw)] transition-opacity duration-500"
-          data={{
-            title: p.title,
-            icon: p.icon,
-            tags: p.tags,
-            from: p.from,
-            to: p.to,
-          }}
-        />
+        {p && (
+          <PreviewCard
+            compact
+            className="h-[min(19rem,38vh)] w-[min(15.5rem,24vw)]"
+            data={{
+              title: p.title,
+              icon: p.icon,
+              tags: p.tags,
+              image: p.image,
+              from: p.from,
+              to: p.to,
+            }}
+          />
+        )}
       </div>
 
       <div className="relative flex h-full flex-col justify-between overflow-y-auto px-5 pb-7 pt-[calc(var(--nav-h)+2rem)] sm:px-8">
         {/* Index */}
         <nav aria-label="Primary" className="relative">
-          <ul>
+          <ul onMouseLeave={() => setHovered(null)}>
             {nav.map((item) => {
               const active = pathname === item.href;
               return (

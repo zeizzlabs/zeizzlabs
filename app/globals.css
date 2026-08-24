@@ -671,8 +671,11 @@ html.has-custom-cursor * {
 /* SplitText line wrapper — the mask each line rises out of. */
 .split-line {
   overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+  /* Deep enough to clear descenders. At 0.08em the tails of y, g, p and j were
+     sliced off by the mask; the negative margin keeps the extra room from
+     changing the line's layout height. */
+  padding-bottom: 0.22em;
+  margin-bottom: -0.22em;
 }
 
 /* background-clip:text needs the background on the same element as the text.

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Icon } from "./Icon";
+import { mediaSrc } from "@/lib/media-manifest";
 import { cn } from "@/lib/cn";
 
 /**
@@ -10,9 +11,9 @@ import { cn } from "@/lib/cn";
  * circuit motif over the pillar's accent gradient — enough that a glance at it
  * tells you what you are about to open.
  *
- * `image` is an escape hatch: set it and real artwork replaces the generated
- * composition, no other change needed. Until then this is fully procedural, so
- * there are no missing-asset holes.
+ * `image` layers real artwork underneath rather than replacing the card. The
+ * label, icon and tags always render on top — an image on its own gave no clue
+ * what you were about to open, which is what made these read as empty.
  */
 export type PreviewData = {
   index?: string;
@@ -44,23 +45,21 @@ export function PreviewCard({
       )}
       style={{ background: `linear-gradient(145deg, ${data.from}, ${data.to})` }}
     >
+      {/* Ground: artwork if there is any, otherwise the generated composition.
+          Either way the label layer below sits on top of it. */}
       {data.image ? (
         <Image
-          src={data.image}
+          src={mediaSrc(data.image)}
           alt=""
           fill
-          sizes="320px"
+          sizes="(max-width: 1024px) 40vw, 320px"
           className="object-cover"
         />
       ) : (
         <>
-          {/* Ground: technical grid, a top-left key light, and a soft vignette
-              so the composition has depth rather than reading as flat colour. */}
           <div className="grid-lines absolute inset-0 opacity-[0.45]" />
           <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_26%_16%,#fff9,transparent_58%)]" />
-          <div className="absolute inset-0 [background:linear-gradient(to_top,rgba(4,6,12,0.92)_2%,rgba(4,6,12,0.72)_28%,transparent_72%)]" />
 
-          {/* Circuit motif, echoing the brand mark. */}
           <svg
             viewBox="0 0 300 240"
             aria-hidden
@@ -79,7 +78,6 @@ export function PreviewCard({
             <circle cx="232" cy="190" r="4" />
           </svg>
 
-          {/* The brand mark, sitting in the artwork rather than on top of it. */}
           <Image
             src="/brand/zeizzlabs-mark.png"
             alt=""
@@ -90,47 +88,50 @@ export function PreviewCard({
               compact ? "-right-6 -top-6 h-28 w-28" : "-right-8 -top-8 h-36 w-36"
             )}
           />
-
-          <div className="relative flex h-full flex-col justify-between p-5">
-            <div className="flex items-start justify-between gap-3">
-              {data.index && (
-                <span className="font-mono text-[10.5px] tracking-[0.22em] text-ink-950/70">
-                  {data.index}
-                </span>
-              )}
-              {data.icon && (
-                <span className="grid h-9 w-9 place-items-center rounded-lg bg-canvas/25 text-white/90 backdrop-blur-sm">
-                  <Icon name={data.icon} className="h-4.5 w-4.5" strokeWidth={1.8} />
-                </span>
-              )}
-            </div>
-
-            <div>
-              <p
-                className={cn(
-                  "font-display font-bold leading-[1.06] tracking-[-0.035em] text-white",
-                  compact ? "text-lg" : "text-[1.45rem]"
-                )}
-              >
-                {data.title}
-              </p>
-
-              {data.tags && data.tags.length > 0 && (
-                <ul className="mt-3 flex flex-wrap gap-1.5">
-                  {data.tags.slice(0, compact ? 2 : 3).map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-full bg-canvas/35 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-white/85 backdrop-blur-sm"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
         </>
       )}
+
+      {/* Always-on scrim, so the label reads over artwork of any brightness. */}
+      <div className="absolute inset-0 [background:linear-gradient(to_top,rgba(4,6,12,0.92)_2%,rgba(4,6,12,0.7)_30%,rgba(4,6,12,0.15)_74%)]" />
+
+      <div className="relative flex h-full flex-col justify-between p-5">
+        <div className="flex items-start justify-between gap-3">
+          {data.index && (
+            <span className="font-mono text-[10.5px] tracking-[0.22em] text-white/70">
+              {data.index}
+            </span>
+          )}
+          {data.icon && (
+            <span className="ml-auto grid h-9 w-9 place-items-center rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <Icon name={data.icon} className="h-4.5 w-4.5" strokeWidth={1.8} />
+            </span>
+          )}
+        </div>
+
+        <div>
+          <p
+            className={cn(
+              "font-display font-semibold leading-[1.08] tracking-[-0.03em] text-white",
+              compact ? "text-lg" : "text-[1.45rem]"
+            )}
+          >
+            {data.title}
+          </p>
+
+          {data.tags && data.tags.length > 0 && (
+            <ul className="mt-3 flex flex-wrap gap-1.5">
+              {data.tags.slice(0, compact ? 2 : 3).map((t) => (
+                <li
+                  key={t}
+                  className="rounded-full bg-white/15 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-white backdrop-blur-sm"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

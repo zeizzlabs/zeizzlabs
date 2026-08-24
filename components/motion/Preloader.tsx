@@ -149,10 +149,10 @@ export function Preloader() {
             <Image
               src="/brand/zeizzlabs-mark.png"
               alt=""
-              width={320}
-              height={320}
+              width={440}
+              height={440}
               priority
-              className="h-24 w-24 sm:h-32 sm:w-32"
+              className="h-32 w-32 sm:h-44 sm:w-44"
             />
           </div>
         </div>
