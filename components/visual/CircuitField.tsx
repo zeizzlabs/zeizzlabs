@@ -22,6 +22,11 @@ const LEFT: Trace[] = [
   { d: "M-10 500 H200 L250 550 H320", tone: "blue", dur: 6.8, r: 6 },
   { d: "M-10 600 H110 L160 650 H240", tone: "gold", dur: 7.6, r: 5 },
   { d: "M-10 700 H260 L300 660 H360", tone: "blue", dur: 8.4, r: 6 },
+  { d: "M-10 105 H210 L245 145 H310", tone: "steel", dur: 10.5, r: 4 },
+  { d: "M-10 255 H60 L105 300 H185", tone: "gold", dur: 6.6, r: 5 },
+  { d: "M-10 350 H155 L200 395 H285", tone: "blue", dur: 9.8, r: 6 },
+  { d: "M-10 545 H85 L135 595 H210", tone: "steel", dur: 7.2, r: 4 },
+  { d: "M-10 645 H230 L275 690 H345", tone: "gold", dur: 11.2, r: 5 },
 ];
 
 /** Different heights, lengths, tones and speeds — not a reflection of LEFT. */
@@ -33,6 +38,10 @@ const RIGHT: Trace[] = [
   { d: "M1210 465 H1105 L1050 520 H950", tone: "gold", dur: 8.8, r: 5 },
   { d: "M1210 560 H1040 L995 605 H915", tone: "blue", dur: 6.6, r: 7 },
   { d: "M1210 690 H1140 L1090 640 H1000", tone: "gold", dur: 7.9, r: 5 },
+  { d: "M1210 105 H1150 L1105 150 H1020", tone: "steel", dur: 10.1, r: 4 },
+  { d: "M1210 220 H1075 L1025 265 H960", tone: "gold", dur: 6.1, r: 5 },
+  { d: "M1210 415 H1160 L1115 460 H1030", tone: "blue", dur: 11.6, r: 6 },
+  { d: "M1210 620 H1090 L1045 665 H975", tone: "steel", dur: 7.4, r: 4 },
 ];
 
 const tones = {
@@ -60,19 +69,36 @@ function Side({ traces, side }: { traces: Trace[]; side: "l" | "r" }) {
               strokeOpacity={0.5}
               strokeLinecap="square"
             />
-            {/* Travelling pulse along the same path. */}
+            {/* The charge is drawn twice: a long, dim wake that lifts the
+                trace as it approaches and fades behind, and a short bright
+                head riding just ahead of it. Together they read as current
+                lighting the line rather than a dot sliding along it. */}
             <path
               d={t.d}
               fill="none"
               stroke={stroke}
-              strokeWidth={2}
+              strokeWidth={2.2}
               strokeLinecap="round"
-              strokeDasharray="26 460"
+              strokeDasharray="86 400"
+              strokeOpacity={0.3}
               style={{
                 animation: `dash-flow ${t.dur}s linear infinite`,
-                animationDelay: `${i * 0.55}s`,
-                filter: "drop-shadow(0 0 5px currentColor)",
-                color: stroke,
+                animationDelay: `-${i * 0.55 + 0.2}s`,
+                filter: `drop-shadow(0 0 7px ${stroke})`,
+              }}
+            />
+            <path
+              d={t.d}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={2.4}
+              strokeLinecap="round"
+              strokeDasharray="24 462"
+              style={{
+                animation: `dash-flow ${t.dur}s linear infinite`,
+                animationDelay: `-${i * 0.55}s`,
+                filter: `drop-shadow(0 0 4px ${stroke}) drop-shadow(0 0 12px ${stroke})`,
+                opacity: 0.95,
               }}
             />
             <circle
