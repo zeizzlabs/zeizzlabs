@@ -35,21 +35,22 @@ export function Navbar({ logo }: { logo: ReactNode }) {
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>('[data-theme="light"]')
     );
-    if (!sections.length) {
-      setOver("dark");
-      return;
-    }
     const check = () => {
       const y = 40;
+      // An empty list simply never hits, which resolves to the dark default.
       const hit = sections.some((s) => {
         const r = s.getBoundingClientRect();
         return r.top <= y && r.bottom >= y;
       });
       setOver(hit ? "light" : "dark");
     };
-    check();
+    // First measurement waits a frame so layout has settled after a route swap.
+    const id = requestAnimationFrame(check);
     window.addEventListener("scroll", check, { passive: true });
-    return () => window.removeEventListener("scroll", check);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("scroll", check);
+    };
   }, [pathname]);
 
   const light = over === "light" && !open;

@@ -27,8 +27,11 @@ export function Counter({
     if (!el) return;
 
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setValue(to);
-      return;
+      // Deferred to the next frame rather than set synchronously here: a
+      // setState in the effect body triggers a second render pass before the
+      // browser has painted the first.
+      const id = requestAnimationFrame(() => setValue(to));
+      return () => cancelAnimationFrame(id);
     }
 
     let raf = 0;

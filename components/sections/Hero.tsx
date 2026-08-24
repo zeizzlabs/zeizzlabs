@@ -161,7 +161,7 @@ export function Hero() {
 
       <a
         data-hero-cue
-        href="/#services"
+        href="#services"
         aria-label="Scroll to services"
         className="group relative z-10 mt-14 hidden flex-col items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-faint transition-colors hover:text-steel-300 sm:flex"
       >

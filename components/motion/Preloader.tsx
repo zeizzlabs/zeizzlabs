@@ -28,8 +28,10 @@ export function Preloader() {
 
     if (seen || prefersReducedMotion()) {
       document.documentElement.classList.remove("is-loading");
-      setMounted(false);
-      return;
+      // Unmount on the next frame — setting state synchronously in an effect
+      // body forces an extra render before the first paint.
+      const id = requestAnimationFrame(() => setMounted(false));
+      return () => cancelAnimationFrame(id);
     }
 
     document.documentElement.classList.add("is-loading");

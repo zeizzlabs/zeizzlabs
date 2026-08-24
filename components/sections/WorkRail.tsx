@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { projects } from "@/content/work";
 import { Icon } from "@/components/ui/Icon";
 import { TransitionLink } from "@/components/motion/PageTransition";

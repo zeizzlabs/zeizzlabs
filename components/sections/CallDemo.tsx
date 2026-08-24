@@ -56,9 +56,11 @@ export function CallDemo() {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setStep(script.length);
-      setDone(true);
-      return;
+      const id = requestAnimationFrame(() => {
+        setStep(script.length);
+        setDone(true);
+      });
+      return () => cancelAnimationFrame(id);
     }
     const io = new IntersectionObserver(
       ([e]) => {
@@ -76,7 +78,10 @@ export function CallDemo() {
   // Type the current line, then advance.
   useEffect(() => {
     if (step < 0 || step >= script.length) {
-      if (step >= script.length) setDone(true);
+      if (step >= script.length) {
+        const id = requestAnimationFrame(() => setDone(true));
+        return () => cancelAnimationFrame(id);
+      }
       return;
     }
     const full = script[step].text;
