@@ -3,17 +3,17 @@ import { Ticker } from "@/components/sections/Ticker";
 import { Proof } from "@/components/sections/Proof";
 import { Services } from "@/components/sections/Services";
 import { AiSystems } from "@/components/sections/AiSystems";
-import { Process } from "@/components/sections/Process";
-import { Work } from "@/components/sections/Work";
+import { WorkRail } from "@/components/sections/WorkRail";
+import { ProcessTeaser } from "@/components/sections/ProcessTeaser";
 import { Packages } from "@/components/sections/Packages";
 import { Faq } from "@/components/sections/Faq";
-import { Contact } from "@/components/sections/Contact";
 import { FinalCta } from "@/components/sections/FinalCta";
 
 /**
- * Page order follows the Trust & Authority conversion pattern:
- * immersive hero → credibility → solution overview → differentiator →
- * how it works → evidence → transparent pricing → objections → convert.
+ * The home page is a trailer, not the whole film: each block sells one idea and
+ * hands off to a real page. Depth lives in /services, /work, /process and
+ * /packages, which is what keeps this page from turning back into a scroll of
+ * every section the site owns.
  */
 export default function Home() {
   return (
@@ -23,11 +23,10 @@ export default function Home() {
       <Proof />
       <Services />
       <AiSystems />
-      <Process />
-      <Work />
+      <WorkRail />
+      <ProcessTeaser />
       <Packages />
       <Faq />
-      <Contact />
       <FinalCta />
     </>
   );

@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
@@ -95,7 +95,7 @@ export function Packages() {
 
           <div className="grid items-start gap-5 lg:grid-cols-3">
             {tiers.map((t, i) => (
-              <Reveal key={t.id} delay={i * 90} variant={t.featured ? "scale" : "up"}>
+              <Reveal key={t.id} delay={i * 90} mode="fade">
                 <div
                   className={cn(
                     "relative flex h-full flex-col overflow-hidden rounded-xl2 p-7 transition-all duration-500 sm:p-8",
@@ -157,7 +157,7 @@ export function Packages() {
             ))}
           </div>
 
-          <Reveal delay={200}>
+          <Reveal delay={0.2}>
             <p className="mt-8 text-center text-[13px] text-faint">
               Prices are indicative starting points and exclude taxes. Every project
               gets a fixed written quote before work begins.

@@ -1,5 +1,5 @@
 import { Section } from "@/components/ui/Section";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { Icon } from "@/components/ui/Icon";
 import { stats } from "@/content/offerings";

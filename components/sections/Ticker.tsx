@@ -12,18 +12,9 @@ export function Ticker() {
       aria-label="What we build"
       className="relative overflow-hidden border-y border-line bg-ink-900/60 py-8"
     >
-      <Marquee items={marqueeWords} duration={54} />
+      <Marquee items={marqueeWords} speed={70} />
       <div className="h-4" />
-      <Marquee
-        items={techStack}
-        duration={44}
-        reverse
-        renderItem={(t) => (
-          <span className="mx-2 inline-flex items-center rounded-full border border-line px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-faint">
-            {t}
-          </span>
-        )}
-      />
+      <Marquee items={techStack} speed={46} reverse variant="chip" />
     </section>
   );
 }

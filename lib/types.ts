@@ -11,8 +11,8 @@ export type IconName = string;
 export interface NavItem {
   label: string;
   href: string;
-  /** Optional flyout children shown in the desktop mega-menu. */
-  children?: { label: string; href: string; desc?: string; icon?: IconName }[];
+  /** One-line descriptor shown beside the label in the overlay menu. */
+  desc?: string;
 }
 
 /** One of the eight ZeizzLabs service pillars (from the brand banner). */
@@ -27,7 +27,11 @@ export interface Service {
   blurb: string;
   /** Concrete deliverables — rendered as chips. */
   deliverables: string[];
-  /** Bento span: "wide" = 2 cols on desktop, "tall" = 2 rows. */
+  /** Two or three sentences for the service's own page. */
+  overview: string;
+  /** What the client actually ends up with. */
+  outcomes: string[];
+  /** Bento span, kept for any grid presentation of the pillars. */
   span?: "wide" | "tall" | "hero";
   /** Accent family for the tile's glow. */
   accent: "blue" | "gold" | "steel";

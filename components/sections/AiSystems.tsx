@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Aurora } from "@/components/visual/Aurora";
@@ -71,7 +71,7 @@ export function AiSystems() {
             </ul>
 
             {/* Connected systems */}
-            <Reveal delay={340}>
+            <Reveal delay={0.34}>
               <div className="mt-8 rounded-card border border-line bg-white/[0.02] p-5">
                 <p className="eyebrow mb-4">Plugs into</p>
                 <ul className="flex flex-wrap gap-2">
@@ -88,7 +88,7 @@ export function AiSystems() {
               </div>
             </Reveal>
 
-            <Reveal delay={420}>
+            <Reveal delay={0.42}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button href="/#contact" arrow>
                   Get an AI agent
@@ -101,7 +101,7 @@ export function AiSystems() {
           </div>
 
           {/* Demo */}
-          <Reveal variant="scale" delay={120} className="lg:sticky lg:top-28 lg:self-start">
+          <Reveal mode="fade" delay={0.12} className="lg:sticky lg:top-28 lg:self-start">
             <CallDemo />
           </Reveal>
         </div>

@@ -9,7 +9,10 @@ import { Logo } from "@/components/brand/Logo";
 import { Footer } from "@/components/layout/Footer";
 import { MobileActionBar } from "@/components/layout/MobileActionBar";
 import { BackToTop } from "@/components/layout/BackToTop";
-import { Cursor } from "@/components/layout/Cursor";
+import { Cursor } from "@/components/motion/Cursor";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { Preloader } from "@/components/motion/Preloader";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 /**
  * Type system:
@@ -151,10 +154,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <Preloader />
+        <SmoothScroll />
         <Cursor />
-        <Navbar logo={<Logo size={46} priority revealOnScroll />} />
-        <main id="main">{children}</main>
-        <Footer />
+        <PageTransition>
+          <Navbar logo={<Logo size={46} priority revealOnScroll />} />
+          <main id="main">{children}</main>
+          <Footer />
+        </PageTransition>
         <MobileActionBar />
         <BackToTop />
       </body>

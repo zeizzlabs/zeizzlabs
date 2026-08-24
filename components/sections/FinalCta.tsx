@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/components/ui/Reveal";
-import { Kinetic } from "@/components/ui/Kinetic";
+import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { CircuitField } from "@/components/visual/CircuitField";
@@ -24,7 +23,7 @@ export function FinalCta() {
       />
 
       <div className="relative mx-auto max-w-4xl">
-        <Reveal variant="scale">
+        <Reveal mode="fade">
           <div className="relative mx-auto mb-8 w-fit">
             <div
               aria-hidden
@@ -45,21 +44,22 @@ export function FinalCta() {
         </Reveal>
 
         <h2 className="text-balance">
-          <Kinetic text="Everything digital." className="h-display block text-ink" />
-          <Kinetic
-            text="Endless possibilities."
-            className="h-display block text-gradient"
-          />
+          <Reveal mode="lines" className="h-display block text-ink">
+            Everything digital.
+          </Reveal>
+          <Reveal mode="lines" delay={0.1} className="h-display block text-gradient">
+            Endless possibilities.
+          </Reveal>
         </h2>
 
-        <Reveal delay={220}>
+        <Reveal delay={0.22}>
           <p className="mx-auto mt-7 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
             Whatever the digital side of your business needs next — the site, the
             brand, the app, the AI — we build it end to end.
           </p>
         </Reveal>
 
-        <Reveal delay={300}>
+        <Reveal delay={0.3}>
           <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Magnetic className="w-full sm:w-auto">
               <Button href="/#contact" size="lg" arrow className="w-full sm:w-auto">

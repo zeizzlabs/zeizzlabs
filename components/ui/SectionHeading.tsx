@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { Reveal } from "./Reveal";
-import { Kinetic } from "./Kinetic";
+import { Reveal } from "@/components/motion/Reveal";
 
 /**
  * Section header: mono eyebrow with a hairline, kinetic display title, and an
@@ -47,19 +46,19 @@ export function SectionHeading({
         </div>
       </Reveal>
 
-      <Kinetic
-        as="h2"
-        text={title}
-        className="h-section text-balance text-ink"
-      />
-      {accent && (
-        <Reveal delay={120}>
-          <span className="h-section text-gradient block text-balance">{accent}</span>
+      <h2 className="text-balance">
+        <Reveal mode="lines" className="h-section block text-ink">
+          {title}
         </Reveal>
-      )}
+        {accent && (
+          <Reveal mode="lines" delay={0.1} className="h-section text-gradient block">
+            {accent}
+          </Reveal>
+        )}
+      </h2>
 
       {lede && (
-        <Reveal delay={160}>
+        <Reveal delay={0.16}>
           <p
             className={cn(
               "mt-6 text-pretty text-base leading-relaxed text-muted sm:text-lg",

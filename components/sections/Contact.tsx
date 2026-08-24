@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { Aurora } from "@/components/visual/Aurora";
 import { ContactForm } from "@/components/forms/ContactForm";
@@ -64,7 +64,7 @@ export function Contact() {
             ))}
           </div>
 
-          <Reveal delay={280}>
+          <Reveal delay={0.28}>
             <div className="mt-8 flex items-start gap-3 rounded-card border border-gold-500/20 bg-gold-500/[0.05] p-5">
               <Icon name="Clock" className="mt-0.5 h-4.5 w-4.5 shrink-0 text-gold-300" />
               <p className="text-[13.5px] leading-relaxed text-steel-300">
@@ -75,7 +75,7 @@ export function Contact() {
           </Reveal>
         </div>
 
-        <Reveal variant="scale" delay={120}>
+        <Reveal mode="fade" delay={0.12}>
           <ContactForm />
         </Reveal>
       </div>

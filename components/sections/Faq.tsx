@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 import { faqs } from "@/content/offerings";
@@ -17,7 +17,7 @@ export function Faq() {
             accent="answers."
             lede="The things people actually ask before hiring us — answered honestly, including the parts other agencies leave vague."
           />
-          <Reveal delay={220}>
+          <Reveal delay={0.22}>
             <div className="mt-8 rounded-card border border-line bg-white/[0.02] p-6">
               <p className="text-sm leading-relaxed text-muted">
                 Still unsure? Send us a message — we&apos;ll tell you what we&apos;d
@@ -36,7 +36,7 @@ export function Faq() {
           </Reveal>
         </div>
 
-        <Reveal delay={100}>
+        <Reveal delay={0.1}>
           <Accordion items={faqs} />
         </Reveal>
       </div>

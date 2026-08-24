@@ -1,5 +1,4 @@
 import type { NavItem, SiteConfig } from "@/lib/types";
-import { services } from "./services";
 
 /**
  * Global brand configuration.
@@ -40,22 +39,16 @@ export const telLink = `tel:${site.phone.replace(/[^\d+]/g, "")}`;
 export const mailLink = `mailto:${site.email}`;
 
 /**
- * Primary navigation. "Services" carries a mega-menu built straight from the
- * eight pillars, so adding a pillar updates the nav automatically.
+ * Primary navigation — real routes, not in-page anchors. Each entry carries an
+ * index and a one-line descriptor because the overlay menu renders them as an
+ * editorial index rather than a list of links.
  */
 export const nav: NavItem[] = [
-  {
-    label: "Services",
-    href: "/#services",
-    children: services.map((s) => ({
-      label: s.short,
-      href: `/#services`,
-      desc: s.blurb,
-      icon: s.icon,
-    })),
-  },
-  { label: "How we work", href: "/#process" },
-  { label: "AI Systems", href: "/#ai" },
-  { label: "Packages", href: "/#packages" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Home", href: "/", desc: "Everything digital" },
+  { label: "Services", href: "/services", desc: "Eight pillars, one studio" },
+  { label: "Work", href: "/work", desc: "What we've built" },
+  { label: "Process", href: "/process", desc: "How a build runs" },
+  { label: "Packages", href: "/packages", desc: "Clear starting prices" },
+  { label: "About", href: "/about", desc: "Who you'd be working with" },
+  { label: "Contact", href: "/contact", desc: "Start a project" },
 ];

@@ -1,0 +1,176 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { services } from "@/content/services";
+import { TransitionLink } from "@/components/motion/PageTransition";
+import { Icon } from "@/components/ui/Icon";
+import { cn } from "@/lib/cn";
+
+/**
+ * SERVICES — an editorial index, not a grid of cards.
+ *
+ * This is the layout the studios use for capability lists and it works because
+ * it inverts the usual hierarchy: instead of eight equal boxes competing at
+ * once, one enormous row owns the screen at a time and the rest recede. Reading
+ * it is a scan down a table of contents, and hovering commits to a single idea.
+ *
+ * Interaction:
+ *   - the hovered row lifts to full white, its neighbours dim
+ *   - a preview panel follows the cursor and swaps art per row
+ *   - the row's deliverables slide open underneath it
+ * Touch devices get all deliverables visible, since there is no hover to reveal
+ * them and hiding content behind a gesture nobody can perform is a real trap.
+ */
+
+const accents: Record<string, [string, string]> = {
+  blue: ["#0f5bd6", "#4da3ff"],
+  gold: ["#c9a15c", "#ecd3a0"],
+  steel: ["#5b6880", "#a4b3c9"],
+};
+
+export function ServiceIndex() {
+  const root = useRef<HTMLDivElement>(null);
+  const preview = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<number | null>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      // Rows rise in sequence as the block enters.
+      gsap.from("[data-svc-row]", {
+        yPercent: 100,
+        autoAlpha: 0,
+        duration: 1,
+        stagger: 0.07,
+        scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
+      });
+
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      const xTo = gsap.quickTo(preview.current, "x", { duration: 0.85, ease: "power3" });
+      const yTo = gsap.quickTo(preview.current, "y", { duration: 0.85, ease: "power3" });
+      const onMove = (e: PointerEvent) => {
+        xTo(e.clientX);
+        yTo(e.clientY);
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+      return () => window.removeEventListener("pointermove", onMove);
+    },
+    { scope: root }
+  );
+
+  const current = active !== null ? services[active] : null;
+  const [a, b] = accents[current?.accent ?? "blue"];
+
+  return (
+    <div ref={root} className="relative">
+      {/* Cursor-tracked preview */}
+      <div
+        ref={preview}
+        aria-hidden
+        className={cn(
+          "pointer-events-none fixed left-0 top-0 z-30 hidden -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 lg:block",
+          current ? "opacity-100" : "opacity-0"
+        )}
+      >
+        <div
+          className="relative h-56 w-72 overflow-hidden rounded-2xl transition-[background] duration-500"
+          style={{ background: `linear-gradient(140deg, ${a}, ${b})` }}
+        >
+          <div className="grid-lines absolute inset-0 opacity-40" />
+          <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_28%_18%,#fff7,transparent_62%)]" />
+          {current && (
+            <span className="absolute bottom-5 left-5 flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.2em] text-ink-950/85">
+              <Icon name={current.icon} className="h-4 w-4" strokeWidth={2} />
+              {current.short}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <ul onMouseLeave={() => setActive(null)}>
+        {services.map((s, i) => {
+          const on = active === i;
+          const dim = active !== null && !on;
+          return (
+            <li key={s.id} className="overflow-hidden border-t border-line last:border-b">
+              <TransitionLink
+                href={`/services/${s.id}`}
+                data-svc-row
+                data-cursor="text"
+                data-cursor-text="Open"
+                onMouseEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                className={cn(
+                  "group block py-6 transition-opacity duration-500 sm:py-8",
+                  dim ? "opacity-35" : "opacity-100"
+                )}
+              >
+                <div className="flex items-baseline gap-4 sm:gap-8">
+                  <span className="w-7 shrink-0 font-mono text-[11px] tracking-[0.2em] text-gold-400/80 sm:w-14">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  <h3
+                    className={cn(
+                      "font-display font-bold leading-[1.02] tracking-[-0.04em] transition-all duration-500",
+                      "text-[clamp(1.6rem,5.2vw,4.2rem)]",
+                      on ? "translate-x-2 text-ink sm:translate-x-4" : "text-steel-400"
+                    )}
+                  >
+                    {s.title}
+                  </h3>
+
+                  <span
+                    className={cn(
+                      "ml-auto hidden max-w-xs shrink text-right text-[13.5px] leading-relaxed transition-colors duration-500 lg:block",
+                      on ? "text-steel-300" : "text-faint"
+                    )}
+                  >
+                    {s.blurb}
+                  </span>
+
+                  <Icon
+                    name="ArrowUpRight"
+                    className={cn(
+                      "h-5 w-5 shrink-0 transition-all duration-500 sm:h-6 sm:w-6",
+                      on
+                        ? "translate-x-0 text-gold-300 opacity-100"
+                        : "-translate-x-3 text-faint opacity-0"
+                    )}
+                  />
+                </div>
+
+                {/* Deliverables: revealed on hover at desktop, always shown on
+                    touch where there is no hover to reveal them with. */}
+                <div
+                  className={cn(
+                    "grid transition-[grid-template-rows,opacity] duration-600 ease-[var(--ease-out-expo)]",
+                    "grid-rows-[1fr] opacity-100",
+                    "lg:opacity-0 lg:grid-rows-[0fr]",
+                    on && "lg:grid-rows-[1fr] lg:opacity-100"
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <ul className="mt-4 flex flex-wrap gap-2 pl-11 sm:pl-22">
+                      {s.deliverables.map((d) => (
+                        <li
+                          key={d}
+                          className="rounded-full border border-line px-3 py-1.5 text-[12px] text-steel-400"
+                        >
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </TransitionLink>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}

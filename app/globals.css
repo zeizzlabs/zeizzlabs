@@ -487,6 +487,112 @@ body {
 }
 
 /* ================================================================
+   Studio-tier motion layer
+================================================================ */
+
+/* While the intro is on screen nothing behind it may scroll or paint. */
+html.is-loading,
+html.is-loading body {
+  overflow: hidden;
+  height: 100%;
+}
+
+/* The custom cursor replaces the system one only once it is actually live,
+   so a device without it never ends up with no cursor at all. */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* SplitText line wrapper — the mask each line rises out of. */
+.split-line {
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* background-clip:text needs the background on the same element as the text.
+   SplitText moves text into child elements, which inherit the transparent
+   fill but NOT the background — so a gradient headline would split into
+   invisible lines. Re-apply the gradient to whatever SplitText creates. */
+.text-gradient div,
+.text-gradient .split-line,
+.text-gradient .split-line > div {
+  background: var(--gradient-brand);
+  background-size: 100% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ---- Section theme inversion -------------------------------------
+   A section marked `data-theme="light"` flips the whole token set, so the
+   page alternates between the dark studio ground and a bright paper block
+   as you scroll. Everything inside keeps using the same token names. */
+[data-theme="light"] {
+  --color-ink: #0a0f1c;
+  --color-muted: #4a5568;
+  --color-faint: #6b7686;
+  --color-line: #0a0f1c14;
+  --color-line-strong: #0a0f1c26;
+  --color-surface: #f2f4f8;
+  --color-steel-300: #47536a;
+  --color-steel-400: #5b6880;
+  --color-gold-400: #8a6a2f;
+  --color-blue-400: #0f5bd6;
+  background: #eef1f6;
+  color: #0a0f1c;
+}
+[data-theme="light"] .plate {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  border-color: #0a0f1c14;
+}
+[data-theme="light"] .glass {
+  background: color-mix(in oklab, #ffffff 70%, transparent);
+}
+
+/* The navbar reads the section under it and inverts to match. */
+header[data-over="light"] {
+  color: #0a0f1c;
+}
+header[data-over="light"] .glass,
+header[data-over="light"] {
+  border-color: #0a0f1c1f;
+}
+/* The wordmark artwork is white, so it vanishes on a light section. Inverting
+   turns the brushed white metal into brushed dark metal, which keeps the bevel
+   instead of flattening it to a silhouette. */
+header[data-over="light"] .wordmark-clip img {
+  filter: invert(1) brightness(0.92);
+}
+/* Type-set fallback wordmark needs the same treatment. */
+header[data-over="light"] .wordmark {
+  background: linear-gradient(170deg, #1c2536 0%, #46536b 52%, #0a0f1c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: none;
+}
+
+/* ---- Horizontal scroll rail ------------------------------------- */
+.h-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  will-change: transform;
+}
+
+/* ---- Media-hover distortion target ------------------------------ */
+.media-warp {
+  will-change: transform, filter;
+  transition: filter 0.6s var(--ease-out-expo);
+}
+
+/* GSAP sets inline opacity; make sure nothing fights it. */
+[data-gsap-hidden] {
+  visibility: hidden;
+}
+
+/* ================================================================
    Reduced motion
 ================================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -503,4 +609,6 @@ body {
     clip-path: none !important;
   }
   .kinetic-word { opacity: 1 !important; transform: none !important; }
+  html.is-loading, html.is-loading body { overflow: auto; height: auto; }
+  html.has-custom-cursor, html.has-custom-cursor * { cursor: auto !important; }
 }

@@ -4,7 +4,7 @@ import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
 import { services } from "@/content/services";
 import { Logo } from "@/components/brand/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 
 const socialIcons: Record<string, string> = {
   whatsapp: "MessageCircle",
@@ -124,7 +124,7 @@ export function Footer() {
 
         {/* Oversized wordmark — the closing brand beat. */}
         {/* Closing brand beat — the official wordmark artwork, wiped in on scroll. */}
-        <Reveal variant="clip" className="mt-16 select-none">
+        <Reveal mode="mask" className="mt-16 select-none">
           <Image
             src="/brand/zeizzlabs-wordmark.png"
             alt=""
