@@ -89,6 +89,7 @@ export function ServiceIndex() {
               title: current.short,
               icon: current.icon,
               tags: current.deliverables,
+              image: current.image,
               from: a,
               to: b,
             }}

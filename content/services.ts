@@ -7,6 +7,7 @@ import type { Service } from "@/lib/types";
 export const services: Service[] = [
   {
     id: "software-development",
+    image: "/media/service-software-development.jpg",
     title: "Software & Development",
     short: "Software & Development",
     icon: "Code2",
@@ -31,6 +32,7 @@ export const services: Service[] = [
   },
   {
     id: "ai-intelligence",
+    image: "/media/service-ai-intelligence.jpg",
     title: "AI & Intelligence",
     short: "AI & Intelligence",
     icon: "BrainCircuit",
@@ -55,6 +57,7 @@ export const services: Service[] = [
   },
   {
     id: "automation-workflows",
+    image: "/media/service-automation-workflows.jpg",
     title: "Automation & Workflows",
     short: "Automation & Workflows",
     icon: "Workflow",
@@ -78,6 +81,7 @@ export const services: Service[] = [
   },
   {
     id: "design-branding",
+    image: "/media/service-design-branding.jpg",
     title: "Design & Branding",
     short: "Design & Branding",
     icon: "PenTool",
@@ -100,6 +104,7 @@ export const services: Service[] = [
   },
   {
     id: "digital-products",
+    image: "/media/service-digital-products.jpg",
     title: "Digital Products",
     short: "Digital Products",
     icon: "Boxes",
@@ -116,6 +121,7 @@ export const services: Service[] = [
   },
   {
     id: "cloud-infrastructure",
+    image: "/media/service-cloud-infrastructure.jpg",
     title: "Cloud & Infrastructure",
     short: "Cloud & Infrastructure",
     icon: "Cloud",
@@ -132,6 +138,7 @@ export const services: Service[] = [
   },
   {
     id: "data-analytics",
+    image: "/media/service-data-analytics.jpg",
     title: "Data & Analytics",
     short: "Data & Analytics",
     icon: "BarChart3",
@@ -155,6 +162,7 @@ export const services: Service[] = [
   },
   {
     id: "digital-experiences",
+    image: "/media/service-digital-experiences.jpg",
     title: "Digital Experiences",
     short: "Digital Experiences",
     icon: "Rocket",

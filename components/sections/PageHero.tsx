@@ -53,7 +53,7 @@ export function PageHero({
 
         {lede && (
           <Reveal delay={0.2}>
-            <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-muted">
+            <p className="mt-8 max-w-2xl text-pretty text-[19px] leading-relaxed text-muted sm:text-[21px]">
               {lede}
             </p>
           </Reveal>

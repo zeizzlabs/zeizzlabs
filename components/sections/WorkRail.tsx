@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { projects } from "@/content/work";
 import { Icon } from "@/components/ui/Icon";
+import { Frame } from "@/components/ui/Frame";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { cn } from "@/lib/cn";
 import type { WorkLabel } from "@/lib/types";
@@ -102,18 +103,15 @@ export function WorkRail() {
             data-cursor-text="View"
             className="group relative block w-[86vw] shrink-0 overflow-hidden rounded-[1.5rem] border border-line transition-colors duration-500 hover:border-white/25 max-lg:snap-center sm:w-[70vw] lg:w-[46rem]"
           >
-            {/* Preview plate */}
-            <div
-              className="relative h-[42vh] min-h-[16rem] overflow-hidden lg:h-[52vh]"
-              style={{
-                background: `linear-gradient(140deg, ${p.accent[0]}, ${p.accent[1]})`,
-              }}
+            {/* Project artwork — masked reveal, settle-scale and parallax. */}
+            <Frame
+              src={p.image}
+              alt={`${p.name} — ${p.category}`}
+              rounded=""
+              sizes="(max-width: 1024px) 86vw, 46rem"
+              className="h-[42vh] min-h-[16rem] lg:h-[52vh]"
             >
-              <div className="grid-lines absolute inset-0 opacity-35" />
-              <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_25%_15%,#fff8,transparent_60%)]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent" />
-
-              <span className="absolute left-6 top-6 font-mono text-[11px] tracking-[0.2em] text-ink-950/70">
+              <span className="absolute left-6 top-6 font-mono text-[11px] tracking-[0.2em] text-white/70">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
@@ -124,11 +122,10 @@ export function WorkRail() {
               >
                 {p.label}
               </span>
-
-              <h3 className="absolute bottom-5 left-6 right-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-bold leading-none tracking-[-0.04em] text-ink">
+              <h3 className="absolute bottom-5 left-6 right-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-none tracking-[-0.04em] text-ink">
                 {p.name}
               </h3>
-            </div>
+            </Frame>
 
             <div className="bg-ink-950 p-6 sm:p-7">
               <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-faint">

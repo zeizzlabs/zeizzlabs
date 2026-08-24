@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
+import { Frame } from "@/components/ui/Frame";
 import { Reveal } from "@/components/motion/Reveal";
 import { Ticker } from "@/components/sections/Ticker";
 import { Proof } from "@/components/sections/Proof";
@@ -48,7 +49,17 @@ export default function AboutPage() {
         lede={`${site.brandName} exists because most businesses are forced to assemble their digital presence from strangers who never speak to each other. We do the whole thing.`}
       />
 
-      <Section inner="max-w-[100rem]" className="pt-0">
+      <div className="px-5 sm:px-8">
+        <Frame
+          src="/media/about-studio.jpg"
+          alt=""
+          priority
+          sizes="(max-width: 1024px) 92vw, 100rem"
+          className="mx-auto h-[40vh] min-h-[15rem] max-w-[100rem] lg:h-[54vh]"
+        />
+      </div>
+
+      <Section inner="max-w-[100rem]">
         <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <Reveal>

@@ -4,6 +4,7 @@ import { projects } from "@/content/work";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
+import { Frame } from "@/components/ui/Frame";
 import { Icon } from "@/components/ui/Icon";
 import { CircleCta } from "@/components/ui/CircleCta";
 import { TransitionLink } from "@/components/motion/PageTransition";
@@ -45,21 +46,20 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         ]}
       />
 
-      {/* Full-bleed plate */}
-      <Reveal mode="mask">
-        <div
-          className="relative mx-5 h-[46vh] min-h-[18rem] overflow-hidden rounded-[1.5rem] sm:mx-8 lg:h-[62vh]"
-          style={{
-            background: `linear-gradient(140deg, ${project.accent[0]}, ${project.accent[1]})`,
-          }}
+      {/* Full-bleed artwork */}
+      <div className="px-5 sm:px-8">
+        <Frame
+          src={project.image}
+          alt={`${project.name} — ${project.category}`}
+          priority
+          sizes="(max-width: 1024px) 92vw, 100rem"
+          className="mx-auto h-[46vh] min-h-[18rem] max-w-[100rem] lg:h-[62vh]"
         >
-          <div className="grid-lines absolute inset-0 opacity-35" />
-          <div className="absolute inset-0 mix-blend-overlay [background:radial-gradient(circle_at_28%_18%,#fff8,transparent_60%)]" />
-          <span className="absolute bottom-7 left-7 font-display text-[clamp(2.5rem,7vw,6rem)] font-bold leading-none tracking-[-0.05em] text-ink-950/25">
+          <span className="absolute bottom-7 left-7 font-display text-[clamp(2.5rem,7vw,6rem)] font-semibold leading-none tracking-[-0.05em] text-white/20">
             {project.name}
           </span>
-        </div>
-      </Reveal>
+        </Frame>
+      </div>
 
       <Section inner="max-w-[100rem]">
         <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">

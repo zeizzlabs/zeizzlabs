@@ -17,6 +17,7 @@ export const projects: Project[] = [
     tech: ["Twilio", "Realtime Voice", "Calendar API", "Node"],
     outcome: "Prototype: sub-second turn-taking on a live phone number.",
     accent: ["#1e7bff", "#4da3ff"],
+    image: "/media/work-voice-reception.jpg",
   },
   {
     slug: "whatsapp-desk",
@@ -28,6 +29,7 @@ export const projects: Project[] = [
     tech: ["WhatsApp Cloud API", "Queues", "CRM sync", "Webhooks"],
     outcome: "Prototype: first reply in under 5 seconds, any channel.",
     accent: ["#4da3ff", "#dcb877"],
+    image: "/media/work-whatsapp-desk.jpg",
   },
   {
     slug: "helios-dashboard",
@@ -39,6 +41,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "Edge Functions", "SQL", "Charts"],
     outcome: "Prototype: sub-second queries over 1M synthetic events.",
     accent: ["#dcb877", "#ecd3a0"],
+    image: "/media/work-helios-dashboard.jpg",
   },
   {
     slug: "aria-agent",
@@ -50,5 +53,6 @@ export const projects: Project[] = [
     tech: ["LLM", "RAG", "Vector DB", "TypeScript"],
     outcome: "Experiment: retrieval-grounded drafts with source citations.",
     accent: ["#a4b3c9", "#4da3ff"],
+    image: "/media/work-aria-agent.jpg",
   },
 ];

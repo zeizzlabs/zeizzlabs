@@ -4,6 +4,7 @@ import { services } from "@/content/services";
 import { offerings } from "@/content/offerings";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
+import { Frame } from "@/components/ui/Frame";
 import { Reveal } from "@/components/motion/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { CircleCta } from "@/components/ui/CircleCta";
@@ -41,7 +42,17 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         lede={service.blurb}
       />
 
-      <Section inner="max-w-[100rem]" className="pt-0">
+      <div className="px-5 sm:px-8">
+        <Frame
+          src={service.image}
+          alt={service.short}
+          priority
+          sizes="(max-width: 1024px) 92vw, 100rem"
+          className="mx-auto h-[46vh] min-h-[17rem] max-w-[100rem] lg:h-[60vh]"
+        />
+      </div>
+
+      <Section inner="max-w-[100rem]">
         <div className="grid gap-14 lg:grid-cols-[1.25fr_1fr] lg:gap-20">
           <div>
             <Reveal mode="lines">

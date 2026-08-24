@@ -28,8 +28,11 @@ export function Preloader() {
 
     if (seen || prefersReducedMotion()) {
       document.documentElement.classList.remove("is-loading");
-      // Unmount on the next frame — setting state synchronously in an effect
-      // body forces an extra render before the first paint.
+      // Hide it with a direct DOM write first: this runs before the browser
+      // paints, so there is no flash of the intro. React state cannot do that
+      // job here — setting it synchronously in an effect body forces an extra
+      // render pass, so the actual unmount is deferred by a frame.
+      if (root.current) root.current.style.display = "none";
       const id = requestAnimationFrame(() => setMounted(false));
       return () => cancelAnimationFrame(id);
     }

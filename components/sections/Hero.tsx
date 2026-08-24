@@ -124,7 +124,7 @@ export function Hero() {
 
         <p
           data-hero-stagger
-          className="mx-auto mt-7 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-[17px]"
+          className="mx-auto mt-7 max-w-2xl text-pretty text-[17px] leading-relaxed text-muted sm:text-[19px]"
         >
           {site.brandName} is the digital team behind growing businesses — websites
           and apps, brand and design, AI agents that answer your calls, and

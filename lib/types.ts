@@ -31,6 +31,8 @@ export interface Service {
   overview: string;
   /** What the client actually ends up with. */
   outcomes: string[];
+  /** Artwork in /public/media. Replace the file to change the image. */
+  image: string;
   /** Bento span, kept for any grid presentation of the pillars. */
   span?: "wide" | "tall" | "hero";
   /** Accent family for the tile's glow. */
@@ -98,6 +100,8 @@ export interface Project {
   outcome: string;
   /** Two brand stops for the card's preview gradient. */
   accent: [string, string];
+  /** Artwork in /public/media. Replace the file to change the image. */
+  image: string;
 }
 
 /** A node in the AI + automation system diagram. */
