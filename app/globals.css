@@ -351,6 +351,20 @@ body {
   66%      { transform: translate3d(-6%, 5%, 0) scale(0.94); }
 }
 .animate-drift      { animation: drift 26s ease-in-out infinite; }
+
+/* Second, slower path so layers never move in lockstep. */
+@keyframes sway {
+  0%, 100% { transform: translate3d(-6%, 3%, 0) scale(1.05); }
+  50%      { transform: translate3d(7%, -5%, 0) scale(0.95); }
+}
+.animate-sway { animation: sway 33s ease-in-out infinite; }
+
+/* A sheen crossing the field; transform only, so it costs nothing. */
+@keyframes sheen {
+  0%   { transform: translate3d(-40%, 0, 0); }
+  100% { transform: translate3d(40%, 0, 0); }
+}
+.animate-sheen { animation: sheen 19s ease-in-out infinite alternate; }
 .animate-drift-slow { animation: drift 40s ease-in-out infinite reverse; }
 
 @keyframes sweep { to { background-position: 200% center; } }
@@ -781,12 +795,6 @@ header[data-over="light"] .wordmark {
   .circuit-field path,
   .circuit-field circle {
     filter: none !important;
-  }
-
-  /* The drifting blurred blobs are 40rem elements with a 120px blur. */
-  .animate-drift,
-  .animate-drift-slow {
-    animation: none;
   }
 
   /* Tailwind's backdrop utilities on buttons and chips. Each one is its own

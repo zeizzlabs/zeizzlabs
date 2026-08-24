@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { Icon } from "@/components/ui/Icon";
 import { ShaderField } from "@/components/visual/ShaderField";
+import { Atmosphere } from "@/components/visual/Atmosphere";
 import { RotatingWord } from "@/components/sections/RotatingWord";
 import { site, whatsappLink } from "@/content/site";
 
@@ -85,7 +86,11 @@ export function Hero() {
       ref={root}
       className="noise relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-20 pt-32 text-center sm:px-6 sm:pt-36"
     >
-      <ShaderField className="pointer-events-none absolute inset-0 h-full w-full" />
+      {/* Desktop gets the shader; touch devices get a compositor-only
+          equivalent, because the shader is the one thing a phone GPU cannot
+          afford here. */}
+      <ShaderField className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block" />
+      <Atmosphere />
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-25" />
 
       <div data-hero-content className="relative z-10 flex flex-col items-center">

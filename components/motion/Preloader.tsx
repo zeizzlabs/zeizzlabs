@@ -140,12 +140,9 @@ export function Preloader() {
       <div className="relative flex flex-col items-center gap-8 px-8">
         <div className="overflow-hidden">
           <div data-intro-rise className="relative">
-            {/* Kept subtle: on the light theme a strong blue bloom reads as a
-                grey box behind the mark rather than as light. */}
-            <div
-              aria-hidden
-              className="absolute -inset-6 -z-10 blur-2xl [background:radial-gradient(circle,rgba(30,123,255,0.18),transparent_70%)]"
-            />
+            {/* No bloom behind the mark. The artwork is transparent, and any
+                blurred fill behind it reads as a solid plate on a light ground
+                instead of as light. The mark carries itself. */}
             <Image
               src="/brand/zeizzlabs-mark.png"
               alt=""

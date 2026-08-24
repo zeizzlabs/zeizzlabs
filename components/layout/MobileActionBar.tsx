@@ -19,25 +19,46 @@ export function MobileActionBar() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.75);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    /**
+     * One source of truth, measured in a single rAF-throttled read.
+     *
+     * The previous version had a scroll handler and an IntersectionObserver
+     * both writing this state, and they disagreed whenever the contact section
+     * entered or left the viewport — which is what made the bar flicker. It
+     * also waited three quarters of a viewport before appearing, so on a long
+     * hero it felt like it never came.
+     */
+    let raf = 0;
 
-    const contact = document.getElementById("contact");
-    let io: IntersectionObserver | undefined;
-    if (contact) {
-      io = new IntersectionObserver(
-        ([e]) => {
-          if (e.isIntersecting) setShow(false);
-          else onScroll();
-        },
-        { threshold: 0.15 }
-      );
-      io.observe(contact);
-    }
+    const update = () => {
+      raf = 0;
+      // Far enough that it does not cover the opening screen, close enough
+      // that a single flick brings it in.
+      const past = window.scrollY > window.innerHeight * 0.3;
+
+      // Hide it over the contact section: the form is right there, and a
+      // floating bar on top of it is just in the way.
+      const contact = document.getElementById("contact");
+      let overContact = false;
+      if (contact) {
+        const r = contact.getBoundingClientRect();
+        overContact = r.top < window.innerHeight * 0.9 && r.bottom > 0;
+      }
+
+      setShow(past && !overContact);
+    };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
-      io?.disconnect();
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
@@ -50,7 +71,7 @@ export function MobileActionBar() {
     <div
       aria-hidden={!show}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-500 ease-[var(--ease-out-expo)] sm:hidden",
+        "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-300 ease-[var(--ease-out-quint)] will-change-transform sm:hidden",
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
       )}
     >
