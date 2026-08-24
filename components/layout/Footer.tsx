@@ -1,5 +1,5 @@
 import { TransitionLink } from "@/components/motion/PageTransition";
-import { site, nav, whatsappLink, telLink, mailLink } from "@/content/site";
+import { site, nav, whatsappLink, telLink, mailLink, mailAltLink } from "@/content/site";
 import { services } from "@/content/services";
 import { Logo } from "@/components/brand/Logo";
 import { Icon } from "@/components/ui/Icon";
@@ -81,6 +81,12 @@ export function Footer() {
                 <a href={mailLink} className="group flex min-h-[40px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-ink">
                   <Icon name="Mail" className="h-4 w-4 text-blue-400" />
                   {site.email}
+                </a>
+              </li>
+              <li>
+                <a href={mailAltLink} className="group flex min-h-[40px] items-center gap-2.5 text-sm text-muted transition-colors hover:text-ink">
+                  <Icon name="Mail" className="h-4 w-4 text-steel-400" />
+                  {site.emailAlt}
                 </a>
               </li>
               <li>

@@ -68,7 +68,13 @@ export function Navbar({ logo }: { logo: ReactNode }) {
         data-over={over}
         className={cn(
           "group/nav fixed inset-x-0 top-0 z-[130] transition-[background,backdrop-filter,border-color,color] duration-500",
-          scrolled && !open ? "glass border-b border-line" : "border-b border-transparent",
+          // Always present, just quieter at rest — a bar that only appears once
+          // you scroll reads as missing when you are at the top of the page.
+          open
+            ? "border-b border-transparent"
+            : scrolled
+              ? "glass border-b border-line shadow-[0_10px_40px_-28px_rgba(4,6,12,0.55)]"
+              : "glass border-b border-line/70",
           light ? "text-ink-950" : "text-ink"
         )}
         style={{ height: "var(--nav-h)" }}

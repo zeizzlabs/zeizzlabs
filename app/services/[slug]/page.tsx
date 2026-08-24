@@ -10,6 +10,7 @@ import { Icon } from "@/components/ui/Icon";
 import { CircleCta } from "@/components/ui/CircleCta";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { FinalCta } from "@/components/sections/FinalCta";
+import { AddOns } from "@/components/sections/AddOns";
 
 /** Every pillar is a real, statically-rendered page. */
 export function generateStaticParams() {
@@ -126,6 +127,11 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           </ul>
         </Reveal>
       </Section>
+
+      {/* Add-ons are the most common follow-up question on a build page. */}
+      {(service.id === "software-development" || service.id === "digital-products") && (
+        <AddOns className="border-t border-line" />
+      )}
 
       {/* Next pillar */}
       <Section inner="max-w-[100rem]">

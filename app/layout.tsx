@@ -111,7 +111,7 @@ const jsonLd = {
       slogan: site.tagline,
       logo: `${site.url}/brand/zeizzlabs-emblem.png`,
       image: `${site.url}/brand/og-image.jpg`,
-      email: site.email,
+      email: [site.email, site.emailAlt],
       telephone: site.phone,
       areaServed: "Worldwide",
       hasOfferCatalog: {

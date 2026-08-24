@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { nav, site, whatsappLink, telLink, mailLink } from "@/content/site";
+import { nav, site, whatsappLink, telLink, mailLink, mailAltLink } from "@/content/site";
 import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
@@ -286,6 +286,11 @@ export function MenuOverlay({
               <li>
                 <a href={mailLink} className="text-muted transition-colors hover:text-ink">
                   {site.email}
+                </a>
+              </li>
+              <li>
+                <a href={mailAltLink} className="text-muted transition-colors hover:text-ink">
+                  {site.emailAlt}
                 </a>
               </li>
               <li>

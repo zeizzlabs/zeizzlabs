@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/sections/PageHero";
 import { Packages } from "@/components/sections/Packages";
+import { AddOns } from "@/components/sections/AddOns";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 
@@ -20,6 +21,7 @@ export default function PackagesPage() {
         lede="No hourly invoices you cannot predict. If your project needs less than a package, we will tell you."
       />
       <Packages />
+      <AddOns />
       <Faq />
       <FinalCta />
     </>

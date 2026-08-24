@@ -114,6 +114,51 @@ prompts only until the real thing exists.
 
 ---
 
+## 3b. Menu preview cards — 7 images · 1200 × 1500 · JPG · optional
+
+The cards that follow your cursor over the overlay menu and the services index.
+They currently reuse the service and project artwork above, which works — this
+is only worth doing if you want each route to have its own image.
+
+**These are portrait, not wide.** The card is taller than it is wide, so a
+landscape source gets cropped to a narrow middle strip. Author at 1200 × 1500.
+
+Save as `public/media/menu-<name>.jpg`, then set `image` on the matching entry
+in `previews` inside
+[`components/layout/MenuOverlay.tsx`](../components/layout/MenuOverlay.tsx).
+
+| File | Card |
+| --- | --- |
+| `menu-home.jpg` | Home — "Everything digital" |
+| `menu-services.jpg` | Services — "Eight pillars, one studio" |
+| `menu-work.jpg` | Work — "Selected work" |
+| `menu-process.jpg` | Process — "Six steps, no mystery" |
+| `menu-packages.jpg` | Packages — "Transparent pricing" |
+| `menu-about.jpg` | About — "Who you'd work with" |
+| `menu-contact.jpg` | Contact — "Start a project" |
+
+Append the house style to each. Keep the **lower third quiet** — a label sits
+there, over a dark scrim.
+
+1. **Home** — Vertical composition of blue and gold circuit traces converging
+   upward into a single bright point, dark navy ground, sense of many things
+   becoming one.
+2. **Services** — Eight softly glowing panels stacked in vertical perspective,
+   each a slightly different depth, connected by thin blue traces.
+3. **Work** — A tall stack of translucent interface layers seen at an angle,
+   brushed-steel edges catching light, one layer highlighted in gold.
+4. **Process** — Six illuminated nodes descending a single vertical blue
+   circuit line, each node brighter than the last.
+5. **Packages** — Three vertical champagne-gold columns of differing heights on
+   dark navy, fine measurement lines beside them, editorial and precise.
+6. **About** — A dark studio desk shot from above in portrait crop, screens
+   glowing blue out of focus. A real photograph of your own workspace, colour
+   graded cool, would be better than anything generated.
+7. **Contact** — A single gold signal pulse rising from the bottom of the frame
+   through a dark blue circuit field, radiating rings as it goes.
+
+---
+
 ## 4. Video — optional
 
 Any image on the site can have a short looping video play on top of it. This is

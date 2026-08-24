@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { Aurora } from "@/components/visual/Aurora";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { site, whatsappLink, telLink, mailLink } from "@/content/site";
+import { site, whatsappLink, telLink, mailLink, mailAltLink } from "@/content/site";
 
 const channels = [
   {
@@ -16,6 +16,13 @@ const channels = [
   },
   { icon: "Phone", label: "Call us", value: site.phone, href: telLink, tone: "text-blue-400" },
   { icon: "Mail", label: "Email", value: site.email, href: mailLink, tone: "text-gold-300" },
+  {
+    icon: "Mail",
+    label: "Or email",
+    value: site.emailAlt,
+    href: mailAltLink,
+    tone: "text-steel-400",
+  },
 ];
 
 /**

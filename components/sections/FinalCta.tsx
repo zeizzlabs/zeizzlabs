@@ -32,9 +32,9 @@ export function FinalCta() {
             <Image
               src="/brand/zeizzlabs-mark.png"
               alt=""
-              width={200}
-              height={200}
-              className="animate-float h-20 w-20 sm:h-24 sm:w-24"
+              width={340}
+              height={340}
+              className="animate-float h-28 w-28 sm:h-36 sm:w-36"
             />
           </div>
         </Reveal>

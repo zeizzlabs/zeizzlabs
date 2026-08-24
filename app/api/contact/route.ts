@@ -36,7 +36,11 @@ export async function POST(req: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO || "zeizzlabs@gmail.com";
+  // Both inboxes by default; CONTACT_TO overrides with a comma-separated list.
+  const to = (process.env.CONTACT_TO || "enquire@zeizzlabs.com,zeizzlabs@gmail.com")
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean);
   const from = process.env.CONTACT_FROM || "ZeizzLabs <onboarding@resend.dev>";
 
   if (apiKey) {
