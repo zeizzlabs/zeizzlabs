@@ -137,5 +137,8 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true });
+  // `delivered` distinguishes "it is already in your inbox" from "it is safe in
+  // storage but the mail did not go out" — the caller and I both need to tell
+  // those apart, and a bare ok:true hides a half-failure.
+  return NextResponse.json({ ok: true, delivered: emailed, stored });
 }
