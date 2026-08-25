@@ -41,8 +41,15 @@ Sign up at [resend.com](https://resend.com). No card needed for the free plan.
 
 ### 2. Add the domain
 
-**Domains → Add Domain →** enter `zeizzlabs.com`, pick the region closest to you
-(**ap-south-1 / Mumbai** for India).
+**Domains → Add Domain →** enter `zeizzlabs.com` and pick a region.
+
+Resend offers **us-east-1** (Virginia), **eu-west-1** (Ireland), **sa-east-1**
+(São Paulo) and **ap-northeast-1** (Tokyo). There is no Mumbai region, so
+**Tokyo is the closest option to India** — pick that.
+
+The region is **immutable**. Changing it later means deleting the domain,
+re-adding it and redoing every DNS record with a fresh DKIM key, so it is worth
+getting right the first time.
 
 Resend then shows you three DNS records. They sit on a **`send` subdomain**, not
 the root — that is deliberate, so your main domain's email reputation stays
@@ -63,6 +70,11 @@ GoDaddy wants only the part in front. Get this wrong and you create
 | `resend._domainkey.send.zeizzlabs.com` | **TXT** | `resend._domainkey.send` | the long `p=MIGf...` key from Resend |
 
 Copy and paste the values — do not retype the DKIM key.
+
+> **If verification will not go green,** check the DKIM record's name before
+> anything else. It has to sit on the same `send` subdomain as the other two —
+> `resend._domainkey.send` in GoDaddy, not `resend._domainkey`. One level off
+> and Resend simply never sees it, with no error to tell you why.
 
 ### 4. Verify
 
