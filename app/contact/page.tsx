@@ -15,7 +15,7 @@ export default function ContactPage() {
         eyebrow="Start a project"
         title="Tell us the goal."
         accent="We'll build the thing."
-        lede="A real person reads every message and replies with a straight answer — including whether we are the right fit."
+        lede="No forms that go nowhere. A real person reads every message and replies with a straight answer — including whether we are the right fit."
       />
       <Contact />
     </>

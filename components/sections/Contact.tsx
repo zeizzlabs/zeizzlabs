@@ -1,5 +1,4 @@
 import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { Aurora } from "@/components/visual/Aurora";
@@ -37,13 +36,6 @@ export function Contact() {
 
       <div className="relative grid gap-12 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-16">
         <div>
-          <SectionHeading
-            eyebrow="Start a project"
-            title="Tell us the goal."
-            accent="We'll build the thing."
-            lede="No forms that go nowhere. A real person reads every message and replies with a straight answer — including whether we're the right fit."
-          />
-
           <div className="mt-9 space-y-2">
             {channels.map((c, i) => (
               <Reveal key={c.label} delay={i * 0.08}>
