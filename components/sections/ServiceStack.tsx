@@ -55,8 +55,11 @@ export function ServiceStack() {
       if (!node) continue;
 
       const t = pos - i;
-      const inP = ease(range(t, -0.9, -0.05));
-      const outP = ease(range(t, 0.3, 0.95));
+      // Short, decisive ramps with a long settled plateau between them. Spread
+      // across most of a step instead, the card is mid-transition nearly all
+      // the time and the section reads as permanently half-loaded.
+      const inP = ease(range(t, -0.42, -0.04));
+      const outP = ease(range(t, 0.62, 0.96));
       const opacity = inP * (1 - outP);
 
       if (opacity < 0.008) {
@@ -87,7 +90,7 @@ export function ServiceStack() {
       className="relative lg:hidden"
       style={{ height: `calc(100svh + ${last * STEP_VH}svh)` }}
     >
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden pb-24 pt-[calc(var(--nav-h)+1.25rem)]">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden pb-[7.5rem] pt-[calc(var(--nav-h)+1rem)]">
         <div className="relative min-h-[26rem] flex-1">
           {services.map((s, i) => (
             <div
@@ -137,14 +140,15 @@ export function ServiceStack() {
         </div>
 
         {/* Segment indicator rather than a counter — it shows how far through
-            the set you are without putting numbering back on the page. */}
-        <ul className="mt-6 flex shrink-0 gap-1.5" aria-hidden>
+            the set you are without putting numbering back on the page. Sits
+            above the floating action bar, which was clipping it. */}
+        <ul className="mt-7 flex shrink-0 gap-1.5" aria-hidden>
           {services.map((s, i) => (
             <li
               key={s.id}
               className={cn(
-                "h-[3px] flex-1 rounded-full transition-colors duration-300",
-                i === active ? "[background:var(--gradient-brand)]" : "bg-line-strong"
+                "h-[4px] flex-1 rounded-full transition-colors duration-300",
+                i === active ? "[background:var(--gradient-brand)]" : "bg-steel-400/35"
               )}
             />
           ))}

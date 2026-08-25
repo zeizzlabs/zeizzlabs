@@ -1,7 +1,6 @@
 import { Reveal } from "@/components/motion/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { stats } from "@/content/offerings";
-import { cn } from "@/lib/cn";
 
 /**
  * PROOF — a full-bleed editorial band, not a row of stat cards.
@@ -19,23 +18,12 @@ export function Proof() {
           <p className="eyebrow mb-10">By the numbers</p>
         </Reveal>
 
-        <dl className="grid grid-cols-2 border-y border-line lg:grid-cols-4">
+        {/* No rules and no boxes: the figures are large enough to group
+            themselves, and every line drawn between them made the band read as
+            a table of four cells instead of one statement. */}
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-10 lg:grid-cols-4 lg:gap-x-12">
           {stats.map((s, i) => (
-            /* Two columns on phones, four from lg. Every rule is drawn with a
-               one-directional variant (`max-lg:` below, `lg:` above) rather than
-               a base class an `lg:` utility has to override — same-specificity
-               border overrides are decided by stylesheet order, not class
-               order, and that fight is not worth having. */
-            <Reveal
-              key={s.label}
-              delay={i * 0.08}
-              className={cn(
-                "relative py-8 pr-4 sm:py-9 sm:pr-8",
-                i >= 2 && "max-lg:border-t max-lg:border-line",
-                i % 2 === 1 && "max-lg:border-l max-lg:border-line max-lg:pl-4 sm:max-lg:pl-6",
-                i !== 0 && "lg:border-l lg:border-line lg:pl-8"
-              )}
-            >
+            <Reveal key={s.label} delay={i * 0.08} className="relative">
               <dd className="font-display text-[clamp(2.5rem,10vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.05em] text-gradient">
                 <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} />
               </dd>
