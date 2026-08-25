@@ -1,6 +1,31 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /**
+   * Security headers live here, not in netlify.toml.
+   *
+   * Netlify's `[[headers]]` rules only reach files it serves directly — they
+   * were applying to /media and /brand but not to any page, because pages come
+   * from the Next runtime function. Verified on the deployed site: the images
+   * carried X-Frame-Options and Referrer-Policy and /about carried neither.
+   */
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+          },
+        ],
+      },
+    ];
+  },
+
   images: {
     /**
      * Artwork in /media is served with a `?v=<stamp>` cache key so that
