@@ -2,6 +2,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 import { CircleCta } from "@/components/ui/CircleCta";
+import { ScrollRotate } from "@/components/motion/ScrollRotate";
 import { processSteps } from "@/content/process";
 
 /**
@@ -27,6 +28,7 @@ export function ProcessTeaser() {
         <ol>
           {processSteps.map((s) => (
             <Reveal as="li" key={s.no} className="border-t border-line py-7 last:border-b">
+              <ScrollRotate>
               <div className="flex items-baseline gap-5">
                 <div className="min-w-0">
                   <h3 className="h-card text-2xl text-ink sm:text-3xl">{s.title}</h3>
@@ -38,6 +40,7 @@ export function ProcessTeaser() {
                   </p>
                 </div>
               </div>
+              </ScrollRotate>
             </Reveal>
           ))}
         </ol>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
+import { ScrollRotate } from "@/components/motion/ScrollRotate";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { processSteps } from "@/content/process";
@@ -146,6 +147,7 @@ export function Process() {
           <ol className="space-y-4">
             {processSteps.map((s, i) => (
               <Reveal key={s.no} as="li" delay={0.04}>
+                <ScrollRotate>
                 <div
                   id={`step-${s.no}`}
                   className={cn(
@@ -182,6 +184,7 @@ export function Process() {
                     </div>
                   </div>
                 </div>
+                </ScrollRotate>
               </Reveal>
             ))}
           </ol>

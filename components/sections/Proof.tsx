@@ -1,6 +1,7 @@
 import { Reveal } from "@/components/motion/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { stats } from "@/content/offerings";
+import { cn } from "@/lib/cn";
 
 /**
  * PROOF — a full-bleed editorial band, not a row of stat cards.
@@ -18,20 +19,27 @@ export function Proof() {
           <p className="eyebrow mb-10">By the numbers</p>
         </Reveal>
 
-        <dl className="grid divide-y divide-line border-y border-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
+        <dl className="grid grid-cols-2 border-y border-line lg:grid-cols-4">
           {stats.map((s, i) => (
-            /* Padding on the right only, so every cell's content starts at its
-               own column edge. `first:pl-0` lined column one up but left the
-               third stat indented under it in the two-column layout. */
+            /* Two columns on phones, four from lg. Every rule is drawn with a
+               one-directional variant (`max-lg:` below, `lg:` above) rather than
+               a base class an `lg:` utility has to override — same-specificity
+               border overrides are decided by stylesheet order, not class
+               order, and that fight is not worth having. */
             <Reveal
               key={s.label}
               delay={i * 0.08}
-              className="relative py-9 sm:pr-8 lg:border-l lg:border-line lg:pl-8 lg:first:border-l-0 lg:first:pl-0"
+              className={cn(
+                "relative py-8 pr-4 sm:py-9 sm:pr-8",
+                i >= 2 && "max-lg:border-t max-lg:border-line",
+                i % 2 === 1 && "max-lg:border-l max-lg:border-line max-lg:pl-4 sm:max-lg:pl-6",
+                i !== 0 && "lg:border-l lg:border-line lg:pl-8"
+              )}
             >
-              <dd className="font-display text-[clamp(3rem,7vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.05em] text-gradient">
+              <dd className="font-display text-[clamp(2.5rem,10vw,5.5rem)] font-bold leading-[0.9] tracking-[-0.05em] text-gradient">
                 <Counter to={s.value} prefix={s.prefix} suffix={s.suffix} />
               </dd>
-              <dt className="mt-5 text-[15px] font-medium text-ink">{s.label}</dt>
+              <dt className="mt-4 text-[14px] font-medium leading-snug text-ink sm:mt-5 sm:text-[15px]">{s.label}</dt>
               {s.note && (
                 <p className="mt-1.5 text-[13px] leading-relaxed text-faint">{s.note}</p>
               )}

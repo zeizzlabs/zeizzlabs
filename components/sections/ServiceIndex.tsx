@@ -7,6 +7,7 @@ import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
 import { PreviewCard } from "@/components/ui/PreviewCard";
+import { ServiceStack } from "./ServiceStack";
 import { cn } from "@/lib/cn";
 
 /**
@@ -21,8 +22,9 @@ import { cn } from "@/lib/cn";
  *   - the hovered row lifts to full white, its neighbours dim
  *   - a preview panel follows the cursor and swaps art per row
  *   - the row's deliverables slide open underneath it
- * Touch devices get all deliverables visible, since there is no hover to reveal
- * them and hiding content behind a gesture nobody can perform is a real trap.
+ * Phones do not get this layout at all — see ServiceStack, which hands a single
+ * card slot from one pillar to the next as you scroll. Hover is the whole
+ * mechanism here, and there is no honest touch equivalent of it.
  */
 
 const accents: Record<string, [string, string]> = {
@@ -39,6 +41,9 @@ export function ServiceIndex() {
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
+      // The rows are display:none on phones — ServiceStack owns that viewport —
+      // so there is nothing here worth measuring or animating.
+      if (window.matchMedia("(pointer: coarse)").matches) return;
 
       // Rows rise in sequence as the block enters. fromTo, not from — see the
       // note in components/motion/Reveal.tsx.
@@ -96,7 +101,10 @@ export function ServiceIndex() {
         )}
       </div>
 
-      <ul onMouseLeave={() => setActive(null)}>
+      {/* Phones get the swap stack; the hover index needs a pointer to work. */}
+      <ServiceStack />
+
+      <ul className="max-lg:hidden" onMouseLeave={() => setActive(null)}>
         {services.map((s, i) => {
           const on = active === i;
           const dim = active !== null && !on;
