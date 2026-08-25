@@ -6,7 +6,6 @@ import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
 import { prefersReducedMotion } from "@/lib/gsap";
 import { useRafScroll, range, ease } from "@/lib/use-raf-scroll";
-import { cn } from "@/lib/cn";
 
 /**
  * SERVICES, on a phone — one card at a time, swapped by scroll.
@@ -14,9 +13,10 @@ import { cn } from "@/lib/cn";
  * The desktop index works because hover lets one row own the screen. Touch has
  * no hover, so the phone version does it with position instead: every pillar
  * occupies the same slot, and scrolling hands that slot from one to the next.
- * The incoming card slides in from alternating sides while the outgoing one
- * blurs back and away, so the two are visibly the same object being replaced
- * rather than a list moving past.
+ * Nothing slides. The card holds one position and the swap happens in place —
+ * the incoming one grows and sharpens as the outgoing one shrinks and blurs, so
+ * the two are visibly the same object being replaced rather than a list moving
+ * past.
  *
  * The scroll is scrubbed, not triggered: each frame reads one bounding box and
  * writes transforms straight to the DOM. Nothing here goes through React state
@@ -25,6 +25,9 @@ import { cn } from "@/lib/cn";
 
 /** Vertical scroll spent on each hand-off, in units of viewport height. */
 const STEP_VH = 56;
+/** Matched to ScrollFocus so the swap and the process steps share a language. */
+const SHRINK = 0.16;
+const BLUR = 7;
 
 export function ServiceStack() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -69,18 +72,18 @@ export function ServiceStack() {
         continue;
       }
 
-      // Odd cards arrive from the right, even from the left; each leaves back
-      // the way the next one is coming from, so the two cross.
-      const dir = i % 2 === 0 ? -1 : 1;
-      const x = dir * 78 * (1 - inP) - dir * 42 * outP;
-      const scale = 0.94 + 0.06 * inP - 0.08 * outP;
-      const blur = 9 * (1 - inP) + 10 * outP;
+      // Nothing moves. The card holds one position and comes into focus or
+      // falls out of it, exactly as the process steps do — same shrink and
+      // blur figures, so the two sections read as one idea. `opacity` is
+      // already the settled-ness of this card, so it drives all three.
+      const scale = 1 - SHRINK * (1 - opacity);
+      const blur = BLUR * (1 - opacity);
 
       node.style.visibility = "visible";
       node.style.willChange = "transform, opacity, filter";
-      node.style.opacity = String(opacity);
-      node.style.transform = `translate3d(${x.toFixed(2)}px,0,0) scale(${scale.toFixed(4)})`;
-      node.style.filter = blur < 0.05 ? "none" : `blur(${blur.toFixed(2)}px)`;
+      node.style.opacity = opacity.toFixed(3);
+      node.style.transform = `translate3d(0,0,0) scale(${scale.toFixed(4)})`;
+      node.style.filter = blur < 0.06 ? "none" : `blur(${blur.toFixed(2)}px)`;
     }
   });
 
@@ -90,7 +93,7 @@ export function ServiceStack() {
       className="relative lg:hidden"
       style={{ height: `calc(100svh + ${last * STEP_VH}svh)` }}
     >
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden pb-[7.5rem] pt-[calc(var(--nav-h)+1rem)]">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden pb-24 pt-[calc(var(--nav-h)+0.75rem)]">
         <div className="relative min-h-[26rem] flex-1">
           {services.map((s, i) => (
             <div
@@ -105,9 +108,12 @@ export function ServiceStack() {
               style={i === 0 ? undefined : { opacity: 0, visibility: "hidden" }}
               aria-hidden={i !== active}
             >
+              {/* One fixed height for all eight. Left to size themselves they
+                  ran 353px to 451px, so the card's edges jumped on every swap
+                  and it stopped reading as a single card changing its contents. */}
               <TransitionLink
                 href={`/services/${s.id}`}
-                className="plate block rounded-[1.5rem] border border-line p-6 sm:p-8"
+                className="plate block min-h-[28.5rem] rounded-[1.5rem] border border-line p-6 sm:p-8"
               >
                 <span className="grid h-12 w-12 place-items-center rounded-xl border border-line bg-raised text-blue-300">
                   <Icon name={s.icon} className="h-5 w-5" />
@@ -138,21 +144,6 @@ export function ServiceStack() {
             </div>
           ))}
         </div>
-
-        {/* Segment indicator rather than a counter — it shows how far through
-            the set you are without putting numbering back on the page. Sits
-            above the floating action bar, which was clipping it. */}
-        <ul className="mt-7 flex shrink-0 gap-1.5" aria-hidden>
-          {services.map((s, i) => (
-            <li
-              key={s.id}
-              className={cn(
-                "h-[4px] flex-1 rounded-full transition-colors duration-300",
-                i === active ? "[background:var(--gradient-brand)]" : "bg-steel-400/35"
-              )}
-            />
-          ))}
-        </ul>
       </div>
     </div>
   );
