@@ -50,7 +50,7 @@ export const nav: NavItem[] = [
   { label: "Services", href: "/services", desc: "Eight pillars, one studio" },
   { label: "Work", href: "/work", desc: "What we've built" },
   { label: "Process", href: "/process", desc: "How a build runs" },
-  { label: "Packages", href: "/packages", desc: "Clear starting prices" },
+  { label: "Packages", href: "/packages", desc: "What we build, end to end" },
   { label: "About", href: "/about", desc: "Who you'd be working with" },
   { label: "Contact", href: "/contact", desc: "Start a project" },
 ];

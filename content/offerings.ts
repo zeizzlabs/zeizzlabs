@@ -3,9 +3,9 @@ import type { Offering, Stat, Faq } from "@/lib/types";
 /**
  * PACKAGES — the concrete things a business can point at and say "that one".
  *
- * NOTE ON PRICES: the `price` / `from` values below are editable placeholders.
- * Set them to your real numbers (or delete the field — the UI hides the price
- * line when it's absent and shows "Custom quote" instead).
+ * Deliberately no prices. Scope varies enough that a number on the page either
+ * undersells the work or scares off a project that was affordable; every
+ * enquiry gets a fixed written quote instead.
  */
 export const offerings: Offering[] = [
   {
@@ -16,7 +16,6 @@ export const offerings: Offering[] = [
     description:
       "A fast, modern, mobile-first website that turns visitors into enquiries.",
     points: ["Custom design", "SEO + speed built in", "Contact & WhatsApp flows", "You own everything"],
-    from: "₹24,999",
     addOns: ["cms", "seo", "analytics", "messaging", "crm", "payments", "ops"],
   },
   {
@@ -32,7 +31,6 @@ export const offerings: Offering[] = [
       "Push notifications",
       "Store submission handled",
     ],
-    from: "₹54,999",
     addOns: ["mobile", "backend", "auth", "payments", "messaging", "analytics", "ai"],
   },
   {
@@ -43,7 +41,6 @@ export const offerings: Offering[] = [
     description:
       "A voice AI that answers and makes calls in your brand's voice — 24/7, never misses one.",
     points: ["Books appointments", "Qualifies leads", "Calls back missed enquiries", "Full call transcripts"],
-    from: "₹19,999",
     addOns: ["booking", "crm", "messaging", "analytics"],
     featured: true,
   },
@@ -55,7 +52,6 @@ export const offerings: Offering[] = [
     description:
       "Auto-replies, broadcasts, catalogues and chatbots on the WhatsApp Business API.",
     points: ["Instant replies 24/7", "Bulk broadcasts", "Catalogue & orders", "CRM sync"],
-    from: "₹14,999",
     addOns: ["crm", "messaging", "commerce", "ai"],
   },
   {
@@ -66,7 +62,6 @@ export const offerings: Offering[] = [
     description:
       "A logo and full identity system that makes a new business look established.",
     points: ["Logo + variants", "Colour & type system", "Social media kit", "Brand guidelines PDF"],
-    from: "₹9,999",
     addOns: ["cms", "seo"],
   },
   {
@@ -76,7 +71,6 @@ export const offerings: Offering[] = [
     icon: "ShoppingCart",
     description: "An online store with payments, inventory and automated order flows.",
     points: ["Payments (UPI/cards)", "Inventory & orders", "Abandoned-cart flows", "Analytics"],
-    from: "₹39,999",
     addOns: ["commerce", "payments", "auth", "messaging", "analytics", "ops"],
   },
   {
@@ -87,7 +81,6 @@ export const offerings: Offering[] = [
     description:
       "An assistant trained on your own documents, products and policies.",
     points: ["Answers from your data", "Cited, grounded replies", "Site + WhatsApp embed", "Human handoff"],
-    from: "₹29,999",
     addOns: ["ai", "backend", "auth", "messaging"],
   },
 ];
@@ -110,7 +103,7 @@ export const faqs: Faq[] = [
   },
   {
     q: "How much does a project cost?",
-    a: "It depends on scope, but you get a fixed quote before anything starts — no hourly surprises. The packages on this page are real starting points; most business websites and AI systems land in a predictable range, and we'll tell you honestly if your idea needs less than you think.",
+    a: "We do not publish prices, because the honest answer depends on scope — the same brief can be a two-week build or a two-month one. Tell us what you are trying to do and you get a fixed written quote before anything starts, with no hourly surprises afterwards. If your project needs less than you think, we will say so rather than quote for the bigger version.",
   },
   {
     q: "How long does it take?",

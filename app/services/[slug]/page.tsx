@@ -117,11 +117,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 <Icon name={o.icon} className="h-6 w-6 text-blue-400" />
                 <h3 className="h-card mt-4 text-lg text-ink">{o.name}</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-muted">{o.description}</p>
-                {o.from && (
-                  <p className="mt-4 text-sm text-faint">
-                    from <span className="font-medium text-ink">{o.from}</span>
-                  </p>
-                )}
               </li>
             ))}
           </ul>

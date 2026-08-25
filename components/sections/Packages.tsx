@@ -12,9 +12,9 @@ import { addOnGroups } from "@/content/addons";
 import { cn } from "@/lib/cn";
 
 /**
- * PACKAGES — an expanding price index.
+ * PACKAGES — an expanding index of what we build.
  *
- * The offerings are a table, not a grid of cards: name, category and price on
+ * The offerings are a table, not a grid of cards: name and category on
  * one line, with the detail unfolding in place when a row is opened. That keeps
  * all six comparable at a glance, which is what someone choosing between them
  * actually needs — six equal cards force a scan of six separate blocks to
@@ -37,16 +37,16 @@ export function Packages({
       {showHeading && (
         <div className="mb-14">
           <SectionHeading
-            eyebrow="Packages & pricing"
+            eyebrow="What we build"
             title="Pick a starting point."
             accent="We shape the rest."
-            lede="Clear starting prices and a fixed quote before any work begins. If your project needs less than a package, we will say so."
-            aside={<CircleCta href="/contact" label="Get a quote" size={132} />}
+            lede="Tell us what you are trying to do and you get a fixed written quote before any work begins. If your project needs less than a package, we will say so."
+            aside={<CircleCta href="/contact" label="Send enquiry" size={132} />}
           />
         </div>
       )}
 
-      {/* Price index */}
+      {/* Index of what we build */}
       <div className="border-t border-line">
         {offerings.map((o) => {
           const isOpen = open === o.id;
@@ -75,17 +75,6 @@ export function Packages({
                       <span className="ml-3 text-gold-400">Most asked for</span>
                     )}
                   </span>
-                </span>
-
-                <span className="hidden shrink-0 text-right text-sm text-faint sm:block">
-                  {o.from ? (
-                    <>
-                      from{" "}
-                      <span className="font-medium text-ink">{o.from}</span>
-                    </>
-                  ) : (
-                    "Custom quote"
-                  )}
                 </span>
 
                 <span
@@ -179,8 +168,8 @@ export function Packages({
 
       <Reveal delay={0.2}>
         <p className="mt-10 text-[13px] text-faint">
-          Prices are indicative starting points and exclude taxes. Every project
-          gets a fixed written quote before work begins.
+          Every project gets a fixed written quote before work begins — no hourly
+          invoices you cannot predict.
         </p>
       </Reveal>
 

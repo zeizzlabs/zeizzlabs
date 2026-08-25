@@ -68,9 +68,9 @@ const previews: Record<
   "/packages": {
     from: "#c9a15c",
     to: "#0f5bd6",
-    title: "Transparent pricing",
+    title: "What we build",
     icon: "BadgeCheck",
-    tags: ["From ₹9,999", "Fixed scope"],
+    tags: ["Fixed quote", "Fixed scope"],
     image: "/media/service-digital-products.jpg",
   },
   "/about": {
