@@ -1,6 +1,7 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
+import { AutoDeck } from "@/components/motion/AutoDeck";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Aurora } from "@/components/visual/Aurora";
@@ -52,7 +53,31 @@ export function AiSystems() {
         <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Argument */}
           <div>
-            <ul className="space-y-2">
+            {/* Phones get the four as a self-advancing deck; a pointer device
+                gets all four at once, where there is room for them. These cards
+                carry no links, which is the only reason auto-advancing them is
+                safe — a moving target that navigates on tap is not. */}
+            <AutoDeck
+              className="lg:hidden"
+              slides={capabilities.map((c) => ({
+                key: c.title,
+                node: (
+                  <div className="plate flex w-full gap-4 rounded-card border border-line p-5">
+                    <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-gold-500/25 bg-gold-500/[0.07] text-gold-300">
+                      <Icon name={c.icon} className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="h-card text-lg text-ink">{c.title}</h3>
+                      <p className="mt-1.5 text-[14.5px] leading-relaxed text-muted">
+                        {c.body}
+                      </p>
+                    </div>
+                  </div>
+                ),
+              }))}
+            />
+
+            <ul className="space-y-2 max-lg:hidden">
               {capabilities.map((c, i) => (
                 <Reveal key={c.title} delay={i * 0.08} as="li">
                   <div className="group flex gap-4 rounded-card border border-transparent p-4 transition-colors hover:border-line hover:bg-raised">
