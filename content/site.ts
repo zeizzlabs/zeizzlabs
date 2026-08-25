@@ -13,8 +13,10 @@ export const site: SiteConfig = {
   description:
     "ZeizzLabs is a digital creation and innovation studio. Websites, apps and digital products, design and branding, AI agents and AI calling agents, automation, cloud, analytics and immersive digital experiences — everything a business needs to grow online.",
 
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "enquire@zeizzlabs.com",
-  emailAlt: process.env.NEXT_PUBLIC_CONTACT_EMAIL_ALT || "zeizzlabs@gmail.com",
+  // Only ever print an address that has a mailbox behind it. The old primary
+  // sat on the site with nothing to receive it, so anyone who used it got a
+  // bounce — and a bounced enquiry is one lost without either side noticing.
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "zeizzlabs@gmail.com",
   phone: process.env.NEXT_PUBLIC_PHONE || "+91 70175 96468",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917017596468",
 
@@ -38,7 +40,6 @@ export const whatsappLink = `https://wa.me/${site.whatsappNumber}?text=${encodeU
 
 export const telLink = `tel:${site.phone.replace(/[^\d+]/g, "")}`;
 export const mailLink = `mailto:${site.email}`;
-export const mailAltLink = `mailto:${site.emailAlt}`;
 
 /**
  * Primary navigation — real routes, not in-page anchors. Each entry carries an

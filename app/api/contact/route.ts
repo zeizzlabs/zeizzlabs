@@ -13,7 +13,7 @@ import { contactSchema, type ContactInput } from "@/lib/contact-schema";
  *
  * Configure with:
  *   RESEND_API_KEY   enables email delivery
- *   CONTACT_TO       comma-separated recipients; defaults to both inboxes
+ *   CONTACT_TO       comma-separated recipients; defaults to the Gmail inbox
  *   CONTACT_FROM     must be on a domain verified in Resend
  */
 
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
   const stored = await persist(data, ip);
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = (process.env.CONTACT_TO || "enquire@zeizzlabs.com,zeizzlabs@gmail.com")
+  const to = (process.env.CONTACT_TO || "zeizzlabs@gmail.com")
     .split(",")
     .map((a) => a.trim())
     .filter(Boolean);

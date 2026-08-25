@@ -90,7 +90,7 @@ access**. Copy it — starts with `re_`, and it is shown only once.
 
 ```bash
 netlify env:set RESEND_API_KEY "re_your_key_here"
-netlify env:set CONTACT_FROM "ZeizzLabs <enquire@send.zeizzlabs.com>"
+netlify env:set CONTACT_FROM "ZeizzLabs <noreply@send.zeizzlabs.com>"
 netlify deploy --build --prod
 ```
 
@@ -105,11 +105,11 @@ first time.
 ## Where enquiries go
 
 `CONTACT_TO` controls the recipients; it defaults to
-`enquire@zeizzlabs.com,zeizzlabs@gmail.com`. Override with a comma-separated
+`zeizzlabs@gmail.com`. Override with a comma-separated
 list:
 
 ```bash
-netlify env:set CONTACT_TO "enquire@zeizzlabs.com,someone@zeizzlabs.com"
+netlify env:set CONTACT_TO "zeizzlabs@gmail.com,someone@zeizzlabs.com"
 ```
 
 Replies go to the enquirer's own address, so you can answer straight from your
@@ -122,7 +122,7 @@ This trips people up, so it is worth being blunt about:
 **Resend only SENDS.** Verifying `zeizzlabs.com` there lets the site send mail
 *as* your domain. It does not create a mailbox and it cannot receive anything.
 
-`enquire@zeizzlabs.com` is the primary address printed on your site and the
+`zeizzlabs@gmail.com` is the address printed on your site and the
 first recipient of every enquiry. If no mailbox exists behind it, mail sent
 there **bounces**. Three ways to fix that:
 
@@ -131,7 +131,7 @@ there **bounces**. Three ways to fix that:
 2. **GoDaddy email** — often bundled with the domain for a year; check
    My Products before paying for anything.
 3. **Forward it** — cheapest. Many registrars offer free forwarding, so
-   `enquire@zeizzlabs.com` lands in your Gmail. Fine to start with.
+   a role address lands in your Gmail. Fine to start with.
 
 Until one of those exists, drop it from the recipient list so enquiries still
 reach you:

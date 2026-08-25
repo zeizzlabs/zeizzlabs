@@ -127,7 +127,6 @@ export interface SiteConfig {
   /** Primary address, shown first and used for reply-to. */
   email: string;
   /** Secondary address, shown alongside the primary. */
-  emailAlt: string;
   phone: string;
   /** WhatsApp number, digits only with country code. */
   whatsappNumber: string;
