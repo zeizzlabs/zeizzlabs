@@ -3,7 +3,7 @@ import {
   BarChart3, BrainCircuit, Boxes, Check, ChevronDown, Clock, Cloud, Code2,
   Database, Globe, Layers, Lock, Mail, Menu, MessageCircle, Minus, Phone,
   PhoneCall, PenTool, Plug, Plus, Rocket, Search, Server, ShieldCheck,
-  ShoppingCart, Sparkles, TrendingUp, Users, Workflow, X, Zap,
+  ShoppingCart, Smartphone, Sparkles, TrendingUp, Users, Workflow, X, Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { IconName } from "@/lib/types";
@@ -17,7 +17,7 @@ const registry: Record<string, LucideIcon> = {
   BarChart3, BrainCircuit, Boxes, Check, ChevronDown, Clock, Cloud, Code2,
   Database, Globe, Layers, Lock, Mail, Menu, MessageCircle, Minus, Phone,
   PhoneCall, PenTool, Plug, Plus, Rocket, Search, Server, ShieldCheck,
-  ShoppingCart, Sparkles, TrendingUp, Users, Workflow, X, Zap,
+  ShoppingCart, Smartphone, Sparkles, TrendingUp, Users, Workflow, X, Zap,
 };
 
 export function Icon({

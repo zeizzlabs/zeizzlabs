@@ -7,12 +7,12 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Icon } from "@/components/ui/Icon";
 import { CircleCta } from "@/components/ui/CircleCta";
 import { TransitionLink } from "@/components/motion/PageTransition";
-import { offerings, tiers } from "@/content/offerings";
+import { offerings } from "@/content/offerings";
 import { addOnGroups } from "@/content/addons";
 import { cn } from "@/lib/cn";
 
 /**
- * PACKAGES — an expanding price index plus three engagement tiers.
+ * PACKAGES — an expanding price index.
  *
  * The offerings are a table, not a grid of cards: name, category and price on
  * one line, with the detail unfolding in place when a row is opened. That keeps
@@ -177,92 +177,13 @@ export function Packages({
         })}
       </div>
 
-      {/* Engagement tiers */}
-      <div className="mt-20">
-        <Reveal>
-          <p className="eyebrow mb-9">Or work with us end to end</p>
-        </Reveal>
+      <Reveal delay={0.2}>
+        <p className="mt-10 text-[13px] text-faint">
+          Prices are indicative starting points and exclude taxes. Every project
+          gets a fixed written quote before work begins.
+        </p>
+      </Reveal>
 
-        <div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line lg:grid-cols-3">
-          {tiers.map((t, i) => (
-            <Reveal
-              key={t.id}
-              delay={i * 0.09}
-              className={cn(
-                "relative flex flex-col bg-canvas p-8 sm:p-10",
-                t.featured && "bg-panel"
-              )}
-            >
-              {t.featured && (
-                <span className="absolute inset-x-0 top-0 h-px [background:var(--gradient-brand)]" />
-              )}
-
-              <div className="flex items-baseline justify-between gap-4">
-                <h3 className="h-card text-2xl text-ink">{t.name}</h3>
-                {t.featured && (
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold-400">
-                    Most popular
-                  </span>
-                )}
-              </div>
-              <p className="mt-2 text-[14px] text-muted">{t.tagline}</p>
-
-              <div className="mt-8 flex items-end gap-2.5">
-                <span className="pb-1.5 text-[13px] text-faint">from</span>
-                <span
-                  className={cn(
-                    "font-display text-[clamp(2.2rem,4vw,3rem)] font-bold leading-none tracking-[-0.04em]",
-                    t.featured ? "text-gradient" : "text-ink"
-                  )}
-                >
-                  {t.price}
-                </span>
-                <span className="pb-1.5 text-[12.5px] text-faint">· {t.priceNote}</span>
-              </div>
-
-              <ul className="mt-9 space-y-3 border-t border-line pt-7">
-                {t.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-[14px] text-steel-300">
-                    <Icon
-                      name="Check"
-                      className={cn(
-                        "mt-0.5 h-4 w-4 shrink-0",
-                        t.featured ? "text-gold-300" : "text-status-live"
-                      )}
-                      strokeWidth={2.2}
-                    />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <TransitionLink
-                href="/contact"
-                className={cn(
-                  "group/t mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-full pt-0 text-[14px] font-medium transition-all duration-400",
-                  "mt-10",
-                  t.featured
-                    ? "text-white [background:var(--gradient-brand)] bg-[length:200%_auto] hover:bg-[position:right_center]"
-                    : "border border-line-strong text-ink hover:border-white/35"
-                )}
-              >
-                {t.cta}
-                <Icon
-                  name="ArrowRight"
-                  className="h-4 w-4 transition-transform duration-400 group-hover/t:translate-x-1"
-                />
-              </TransitionLink>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.2}>
-          <p className="mt-8 text-[13px] text-faint">
-            Prices are indicative starting points and exclude taxes. Every project
-            gets a fixed written quote before work begins.
-          </p>
-        </Reveal>
-      </div>
     </Section>
   );
 }

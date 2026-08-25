@@ -1,4 +1,4 @@
-import type { Offering, Tier, Stat, Faq } from "@/lib/types";
+import type { Offering, Stat, Faq } from "@/lib/types";
 
 /**
  * PACKAGES — the concrete things a business can point at and say "that one".
@@ -18,6 +18,22 @@ export const offerings: Offering[] = [
     points: ["Custom design", "SEO + speed built in", "Contact & WhatsApp flows", "You own everything"],
     from: "₹24,999",
     addOns: ["cms", "seo", "analytics", "messaging", "crm", "payments", "ops"],
+  },
+  {
+    id: "mobile-app",
+    name: "Mobile App Development",
+    type: "Apps",
+    icon: "Smartphone",
+    description:
+      "An iOS and Android app built from one codebase — fast, native-feeling, and shipped to both stores.",
+    points: [
+      "iOS + Android from one build",
+      "Works offline, syncs later",
+      "Push notifications",
+      "Store submission handled",
+    ],
+    from: "₹54,999",
+    addOns: ["mobile", "backend", "auth", "payments", "messaging", "analytics", "ai"],
   },
   {
     id: "ai-calling-agent",
@@ -77,62 +93,6 @@ export const offerings: Offering[] = [
 ];
 
 /**
- * ENGAGEMENT MODELS — how people work with ZeizzLabs. Three clear doors.
- * Prices are placeholders; edit or remove.
- */
-export const tiers: Tier[] = [
-  {
-    id: "launch",
-    name: "Launch",
-    tagline: "Get online, properly.",
-    price: "₹24,999",
-    priceNote: "one-time",
-    features: [
-      "Up to 6 custom pages",
-      "Mobile-first responsive build",
-      "SEO, speed & analytics setup",
-      "WhatsApp + enquiry form",
-      "Domain, hosting & launch handled",
-      "30 days post-launch support",
-    ],
-    cta: "Start with Launch",
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    tagline: "A website that also works for you.",
-    price: "₹64,999",
-    priceNote: "one-time",
-    features: [
-      "Everything in Launch",
-      "Custom web app or store",
-      "AI chat or calling agent",
-      "WhatsApp & CRM automation",
-      "Brand identity refresh",
-      "90 days support & iteration",
-    ],
-    cta: "Start with Growth",
-    featured: true,
-  },
-  {
-    id: "partner",
-    name: "Digital Partner",
-    tagline: "We become your tech team.",
-    price: "₹18,999",
-    priceNote: "per month",
-    features: [
-      "Dedicated monthly build hours",
-      "Ongoing features & improvements",
-      "AI systems & automation upkeep",
-      "Hosting, security & monitoring",
-      "Monthly analytics reporting",
-      "Priority WhatsApp support",
-    ],
-    cta: "Talk about a retainer",
-  },
-];
-
-/**
  * PROOF NUMBERS. Every value here must be true for your business — edit them.
  * `note` exists so a number is never mistaken for a claim it isn't making.
  */
@@ -159,6 +119,10 @@ export const faqs: Faq[] = [
   {
     q: "What is an AI calling agent, in plain English?",
     a: "A voice AI with your business's script and knowledge that picks up the phone. It answers questions, books appointments, qualifies leads and calls people back — in a natural voice, at any hour. Every call is transcribed, and anything it can't handle is routed to a human.",
+  },
+  {
+    q: "Do you build mobile apps, or only websites?",
+    a: "Both. We build iOS and Android apps from a single codebase, so you are not paying twice for the same app, and the two stay in step when you add features. They are real apps — offline support, push notifications, camera and location, biometric login — not a website wrapped in an app shell. We handle App Store and Play Store submission and the review process too, which is usually the part that catches people out.",
   },
   {
     q: "Do I own the website and the code?",

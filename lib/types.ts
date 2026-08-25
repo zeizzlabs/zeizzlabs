@@ -79,17 +79,6 @@ export interface Faq {
   a: string;
 }
 
-export interface Tier {
-  id: string;
-  name: string;
-  tagline: string;
-  price: string;
-  /** Billing cadence shown after the price, e.g. "one-time". */
-  priceNote: string;
-  features: string[];
-  cta: string;
-  featured?: boolean;
-}
 
 /**
  * Where a piece of work actually is. None of these mean "shipped for a client" —
