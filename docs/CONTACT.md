@@ -30,28 +30,65 @@ netlify blobs:list enquiries
 netlify blobs:get enquiries "<key>"
 ```
 
-## Turning email on
+## Turning email on — step by step
 
-**Step 1.** Create a free account at [resend.com](https://resend.com).
+Free tier: **3,000 emails a month, 100 a day, one domain.** Far more than an
+enquiry form needs.
 
-**Step 2.** Add and verify `zeizzlabs.com` there. Resend gives you DNS records;
-add them in GoDaddy the same way you added the site records. Sending from your
-own domain is what keeps enquiries out of spam.
+### 1. Create the account
 
-**Step 3.** Copy the API key (starts with `re_`).
+Sign up at [resend.com](https://resend.com). No card needed for the free plan.
 
-**Step 4.** Set it on the site:
+### 2. Add the domain
+
+**Domains → Add Domain →** enter `zeizzlabs.com`, pick the region closest to you
+(**ap-south-1 / Mumbai** for India).
+
+Resend then shows you three DNS records. They sit on a **`send` subdomain**, not
+the root — that is deliberate, so your main domain's email reputation stays
+separate from what the site sends.
+
+### 3. Add those records in GoDaddy
+
+**GoDaddy → My Products → zeizzlabs.com → DNS → Add New Record.**
+
+⚠️ **GoDaddy appends the domain for you.** Resend shows the full hostname, but
+GoDaddy wants only the part in front. Get this wrong and you create
+`send.zeizzlabs.com.zeizzlabs.com`, which silently never verifies.
+
+| Resend shows | Type | Enter in GoDaddy as | Value |
+| --- | --- | --- | --- |
+| `send.zeizzlabs.com` | **MX** | `send` | the value Resend gives, priority `10` |
+| `send.zeizzlabs.com` | **TXT** | `send` | `v=spf1 include:amazonses.com ~all` |
+| `resend._domainkey.send.zeizzlabs.com` | **TXT** | `resend._domainkey.send` | the long `p=MIGf...` key from Resend |
+
+Copy and paste the values — do not retype the DKIM key.
+
+### 4. Verify
+
+Back in Resend, press **Verify DNS Records**. Usually done within 15 minutes; it
+can take up to a few hours. Re-press it, do not re-add the records.
+
+### 5. Get the key
+
+**API Keys → Create API Key.** Name it `zeizzlabs-site`, permission **Sending
+access**. Copy it — starts with `re_`, and it is shown only once.
+
+### 6. Wire it up
 
 ```bash
 netlify env:set RESEND_API_KEY "re_your_key_here"
-netlify env:set CONTACT_FROM "ZeizzLabs <enquire@zeizzlabs.com>"
+netlify env:set CONTACT_FROM "ZeizzLabs <enquire@send.zeizzlabs.com>"
 netlify deploy --build --prod
 ```
 
-`CONTACT_FROM` must be on the domain you verified in step 2, or Resend rejects
-the send.
+`CONTACT_FROM` must be on the domain you verified. If Resend verified
+`send.zeizzlabs.com`, send from that subdomain.
 
-**Step 5.** Send yourself a test through the live form and confirm it arrives.
+### 7. Test it
+
+Submit the form on the live site and confirm the mail arrives. Check spam the
+first time.
 
 ## Where enquiries go
 
@@ -66,9 +103,30 @@ netlify env:set CONTACT_TO "enquire@zeizzlabs.com,someone@zeizzlabs.com"
 Replies go to the enquirer's own address, so you can answer straight from your
 inbox.
 
-## Note on the mailbox
+## Sending is not receiving
 
-`enquire@zeizzlabs.com` is the primary address shown on the site and the first
-recipient. It needs to exist as a real mailbox — verifying the domain in Resend
-lets you *send* as it, not receive. Set it up in GoDaddy email or Google
-Workspace, or drop it from `CONTACT_TO` until it exists.
+This trips people up, so it is worth being blunt about:
+
+**Resend only SENDS.** Verifying `zeizzlabs.com` there lets the site send mail
+*as* your domain. It does not create a mailbox and it cannot receive anything.
+
+`enquire@zeizzlabs.com` is the primary address printed on your site and the
+first recipient of every enquiry. If no mailbox exists behind it, mail sent
+there **bounces**. Three ways to fix that:
+
+1. **Google Workspace** — about ₹136/user/month, a real inbox, best option if
+   the address is going on business cards.
+2. **GoDaddy email** — often bundled with the domain for a year; check
+   My Products before paying for anything.
+3. **Forward it** — cheapest. Many registrars offer free forwarding, so
+   `enquire@zeizzlabs.com` lands in your Gmail. Fine to start with.
+
+Until one of those exists, drop it from the recipient list so enquiries still
+reach you:
+
+```bash
+netlify env:set CONTACT_TO "zeizzlabs@gmail.com"
+```
+
+Gmail keeps working as a recipient regardless — it is a normal mailbox. Only the
+address on your own domain needs setting up.
