@@ -31,8 +31,13 @@ export interface Service {
   overview: string;
   /** What the client actually ends up with. */
   outcomes: string[];
-  /** Artwork in /public/media. Replace the file to change the image. */
-  image: string;
+  /**
+   * Artwork in /public/media. Replace the file to change the image.
+   * Optional: PreviewCard already falls back to the accent gradient with the
+   * icon and deliverable chips, which is a designed state, not a broken one.
+   * The newer pillars ship without photography until it exists.
+   */
+  image?: string;
   /** Bento span, kept for any grid presentation of the pillars. */
   span?: "wide" | "tall" | "hero";
   /** Accent family for the tile's glow. */
@@ -79,10 +84,19 @@ export interface Faq {
 
 
 /**
- * Where a piece of work actually is. None of these mean "shipped for a client" —
- * this is the studio's own R&D shelf, and the labels say so plainly.
+ * Where a piece of work actually is.
+ *
+ * Delivered client work and the studio's own R&D share one rail, so the label
+ * has to be able to say "this is running in production for a paying client" as
+ * well as "this is still an idea" — and the card prints whichever is true.
  */
-export type WorkLabel = "concept" | "in-development" | "prototype" | "research";
+export type WorkLabel =
+  | "live"
+  | "shipped"
+  | "in-development"
+  | "prototype"
+  | "research"
+  | "concept";
 
 export interface Project {
   slug: string;
@@ -103,10 +117,20 @@ export interface Project {
   /** What comes next, in order. */
   next: string[];
   tech: string[];
+  /**
+   * Who it was built for. Omitted for the studio's own R&D, where the detail
+   * page falls back to saying so.
+   */
+  client?: string;
   /** Two brand stops for the card's preview gradient. */
   accent: [string, string];
-  /** Artwork in /public/media. Replace the file to change the image. */
-  image: string;
+  /**
+   * Artwork in /public/media. Replace the file to change the image.
+   * Optional: PreviewCard already falls back to the accent gradient with the
+   * icon and deliverable chips, which is a designed state, not a broken one.
+   * The newer pillars ship without photography until it exists.
+   */
+  image?: string;
 }
 
 /** A node in the AI + automation system diagram. */

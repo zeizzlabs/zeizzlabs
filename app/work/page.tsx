@@ -6,7 +6,7 @@ import { FinalCta } from "@/components/sections/FinalCta";
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Systems we have built end to end — each labelled honestly as a live build, a working prototype or an experiment.",
+    "Live client platforms, commerce with real payments, six industry website templates and the studio's own R&D — each card labelled with the stage it is actually at.",
 };
 
 export default function WorkPage() {
@@ -14,9 +14,9 @@ export default function WorkPage() {
     <>
       <PageHero
         eyebrow="Selected work"
-        title="Built to prove"
-        accent="they work."
-        lede="Every card says exactly what stage it is at. No invented clients, no borrowed metrics — because you deserve to know the difference."
+        title="Built, and"
+        accent="running."
+        lede="Live platforms taking real payments, six industry templates, and the experiments we have not finished yet. Every card says which of those it is — no invented clients, no borrowed metrics."
       />
       <WorkRail />
       <FinalCta />

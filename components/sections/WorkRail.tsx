@@ -26,6 +26,8 @@ import type { WorkLabel } from "@/lib/types";
  */
 
 const labelStyle: Record<WorkLabel, string> = {
+  live: "border-status-live/50 text-status-live",
+  shipped: "border-status-live/40 text-status-live/90",
   "in-development": "border-status-live/50 text-status-live",
   prototype: "border-blue-500/50 text-blue-300",
   research: "border-gold-500/50 text-gold-300",

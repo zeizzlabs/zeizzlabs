@@ -103,6 +103,51 @@
       ],
       "port": 3600,
       "autoPort": true
+    },
+    {
+      "name": "sudip",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Sudip-Enterprises",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3700"
+      ],
+      "port": 3700,
+      "autoPort": true
+    },
+    {
+      "name": "minebynine",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/MinebyNine",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3800"
+      ],
+      "port": 3800,
+      "autoPort": true
+    },
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Portfolio",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4500"
+      ],
+      "port": 4500,
+      "autoPort": true
     }
   ]
 }

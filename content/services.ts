@@ -120,6 +120,73 @@ export const services: Service[] = [
     accent: "steel",
   },
   {
+    id: "social-media",
+    title: "Social Media Management",
+    short: "Social Media Management",
+    icon: "Megaphone",
+    blurb: "Turn a quiet account into the channel that makes the phone ring.",
+    overview:
+      "Most small-business accounts are not underperforming, they are unattended — three posts in a good month and a DM that goes unread for two days while the customer books somewhere else. We run the account as a sales channel with a job: every month starts from what the business needs to happen, and the content is reverse-engineered from that. Nothing is posted because the calendar said Tuesday.",
+    outcomes: [
+      "A profile a stranger understands in five seconds",
+      "Enquiries that reach a human while they are still warm",
+      "A monthly report saying what changes next, and why",
+    ],
+    deliverables: [
+      "Content strategy",
+      "Reels & carousels",
+      "Copywriting",
+      "Community management",
+      "Google Business Profile",
+    ],
+    span: "wide",
+    accent: "gold",
+  },
+  {
+    id: "content-channels",
+    title: "Content & Channel Management",
+    short: "Content & Channel Management",
+    icon: "Video",
+    blurb: "YouTube and short-form, run on the two numbers that actually decide it.",
+    overview:
+      "Almost nobody fails on YouTube because the videos were bad. They fail because nobody clicked — a thumbnail that says nothing and forty seconds of throat-clearing before the point. We work click-through rate and retention: packaging first, then the first fifteen seconds, then everything else. Publish, read the retention curve, find the second people left, fix it in the next one.",
+    outcomes: [
+      "Titles and thumbnails people click without feeling tricked",
+      "Viewers who stay past the first fifteen seconds",
+      "A back catalogue that keeps earning views",
+    ],
+    deliverables: [
+      "Channel strategy",
+      "Thumbnails & packaging",
+      "Scripting & hooks",
+      "Retention editing",
+      "Shorts funnel",
+    ],
+    accent: "blue",
+  },
+  {
+    id: "notion-systems",
+    title: "Notion & Internal Systems",
+    short: "Notion & Internal Systems",
+    icon: "LayoutGrid",
+    blurb: "The internal system your team is still using three months later.",
+    overview:
+      "Most workspaces die the same way: built in a burst of enthusiasm, abandoned once keeping them current costs more than the thing they replaced. We build for the day the enthusiasm runs out — fewer databases with sharper relations, views that answer one question each, templates so an entry takes seconds, and nothing that depends on somebody remembering to tidy up.",
+    outcomes: [
+      "One place the answer actually lives",
+      "A system still in use three months later",
+      "Onboarding that does not need the founder's memory",
+    ],
+    deliverables: [
+      "Workspace architecture",
+      "Client & project systems",
+      "SOPs and wiki",
+      "Spreadsheet migration",
+      "Notion templates",
+    ],
+    accent: "steel",
+  },
+  {
     id: "cloud-infrastructure",
     image: "/media/service-cloud-infrastructure.jpg",
     title: "Cloud & Infrastructure",
@@ -198,6 +265,10 @@ export const marqueeWords = [
   "Cloud Hosting",
   "Integrations",
   "Analytics",
+  "Social Media",
+  "YouTube Management",
+  "Content Strategy",
+  "Notion Systems",
   "Motion & 3D",
 ];
 

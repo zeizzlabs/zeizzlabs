@@ -15,7 +15,17 @@ const VERSIONS: Record<string, string> = {
   "/media/service-digital-products.jpg": "eqzhug",
   "/media/service-software-development.jpg": "eqyyxo",
   "/media/work-aria-agent.jpg": "eqzq4b",
+  "/media/work-construction-estimation-platform.jpg": "jdtsww",
+  "/media/work-dental-practice-website.jpg": "kcc1j4",
+  "/media/work-digital-studio-website.jpg": "kcivix",
+  "/media/work-fashion-delivery-store.jpg": "jdtd0z",
   "/media/work-helios-dashboard.jpg": "eqzsbf",
+  "/media/work-mobile-store-website.jpg": "jdvjbt",
+  "/media/work-property-advisory-website.jpg": "jdu3a6",
+  "/media/work-property-agency-website.jpg": "jdqynv",
+  "/media/work-property-consultancy-website.jpg": "kcdv04",
+  "/media/work-studied-systems.jpg": "kchfyj",
+  "/media/work-template-library.jpg": "jb3swf",
   "/media/work-voice-reception.jpg": "eqztxc",
   "/media/work-whatsapp-desk.jpg": "eqzc9c"
 };

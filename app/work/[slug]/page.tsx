@@ -41,7 +41,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
           { label: "Stage", value: workLabels[project.label] },
           { label: "Discipline", value: project.category },
           { label: "Stack", value: project.tech.slice(0, 3).join(", ") },
-          { label: "Built for", value: "Our own R&D" },
+          { label: "Built for", value: project.client ?? "Our own R&D" },
         ]}
       />
 

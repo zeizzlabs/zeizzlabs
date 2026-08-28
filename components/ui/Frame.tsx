@@ -32,8 +32,12 @@ export function Frame({
   rounded = "rounded-[1.5rem]",
   children,
 }: {
-  /** Still image. Also used as the video poster when `video` is set. */
-  src: string;
+  /**
+   * Still image. Also used as the video poster when `video` is set.
+   * Optional: entries without artwork yet render the designed empty frame
+   * below rather than a broken picture or a build error.
+   */
+  src?: string;
   /**
    * Optional looping clip. Normally you do not set this: a video sitting next
    * to the image with the same name is picked up automatically, so adding
@@ -57,12 +61,12 @@ export function Frame({
   // work-vox.jpg -> work-vox.mp4, but only if that file was actually there at
   // build time. Guessing and letting it 404 would cost a failed request on
   // every page load.
-  const auto = src.replace(/\.(jpe?g|png|webp|avif)$/i, ".mp4");
-  const clip = video ?? (MEDIA_VIDEOS.has(auto) ? auto : undefined);
+  const auto = src?.replace(/\.(jpe?g|png|webp|avif)$/i, ".mp4");
+  const clip = video ?? (auto && MEDIA_VIDEOS.has(auto) ? auto : undefined);
 
   // Content-stamped URLs, so swapping a file is picked up instead of being
   // served from the previous cache entry.
-  const stillSrc = mediaSrc(src);
+  const stillSrc = src ? mediaSrc(src) : undefined;
   const clipSrc = clip ? mediaSrc(clip) : undefined;
 
   // Only play while the frame is on screen, and never for reduced motion — an
@@ -88,7 +92,20 @@ export function Frame({
       const el = root.current;
       if (!el) return;
       const img = el.querySelector("[data-frame-img]");
-      if (!img) return;
+      // No artwork: still wipe the frame open, just skip the picture motions.
+      if (!img) {
+        gsap.fromTo(
+          el,
+          { clipPath: "inset(0 0 100% 0)" },
+          {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.2,
+            ease: "zeizz",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true },
+          }
+        );
+        return;
+      }
 
       gsap.fromTo(
         el,
@@ -137,6 +154,7 @@ export function Frame({
       ref={root}
       className={cn("relative overflow-hidden bg-panel", rounded, className)}
     >
+      {stillSrc ? (
       <div data-frame-img className="absolute inset-x-0 -inset-y-[10%] will-change-transform">
         <Image
           src={stillSrc}
@@ -163,6 +181,14 @@ export function Frame({
           />
         )}
       </div>
+      ) : (
+        /* No artwork yet. A quiet graded panel keeps the frame's proportions
+           and the reveal, so the layout does not jump when a picture lands. */
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[radial-gradient(120%_100%_at_30%_0%,rgba(255,255,255,0.06),transparent_60%)]"
+        />
+      )}
       {/*
         Ground tint so type laid over the picture always has contrast. Fixed to
         ink rather than the canvas token: the artwork is saturated and dark in
