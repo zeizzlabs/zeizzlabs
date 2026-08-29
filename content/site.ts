@@ -48,7 +48,7 @@ export const mailLink = `mailto:${site.email}`;
  */
 export const nav: NavItem[] = [
   { label: "Home", href: "/", desc: "Everything digital" },
-  { label: "Services", href: "/services", desc: "Eight pillars, one studio" },
+  { label: "Services", href: "/services", desc: "Everything on the digital side, in one studio" },
   { label: "Work", href: "/work", desc: "What we've built" },
   { label: "Process", href: "/process", desc: "How a build runs" },
   { label: "Packages", href: "/packages", desc: "What we build, end to end" },

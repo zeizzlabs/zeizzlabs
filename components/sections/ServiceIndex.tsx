@@ -7,7 +7,6 @@ import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
 import { PreviewCard } from "@/components/ui/PreviewCard";
-import { ServiceStack } from "./ServiceStack";
 import { cn } from "@/lib/cn";
 
 /**
@@ -22,7 +21,12 @@ import { cn } from "@/lib/cn";
  *   - the hovered row lifts to full white, its neighbours dim
  *   - a preview panel follows the cursor and swaps art per row
  *   - the row's deliverables slide open underneath it
- * Phones do not get this layout at all — see ServiceStack, which hands a single
+ * Phones get the same list. It used to be a scroll-swapped card stack, one
+ * pillar at a time; at sixteen pillars that was nine screens of forced
+ * scrolling to read a menu, so the list now renders at every width — hover
+ * reveals the deliverables on desktop, touch simply always shows them.
+ *
+ * (Historical note — the old card stack handed a single
  * card slot from one pillar to the next as you scroll. Hover is the whole
  * mechanism here, and there is no honest touch equivalent of it.
  */
@@ -41,8 +45,9 @@ export function ServiceIndex() {
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-      // The rows are display:none on phones — ServiceStack owns that viewport —
-      // so there is nothing here worth measuring or animating.
+      // Touch gets the list without the entrance stagger: the rows start at
+      // autoAlpha 0, and a scrub that never resolves on a coarse pointer would
+      // leave the whole menu invisible.
       if (window.matchMedia("(pointer: coarse)").matches) return;
 
       // Rows rise in sequence as the block enters. fromTo, not from — see the
@@ -101,10 +106,7 @@ export function ServiceIndex() {
         )}
       </div>
 
-      {/* Phones get the swap stack; the hover index needs a pointer to work. */}
-      <ServiceStack />
-
-      <ul className="max-lg:hidden" onMouseLeave={() => setActive(null)}>
+      <ul onMouseLeave={() => setActive(null)}>
         {services.map((s, i) => {
           const on = active === i;
           const dim = active !== null && !on;

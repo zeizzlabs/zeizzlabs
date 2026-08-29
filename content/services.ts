@@ -165,6 +165,30 @@ export const services: Service[] = [
     accent: "blue",
   },
   {
+    id: "seo-visibility",
+    title: "SEO & Search Visibility",
+    short: "SEO & Search Visibility",
+    icon: "Search",
+    blurb: "Be the result people find, in Google and in the AI answer.",
+    overview:
+      "Most small-business sites are invisible for reasons that have nothing to do with content — no structured data, a title tag that says 'Home', pages Google was never told about, and a mobile score that quietly costs them the ranking. We fix the technical foundation first, because writing more posts on a site search engines cannot read is spending money to stay where you are. Then the part that now matters as much: whether an AI assistant asked about your category can find and correctly quote you.",
+    outcomes: [
+      "Found for the searches that actually bring enquiries",
+      "Correctly quoted when an AI is asked about your category",
+      "Reporting that names the next change, not just the rank",
+    ],
+    deliverables: [
+      "Technical SEO audit",
+      "On-page & metadata",
+      "Local SEO",
+      "Structured data",
+      "Core Web Vitals",
+      "AI search visibility",
+    ],
+    span: "wide",
+    accent: "steel",
+  },
+  {
     id: "notion-systems",
     title: "Notion & Internal Systems",
     short: "Notion & Internal Systems",
@@ -359,6 +383,20 @@ export const services: Service[] = [
   },
 ];
 
+/**
+ * The pillar count, derived. It was written out as "eight" in five places and
+ * was wrong in all of them the moment a pillar was added.
+ */
+export const servicesCount = services.length;
+
+const WORDS = [
+  "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+  "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+  "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty",
+];
+/** "Seventeen" for the headline; falls back to the numeral past twenty. */
+export const servicesCountWord = WORDS[servicesCount] ?? String(servicesCount);
+
 /** Marquee strip — the vocabulary of the studio. */
 export const marqueeWords = [
   "Websites",
@@ -376,6 +414,7 @@ export const marqueeWords = [
   "Cloud Hosting",
   "Integrations",
   "Analytics",
+  "SEO",
   "Social Media",
   "YouTube Management",
   "Content Strategy",

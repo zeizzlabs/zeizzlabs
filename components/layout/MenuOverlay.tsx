@@ -44,7 +44,7 @@ const previews: Record<
   "/services": {
     from: "#0b429e",
     to: "#4da3ff",
-    title: "Eight pillars, one studio",
+    title: "Everything on the digital side, in one studio",
     icon: "Boxes",
     tags: ["Web", "AI", "Design"],
     image: "/media/service-software-development.jpg",
@@ -260,7 +260,7 @@ export function MenuOverlay({
         {/* Foot: pillars + direct contact */}
         <div className="relative mt-10 grid gap-8 border-t border-line pt-8 lg:grid-cols-[1.4fr_1fr]">
           <div data-menu-fade>
-            <p className="eyebrow mb-4">The eight pillars</p>
+            <p className="eyebrow mb-4">Services</p>
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
               {services.map((s) => (
                 <li key={s.id}>

@@ -6,7 +6,7 @@ import { services } from "@/content/services";
 const words = services.map((s) => s.short);
 
 /**
- * Cycles the eight pillars in the hero sub-line. Each word swaps on a blur+rise
+ * Cycles the pillars in the hero sub-line. Each word swaps on a blur+rise
  * transition; the container is sized to the longest word so nothing reflows
  * (no layout shift as it cycles). Static for reduced-motion users.
  */
