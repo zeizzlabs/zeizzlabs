@@ -148,6 +148,21 @@
       ],
       "port": 4500,
       "autoPort": true
+    },
+    {
+      "name": "trinath",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/sudipjhawar/Trinath-Enterprises",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4600"
+      ],
+      "port": 4600,
+      "autoPort": true
     }
   ]
 }

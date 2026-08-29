@@ -156,37 +156,6 @@ export const projects: Project[] = [
     image: "/media/work-property-agency-website.jpg",
   },
   {
-    slug: "template-library",
-    name: "The Template Library",
-    category: "Product · Six Industry Websites",
-    label: "shipped",
-    summary:
-      "Six production websites, one per industry, each rebrandable in four files and nothing in the component layer.",
-    vision:
-      "A restaurant, a fast-food brand, a salon, a cafe, a property developer and a travel operator all need a site that answers a different question, and none of them can fund a bespoke build. Designing one properly per industry and reselling it is the only version of this that is both affordable for them and honest from us.",
-    building: [
-      "Sit-down restaurant, reservation-led",
-      "Fast food, ordering-led, with a cart and a combo builder",
-      "Salon and spa, with prices visible before the call to action",
-      "Cafe and roastery, light-ground, with a working brew timer",
-      "Property developer, with an EMI calculator and a progress tracker",
-      "Pilgrimage and adventure travel, static, no build step",
-    ],
-    approach:
-      "A rebrand touches a content module, the palette block, the font imports and the image folder — and nothing else. The moment a rebrand needs a component edited, the second sale costs as much as the first and it stops being a product. Missing photography resolves to a designed wash in the brand palette, so a client can see and approve their site on day one: waiting on a photographer is the single most common reason a small-business site never launches.",
-    stage:
-      "Six verticals built and demonstrable. Each ships with palette presets and a generation manifest for the artwork it references.",
-    next: [
-      "A licence and handover pack per template",
-      "More verticals — dental, legal, fitness",
-      "A hosted demo per template under one roof",
-    ],
-    tech: ["Next.js", "React", "Tailwind", "TypeScript"],
-    client: "Licensed to clients",
-    accent: ["#c1662f", "#d99b52"],
-    image: "/media/work-template-library.jpg",
-  },
-  {
     slug: "property-consultancy-website",
     name: "Property Consultancy Website",
     category: "Client Site · Advisory",
@@ -268,33 +237,314 @@ export const projects: Project[] = [
     image: "/media/work-dental-practice-website.jpg",
   },
   {
-    slug: "studied-systems",
-    name: "StudiedSystems — Digital Products",
-    category: "Own Products · Published",
+    slug: "restaurant-website",
+    name: "Restaurant Website",
+    category: "Template · Sit-down Dining",
     label: "shipped",
     summary:
-      "A shelf of self-published digital products sold direct — documentation systems, trackers, teaching companions, engineering spreadsheets and a printed colouring series.",
+      "The donor architecture for the whole template family — one page, one content file as the entire rebrand surface, and photography that degrades to a designed wash rather than a broken icon.",
     vision:
-      "Client work teaches you to build what someone asked for. Selling your own product teaches you something client work cannot: whether a stranger with no onboarding call, no context and no patience can open the thing and understand it in the first minute. Nobody is there to explain it, and a confused buyer just refunds.",
+      "A restaurant that has just opened has no photographs yet, and waiting for a shoot is the usual reason a site never launches at all. So the first question was not how the site looks with pictures, but whether it is still worth publishing without them.",
     building: [
-      "The Evidence Log — a timestamped documentation system, $26",
-      "The Application Kit — checklist, deadline timeline and status dashboard, $22",
-      "Tell It Back — 88 narration prompts with the source method, $18",
-      "Engineering Spreadsheets — working calculation workbooks",
-      "Kawaii Little Worlds — a print-ready colouring series on Amazon KDP",
-      "Listing photography, product copy and buyer instructions for each",
+      "A reservation-led single page for a sit-down restaurant",
+      "One content module carrying every word, price and link",
+      "Missing photography degrading to a designed wash in the brand palette",
+      "Menu, story, gallery, events and visit sections",
     ],
     approach:
-      "Every product is priced once rather than subscribed, because the buyer is purchasing a finished thing and a recurring charge for a static file is a way of losing the customer twice. The hard part is never the build — it is writing instructions clear enough that support requests do not arrive, which is a discipline that has since improved every client handover we do.",
-    stage: "Published and selling.",
+      "Everything a client changes lives in four files and nothing in the component layer. That constraint is what makes the second restaurant a matter of days, and it only holds if you refuse to let a client-specific decision leak into a shared component — the first time one does, every future rebrand inherits it.",
+    stage:
+      "Shipped, and the donor for five further verticals.",
     next: [
-      "More systems in the same house style",
-      "A direct storefront alongside the marketplace",
+      "Multi-location support",
+      "Online ordering as an optional module",
     ],
-    tech: ["Product design", "Editorial", "Typesetting", "Listing photography"],
-    client: "Own products",
+    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    client: "Template — for licence",
     accent: ["#d99a76", "#c55e33"],
-    image: "/media/work-studied-systems.jpg",
+    image: "/media/work-restaurant-website.jpg",
+  },
+  {
+    slug: "fast-food-ordering-website",
+    name: "Fast-Food Ordering Website",
+    category: "Template · Quick Service",
+    label: "shipped",
+    summary:
+      "The ordering half of the restaurant problem: a persistent cart, category tabs, veg and spice filters, a combo builder, coupon codes and a sticky bar that becomes the running order total.",
+    vision:
+      "A sit-down restaurant sells a reservation; a fast-food brand sells the order itself. Same industry, opposite site — which made it the right test of whether the donor architecture could bend that far without being rewritten.",
+    building: [
+      "A persistent cart and a sticky mobile bar showing the live total",
+      "Category tabs plus vegetarian and spice filters",
+      "A combo builder and coupon codes",
+      "Checkout posting to one route, then handing off to the client's POS",
+      "Seven palette presets, from fried chicken to bubble tea",
+    ],
+    approach:
+      "Checkout deliberately stops at a single route rather than integrating a payment provider, because every quick-service client already has a POS or an aggregator and the one thing they will not do is change it. The template's job is to reach that boundary cleanly and stop.",
+    stage:
+      "Shipped.",
+    next: [
+      "Direct aggregator integrations",
+      "Live order status for the customer",
+    ],
+    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    client: "Template — for licence",
+    accent: ["#f08a7a", "#e0451d"],
+    image: "/media/work-fast-food-ordering-website.jpg",
+  },
+  {
+    slug: "salon-spa-website",
+    name: "Salon & Spa Website",
+    category: "Template · Appointments",
+    label: "shipped",
+    summary:
+      "The first service-appointment vertical, and where the rule that services and prices come before any call to action was settled.",
+    vision:
+      "Salon sites hide the price list behind an enquiry form, and the customer comparing three salons simply discards the two that will not tell them. Putting prices second on the page is a commercial decision disguised as a layout one.",
+    building: [
+      "Services and prices as section two, above every call to action",
+      "Service rows that pre-fill the booking form when picked",
+      "A dependency-free immersion layer with no animation runtime at all",
+      "Eucalyptus, bone and brass, chosen against the stock spa palette",
+    ],
+    approach:
+      "The motion here uses no animation library at all — the whole immersion layer is CSS and a few observers. A salon site is opened on a mid-range phone between appointments, and a runtime that costs a second of load is a worse trade than any effect it buys.",
+    stage:
+      "Shipped.",
+    next: [
+      "Stylist-level availability",
+      "Membership and package handling",
+    ],
+    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    client: "Template — for licence",
+    accent: ["#c8b08a", "#7e6425"],
+    image: "/media/work-salon-spa-website.jpg",
+  },
+  {
+    slug: "cafe-roastery-website",
+    name: "Cafe & Roastery Website",
+    category: "Template · Cafe & Retail",
+    label: "shipped",
+    summary:
+      "The first light-ground template in the family, with an order tray and a brew guide that is a real, working timer.",
+    vision:
+      "Every template so far had been dark, and dark had started to be a habit rather than a decision. A roastery sells paper bags, kraft and cream — the palette had to invert, and inverting it exposed which parts of the system had quietly assumed a dark ground.",
+    building: [
+      "The first light-ground template — cream is the page, not an accent",
+      "An order tray persisted locally, and a separate reservation path",
+      "A brew guide that is a real timer, safe against a backgrounded tab",
+      "A palette splitting fill from text, because one accent cannot do both",
+    ],
+    approach:
+      "The brew timer is the detail that matters: a timer driven by an interval drifts badly once the tab is backgrounded, which is exactly what happens when someone starts it and puts the phone down. It reads wall-clock time on wake instead, so it is still correct four minutes later.",
+    stage:
+      "Shipped, and the source of the fill-versus-text accent rule the later templates inherit.",
+    next: [
+      "Subscription coffee",
+      "Wholesale ordering for cafes",
+    ],
+    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    client: "Template — for licence",
+    accent: ["#c99a63", "#865b21"],
+    image: "/media/work-cafe-roastery-website.jpg",
+  },
+  {
+    slug: "property-developer-website",
+    name: "Property Developer Website",
+    category: "Template · Developers",
+    label: "shipped",
+    summary:
+      "The property-developer vertical, and the first template carrying real tooling rather than only content — an EMI calculator, a construction-progress tracker, and a registration number on every card.",
+    vision:
+      "A developer sells something that does not exist yet, so the site has to answer two questions an agency site never faces: can I afford it, and will it actually be finished. Neither is answered by photography.",
+    building: [
+      "An EMI calculator and a construction-progress tracker",
+      "Registration numbers on every project card",
+      "Status never carried by colour alone — each state has its own token and label",
+      "Every number, area and price set in tabular mono",
+    ],
+    approach:
+      "Status is never colour alone. A buyer scanning phases needs to read 'ready to move' rather than infer it from green, and a colour-blind buyer needs the same information the rest get — so every state carries a label as well as a token.",
+    stage:
+      "Shipped.",
+    next: [
+      "Unit-level availability and floor plates",
+      "Buyer document lockers",
+    ],
+    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    client: "Template — for licence",
+    accent: ["#8fb3d9", "#34517a"],
+    image: "/media/work-property-developer-website.jpg",
+  },
+  {
+    slug: "travel-booking-website",
+    name: "Travel & Yatra Booking Website",
+    category: "Client Site · Travel",
+    label: "live",
+    summary:
+      "A three-page travel site for pilgrimage and adventure booking, built as static HTML with no build step, no dependencies and no backend.",
+    vision:
+      "The customer for a Char Dham yatra is often on a hill connection, on an older phone, and deciding quickly. Every kilobyte and every dependency is a tax on someone in exactly the moment they are ready to book.",
+    building: [
+      "Three pages covering pilgrimage packages and adventure booking",
+      "A booking sheet composing a structured message and handing off",
+      "Static HTML with no build step, no dependencies and no backend",
+      "Motion on transform and opacity only, for mid-range phones",
+    ],
+    approach:
+      "Choosing no framework at all was the design decision, not a shortcut. There is nothing to hydrate, nothing to wait for and nothing to break on a weak connection — and the operator can edit a page without a toolchain, which is the difference between a site that stays current and one that does not.",
+    stage:
+      "Live.",
+    next: [
+      "Seat availability against real departures",
+      "Hindi throughout",
+    ],
+    tech: ["HTML", "CSS", "JavaScript"],
+    client: "Pilgrimage tour operator",
+    accent: ["#7fc4bb", "#1c6b66"],
+    image: "/media/work-travel-booking-website.jpg",
+  },
+  {
+    slug: "the-evidence-log",
+    name: "The Evidence Log",
+    category: "Own Product · Published",
+    label: "shipped",
+    summary:
+      "A documentation system for people who need a clear, timestamped record of events, dates and documents — sold direct as a one-time purchase.",
+    vision:
+      "People who need a record usually need it because something has gone wrong, and they are assembling it under stress, late, from memory. The product's whole job is to make the structure obvious enough that a person in that state can still use it correctly.",
+    building: [
+      "A timestamped entry log with file and audio attachments",
+      "Tagging, records and exportable reports",
+      "The record is a file the buyer owns outright",
+      "Sold once at $26, not subscribed",
+    ],
+    approach:
+      "Priced once rather than subscribed. A recurring charge on a record someone may need to keep for years is a way of losing the customer twice — and the buyer is purchasing a finished thing, not a service.",
+    stage:
+      "Published and selling.",
+    next: [
+      "A guided first-entry walkthrough",
+      "A companion for shared records",
+    ],
+    tech: ["Product design", "Editorial", "Listing photography", "Etsy"],
+    client: "StudiedSystems",
+    accent: ["#d99a76", "#8e3f1e"],
+    image: "/media/work-the-evidence-log.jpg",
+  },
+  {
+    slug: "the-application-kit",
+    name: "The Application Kit",
+    category: "Own Product · Published",
+    label: "shipped",
+    summary:
+      "A document checklist, deadline timeline and status dashboard for anyone running several applications at once, with sample documents so the first entry takes minutes.",
+    vision:
+      "Running six applications at once is not hard because any one of them is hard. It is hard because the deadlines, documents and states live in six different places, and the one that slips is always the one nobody was looking at.",
+    building: [
+      "A per-application document checklist with three states",
+      "A timeline view with reminders before dates pass",
+      "A dashboard sorting open, in-progress and submitted",
+      "Sample documents, so the first entry takes minutes",
+    ],
+    approach:
+      "The worked sample is the manual. A blank template asks the buyer to invent a structure before they can use it, which is where most of them stop — so the kit arrives with one application already filled in.",
+    stage:
+      "Published and selling at $22.",
+    next: [
+      "Regional presets for common application types",
+      "A shared view for a family or advisor",
+    ],
+    tech: ["Product design", "Editorial", "Listing photography", "Etsy"],
+    client: "StudiedSystems",
+    accent: ["#d99a76", "#8e3f1e"],
+    image: "/media/work-the-application-kit.jpg",
+  },
+  {
+    slug: "tell-it-back",
+    name: "Tell It Back",
+    category: "Own Product · Published",
+    label: "shipped",
+    summary:
+      "A homeschool narration companion — 88 prompts sorted by age and subject, the four rules that make the method work, and the original source text behind it.",
+    vision:
+      "Narration is a teaching method people adopt from a summary and then abandon, because the summary leaves out the four rules that make it work at all. Most products in this space sell prompts and skip the method.",
+    building: [
+      "88 prompts organised by age and subject",
+      "The four rules that make the method work, stated first",
+      "A section built around the four common failures",
+      "The original source text, and printable cards",
+    ],
+    approach:
+      "Leading with the failure modes rather than the promise is the unusual choice. A parent who knows the four ways this goes wrong will keep going when it does; one sold only on the benefit stops the first week it is awkward.",
+    stage:
+      "Published and selling at $18.",
+    next: [
+      "Subject-specific packs",
+      "A version for classroom groups",
+    ],
+    tech: ["Product design", "Editorial", "Research", "Etsy"],
+    client: "StudiedSystems",
+    accent: ["#d99a76", "#8e3f1e"],
+    image: "/media/work-tell-it-back.jpg",
+  },
+  {
+    slug: "engineering-workbooks",
+    name: "Engineering Spreadsheets",
+    category: "Own Product · Published",
+    label: "shipped",
+    summary:
+      "Nine construction site workbooks across two regional editions, covering bar bending schedules, billing and measurement, labour compliance, delay control, cost estimation and payment protection.",
+    vision:
+      "Site paperwork is where money is actually lost — an unrecorded variation, a missed measurement, a delay nobody documented. The engineers who need these are not going to adopt software; they will open a spreadsheet, so the spreadsheet has to be right.",
+    building: [
+      "Nine workbooks across an India and a United States edition",
+      "India: bar bending, billing, compliance, delay control, cost estimation",
+      "United States: contractor estimator, payment protection, subcontractor compliance",
+      "Every workbook shipping blank and worked, because the sample is the manual",
+    ],
+    approach:
+      "Two regional editions rather than one generic set, because compliance is the entire value and a generic labour-compliance sheet is worse than none — it gives false confidence in exactly the document an audit will examine.",
+    stage:
+      "Published.",
+    next: [
+      "More trades per edition",
+      "A guided video per workbook",
+    ],
+    tech: ["Excel", "Domain modelling", "Technical writing", "Video"],
+    client: "Own product",
+    accent: ["#dcb877", "#865b21"],
+    image: "/media/work-engineering-workbooks.jpg",
+  },
+  {
+    slug: "kawaii-little-worlds",
+    name: "Kawaii Little Worlds",
+    category: "Own Product · Published",
+    label: "shipped",
+    summary:
+      "A children's colouring series published to Amazon KDP — 6x9, 46 pages, print-ready interior and cover, with the AI-content disclosure answered honestly.",
+    vision:
+      "Publishing to a print platform is a production problem, not a creative one. Bleed, trim, spine width and colour space decide whether the book is accepted, and none of that is visible on screen until it is rejected.",
+    building: [
+      "Print-ready 6x9 interior and wrap cover, produced to the platform's spec",
+      "Four story beats followed by a 25-plate gallery",
+      "A formal copyright page and fill-in activity pages",
+      "The AI-content disclosure answered honestly at upload",
+      "A second title on the same production pipeline",
+    ],
+    approach:
+      "The disclosure was answered honestly, which is the only defensible choice and also the practical one — a platform that later determines otherwise removes the listing, and the whole catalogue with it. The pipeline is built so the second title cost a fraction of the first.",
+    stage:
+      "Published on Amazon KDP, two titles.",
+    next: [
+      "More titles on the same pipeline",
+      "A paperback bundle",
+    ],
+    tech: ["Art direction", "Typesetting", "PDF production", "Amazon KDP"],
+    client: "Self-published — Amazon KDP",
+    accent: ["#b39ddb", "#4e3e7d"],
+    image: "/media/work-kawaii-little-worlds.jpg",
   },
   {
     slug: "voice-reception",
