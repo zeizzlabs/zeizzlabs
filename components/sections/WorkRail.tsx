@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useDragMarquee } from "@/lib/use-drag-marquee";
 import { projects, workLabels } from "@/content/work";
 import { Icon } from "@/components/ui/Icon";
 import { TransitionLink } from "@/components/motion/PageTransition";
@@ -24,11 +24,12 @@ import type { Project, WorkLabel } from "@/lib/types";
  * round of work on this site was removing per-frame repaints that made the
  * page shimmer. No JavaScript touches the position at any point.
  *
- * PAUSE. Each row pauses on its own, from a pointer down or a hover, so
- * holding one rail still leaves the other running. `animationPlayState` is the
- * whole mechanism: the track keeps its position exactly where it was rather
- * than snapping, which is what makes it feel like stopping a belt with a
- * finger.
+ * CONTROL. Each row is a velocity, not a schedule, so a finger can push it
+ * along, drag it back the other way, slow it by leaning against it, or stop it
+ * dead — and on release it eases back to its own drift rather than snapping.
+ * The rows are independent, so holding one leaves the other running. See
+ * lib/use-drag-marquee for the model; a CSS animation cannot do this, because
+ * play state is binary and a keyframe has nowhere to put a finger's momentum.
  */
 
 const labelStyle: Record<WorkLabel, string> = {
@@ -92,34 +93,34 @@ function Card({ p }: { p: Project }) {
 }
 
 function Rail({ items, dir }: { items: Project[]; dir: "left" | "right" }) {
-  const [paused, setPaused] = useState(false);
-
-  // Speed held roughly constant per card, so a longer row travels for longer
-  // rather than faster — otherwise the two rows read as different mechanisms.
-  const duration = items.length * 6;
+  // Pixels per second. Left-travelling rows carry a negative velocity, which
+  // is the only difference between the two rows.
+  const { viewport, track, wasDragged, handlers } = useDragMarquee({
+    base: dir === "left" ? -38 : 38,
+  });
 
   return (
     <div
-      className="group/rail relative overflow-hidden py-2"
-      onPointerDown={() => setPaused(true)}
-      onPointerUp={() => setPaused(false)}
-      onPointerCancel={() => setPaused(false)}
-      onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
-      onPointerLeave={() => setPaused(false)}
+      ref={viewport}
+      // touch-pan-y keeps vertical page scrolling native while the horizontal
+      // axis belongs to the rail; without it the browser claims the gesture
+      // and the drag never reaches us.
+      // Named so the rail can be found unambiguously — the homepage has other
+      // horizontal flex tracks, and a class selector picked the wrong one.
+      data-work-rail={dir}
+      className="relative touch-pan-y select-none overflow-hidden py-2"
+      {...handlers}
+      onClickCapture={(e) => {
+        // A drag that ends on a card would otherwise open it.
+        if (wasDragged()) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
     >
-      <div
-        className={cn(
-          "flex w-max gap-4",
-          dir === "left" ? "marquee-left" : "marquee-right"
-        )}
-        style={{
-          animationDuration: `${duration}s`,
-          animationPlayState: paused ? "paused" : "running",
-        }}
-      >
-        {/* Rendered twice: the track travels exactly half its width, so the
-            second copy is in the first one's place when the cycle restarts and
-            the seam never lands on screen. */}
+      <div ref={track} className="flex w-max gap-4 will-change-transform">
+        {/* Rendered twice: position wraps at half the scroll width, so the
+            second copy stands where the first was and the seam never shows. */}
         {[0, 1].map((copy) => (
           <div key={copy} className="flex gap-4" aria-hidden={copy === 1}>
             {items.map((p) => (
@@ -144,7 +145,7 @@ export function WorkRail() {
       <div className="mx-auto mb-8 flex max-w-[100rem] items-end justify-between gap-6 px-5 sm:px-8">
         <p className="eyebrow">Selected work</p>
         <p className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-faint sm:flex">
-          Touch a row to hold it
+          Drag a row to steer it
           <Icon name="ArrowRight" className="h-3.5 w-3.5" />
         </p>
       </div>

@@ -17,7 +17,7 @@ export function Services() {
         />
       </div>
 
-      <ServiceIndex />
+      <ServiceIndex chips="glow" />
     </Section>
   );
 }

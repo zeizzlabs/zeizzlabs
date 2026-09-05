@@ -8,6 +8,7 @@ import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
 import { PreviewCard } from "@/components/ui/PreviewCard";
 import { DriftingChips } from "@/components/ui/DriftingChips";
+import { GlowChips } from "@/components/ui/GlowChips";
 import { cn } from "@/lib/cn";
 
 /**
@@ -38,7 +39,17 @@ const accents: Record<string, [string, string]> = {
   steel: ["#3d4759", "#7d8da6"],
 };
 
-export function ServiceIndex() {
+export function ServiceIndex({
+  /**
+   * How the deliverable chips behave. "drift" softens one chip per pillar at a
+   * time; "glow" pulses every chip on its own clock. The homepage uses the
+   * glow — it is the louder of the two, and the homepage is where the range is
+   * being sold rather than read.
+   */
+  chips = "drift",
+}: {
+  chips?: "drift" | "glow";
+} = {}) {
   const root = useRef<HTMLDivElement>(null);
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
@@ -167,7 +178,11 @@ export function ServiceIndex() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <DriftingChips items={s.deliverables} className="mt-4" />
+                    {chips === "glow" ? (
+                      <GlowChips items={s.deliverables} className="mt-4" />
+                    ) : (
+                      <DriftingChips items={s.deliverables} className="mt-4" />
+                    )}
                   </div>
                 </div>
               </TransitionLink>

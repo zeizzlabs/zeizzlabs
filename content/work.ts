@@ -499,6 +499,7 @@ export const projects: Project[] = [
         ],
       },
     ],
+    image: "/media/work-notion-systems-shop.jpg",
   },
   {
     slug: "engineering-spreadsheets",

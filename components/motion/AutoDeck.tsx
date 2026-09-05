@@ -16,8 +16,10 @@ import { prefersReducedMotion } from "@/lib/gsap";
  * Three things stop it being an annoyance:
  *   - it is paused while off-screen, so it never runs unseen or in a background
  *     tab, and costs nothing when the section is not being looked at;
- *   - touching it pauses it, and it stays paused for a beat after release, so
- *     reading a card is never a race;
+ *   - a finger takes it over completely: drag to scrub the deck forwards or
+ *     backwards at whatever speed the hand moves, flick to send it on, or hold
+ *     to stop it dead — and on release the flick's momentum decays back into
+ *     the normal advance rather than snapping;
  *   - `prefers-reduced-motion` disables it outright and the caller's static
  *     fallback is shown instead.
  *
@@ -29,8 +31,12 @@ import { prefersReducedMotion } from "@/lib/gsap";
 const CYCLE = 3600;
 /** Fraction of the cycle a card spends parked in the middle. */
 const HOLD = 0.44;
-/** How long the deck stays paused after a touch ends. */
-const RESUME_DELAY = 2200;
+/**
+ * How quickly a flick's momentum bleeds back into the normal advance, in
+ * milliseconds. Long enough that a hard flick visibly runs on, short enough
+ * that it never feels out of control.
+ */
+const FLICK_DECAY = 520;
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const easeInOut = (t: number) =>
@@ -63,14 +69,29 @@ export function AutoDeck({
     let running = false;
     let onScreen = false;
     let held = false;
-    let resumeAt = 0;
+    /**
+     * Extra clock milliseconds per real second, carried over from a flick.
+     * Decays to zero, at which point the deck is back to its own pace. Signed,
+     * so a backwards flick runs the deck backwards before it settles.
+     */
+    let flick = 0;
+    let lastX = 0;
+    let lastT = 0;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
 
       const dt = prev ? Math.min(now - prev, 64) : 0;
       prev = now;
-      if (!held && now >= resumeAt) clock += dt;
+
+      // While a finger is down the clock is written by the drag handler alone.
+      // Otherwise the deck advances at its own pace plus whatever is left of
+      // the last flick.
+      if (!held) {
+        clock += dt + (flick * dt) / 1000;
+        flick *= Math.exp(-dt / FLICK_DECAY);
+        if (Math.abs(flick) < 1) flick = 0;
+      }
 
       const raw = clock / CYCLE;
       const idx = Math.floor(raw);
@@ -138,16 +159,51 @@ export function AutoDeck({
       if (document.visibilityState === "visible" && onScreen) start();
       else stop();
     };
-    const down = () => {
+    /**
+     * Drag maps horizontal distance onto the clock: moving a card's full
+     * travel across the deck is one cycle, so the deck tracks the finger
+     * one-to-one rather than at some invented sensitivity.
+     */
+    const down = (e: PointerEvent) => {
       held = true;
+      flick = 0;
+      lastX = e.clientX;
+      lastT = performance.now();
+      el.setPointerCapture?.(e.pointerId);
     };
-    const up = () => {
+
+    const move = (e: PointerEvent) => {
+      if (!held) return;
+      const spread = el.clientWidth * 0.92;
+      if (spread <= 0) return;
+
+      const now = performance.now();
+      const dx = e.clientX - lastX;
+      const dtMs = Math.max(1, now - lastT);
+
+      const deltaClock = (dx / spread) * CYCLE;
+      clock += deltaClock;
+
+      // Smoothed: one raw sample between frames is noisy, and a spike would
+      // fling the deck across several cards on release.
+      flick = flick * 0.7 + (deltaClock / (dtMs / 1000)) * 0.3;
+
+      lastX = e.clientX;
+      lastT = now;
+    };
+
+    const up = (e: PointerEvent) => {
+      if (!held) return;
       held = false;
-      resumeAt = performance.now() + RESUME_DELAY;
+      el.releasePointerCapture?.(e.pointerId);
+      // A finger held still before lifting should leave the deck where it is
+      // rather than throwing it.
+      if (performance.now() - lastT > 120) flick = 0;
     };
 
     document.addEventListener("visibilitychange", onVis);
     el.addEventListener("pointerdown", down, { passive: true });
+    el.addEventListener("pointermove", move, { passive: true });
     el.addEventListener("pointerup", up, { passive: true });
     el.addEventListener("pointercancel", up, { passive: true });
 
@@ -156,6 +212,7 @@ export function AutoDeck({
       io.disconnect();
       document.removeEventListener("visibilitychange", onVis);
       el.removeEventListener("pointerdown", down);
+      el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
     };
@@ -165,7 +222,7 @@ export function AutoDeck({
     <div
       ref={track}
       className={className}
-      style={{ position: "relative", height, overflow: "hidden" }}
+      style={{ position: "relative", height, overflow: "hidden", touchAction: "pan-y" }}
     >
       {slides.map((s, i) => (
         <div

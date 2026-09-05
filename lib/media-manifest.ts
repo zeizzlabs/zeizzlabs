@@ -27,6 +27,7 @@ const VERSIONS: Record<string, string> = {
   "/media/work-hotel-website.jpg": "uv4znf",
   "/media/work-kawaii-little-worlds.jpg": "lh8s5j",
   "/media/work-mobile-store-website.jpg": "v06qjh",
+  "/media/work-notion-systems-shop.jpg": "vevr2o",
   "/media/work-property-advisory-website.jpg": "v05r8e",
   "/media/work-property-agency-website.jpg": "v05b30",
   "/media/work-property-consultancy-website.jpg": "v05d1s",
