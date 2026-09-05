@@ -24,10 +24,30 @@ export function Navbar({ logo }: { logo: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        /**
+         * Hysteresis, because this threshold had none.
+         *
+         * `scrolled` toggles the glass backdrop-filter, a border, a shadow and
+         * the wordmark reveal all at once. With a single 24px line, resting
+         * anywhere near it — which is where a reader is while easing away from
+         * the top — flipped every one of those on and off repeatedly. That is
+         * the header flicker, and because backdrop-filter repaints what is
+         * behind it, the page under the header appeared to flicker too.
+         */
+        setScrolled((was) => (was ? window.scrollY > 16 : window.scrollY > 72));
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   // Detect whether a light-themed section currently sits under the bar so the
@@ -38,24 +58,52 @@ export function Navbar({ logo }: { logo: ReactNode }) {
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>("[data-theme]")
     ).filter((el) => el !== document.documentElement);
-    const check = () => {
-      const y = 40;
-      const hit = sections.find((el) => {
+    /**
+     * Cache each section's document offsets instead of measuring every scroll.
+     *
+     * This ran getBoundingClientRect() over every themed section on EVERY
+     * scroll event, unthrottled. Lenis emits one per animation frame, so the
+     * header forced a synchronous layout 60-120 times a second for the whole
+     * length of a scroll — which is what made the header, and by extension the
+     * whole page, judder on a phone. Offsets only change when the layout does,
+     * so they are measured once and re-measured on resize.
+     */
+    const measure = () =>
+      sections.map((el) => {
         const r = el.getBoundingClientRect();
-        return r.top <= y && r.bottom >= y;
+        const top = r.top + window.scrollY;
+        return { top, bottom: top + r.height, theme: el.dataset.theme };
       });
+    let boxes = measure();
+
+    const check = () => {
+      const y = window.scrollY + 40;
+      const hit = boxes.find((b) => b.top <= y && b.bottom >= y);
       const pageTheme =
         (document.documentElement.dataset.theme as "dark" | "light") ?? "light";
       setOver(
-        hit ? ((hit.dataset.theme as "dark" | "light") ?? pageTheme) : pageTheme
+        hit ? ((hit.theme as "dark" | "light") ?? pageTheme) : pageTheme
       );
     };
+
+    let raf = 0;
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; check(); });
+    };
+    const onResize = () => { boxes = measure(); check(); };
+
     // First measurement waits a frame so layout has settled after a route swap.
-    const id = requestAnimationFrame(check);
-    window.addEventListener("scroll", check, { passive: true });
+    const id = requestAnimationFrame(onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    // Images and fonts land after mount and move everything below them.
+    window.addEventListener("load", onResize);
     return () => {
       cancelAnimationFrame(id);
-      window.removeEventListener("scroll", check);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("load", onResize);
     };
   }, [pathname]);
 
@@ -141,7 +189,7 @@ export function Navbar({ logo }: { logo: ReactNode }) {
           </div>
         </div>
 
-        {scrolled && !open && <ScrollProgress />}
+        <ScrollProgress hidden={!scrolled || open} />
       </header>
 
       <MenuOverlay open={open} onClose={() => setOpen(false)} />

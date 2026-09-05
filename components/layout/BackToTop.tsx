@@ -9,10 +9,31 @@ export function BackToTop() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > window.innerHeight * 2);
-    onScroll();
+    // Throttled to a frame, and the viewport height is cached: reading
+    // innerHeight on every scroll event is a layout read the browser has to
+    // resolve synchronously, which is exactly the per-frame work that made the
+    // page judder while scrolling.
+    let vh = window.innerHeight;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      setShow(window.scrollY > vh * 2);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      vh = window.innerHeight;
+      onScroll();
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (

@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
  * Reading-progress hairline under the navbar. Written with a rAF-throttled
  * scroll listener and a scaleX transform, so it never triggers layout.
  */
-export function ScrollProgress() {
+export function ScrollProgress({ hidden = false }: { hidden?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export function ScrollProgress() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden"
+      className={`pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden transition-opacity duration-300 ${hidden ? "opacity-0" : "opacity-100"}`}
     >
       <div
         ref={ref}
