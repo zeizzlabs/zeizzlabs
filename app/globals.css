@@ -924,3 +924,32 @@ header[data-over="light"] .wordmark {
      doing a job, it is transform-only, and with the backdrop-filter gone it no
      longer forces anything else to repaint. */
 }
+
+/* ---------------------------------------------------------------------------
+   Work rails — two tracks travelling in opposite directions.
+
+   Transform only, on a track rendered twice and moved exactly half its width,
+   so the loop is seamless and the whole thing lives on the compositor. These
+   stay running on touch, unlike the decorative loops above: this motion is the
+   component, not an ornament on top of one.
+--------------------------------------------------------------------------- */
+@keyframes marquee-left {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes marquee-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+.marquee-left  { animation: marquee-left  linear infinite; will-change: transform; }
+.marquee-right { animation: marquee-right linear infinite; will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nothing moves on its own; the row becomes an ordinary swipeable shelf. */
+  .marquee-left,
+  .marquee-right {
+    animation: none;
+    transform: none;
+  }
+}

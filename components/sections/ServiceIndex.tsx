@@ -7,6 +7,7 @@ import { services } from "@/content/services";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { Icon } from "@/components/ui/Icon";
 import { PreviewCard } from "@/components/ui/PreviewCard";
+import { DriftingChips } from "@/components/ui/DriftingChips";
 import { cn } from "@/lib/cn";
 
 /**
@@ -166,16 +167,7 @@ export function ServiceIndex() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {s.deliverables.map((d) => (
-                        <li
-                          key={d}
-                          className="rounded-full border border-line px-3 py-1.5 text-[12px] text-steel-400"
-                        >
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
+                    <DriftingChips items={s.deliverables} className="mt-4" />
                   </div>
                 </div>
               </TransitionLink>
