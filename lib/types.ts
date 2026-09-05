@@ -130,6 +130,18 @@ export interface Project {
    * icon and deliverable chips, which is a designed state, not a broken one.
    * The newer pillars ship without photography until it exists.
    */
+  /**
+   * Where the thing actually lives. Renders a Visit button on the detail page.
+   * Absent for work that has no public URL — an unfinished build, or a
+   * template held for licence rather than deployed.
+   */
+  link?: { href: string; label: string };
+  /**
+   * For a catalogue entry — a shelf of products rather than one build — the
+   * things it contains, grouped so the page lists the range instead of
+   * pretending each item is its own project.
+   */
+  catalogue?: { heading: string; items: string[] }[];
   image?: string;
 }
 

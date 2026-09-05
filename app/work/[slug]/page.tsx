@@ -68,6 +68,24 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         </Frame>
       </div>
 
+      {project.link && (
+        <div className="px-5 pt-8 sm:px-8">
+          <div className="mx-auto max-w-[100rem]">
+            <a
+              href={project.link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="text"
+              data-cursor-text="Open"
+              className="inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 text-[14.5px] font-semibold text-white [background:var(--gradient-brand)] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              {project.link.label}
+              <Icon name="ArrowUpRight" className="h-4 w-4" strokeWidth={2} />
+            </a>
+          </div>
+        </div>
+      )}
+
       <Section inner="max-w-[100rem]">
         <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
           <div>
@@ -84,6 +102,31 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                 {project.vision}
               </p>
             </Reveal>
+
+            {project.catalogue && (
+              <div className="mt-14">
+                <Reveal>
+                  <h2 className="eyebrow mb-5">What is in it</h2>
+                </Reveal>
+                <div className="grid gap-8 sm:grid-cols-2">
+                  {project.catalogue.map((group, i) => (
+                    <Reveal key={group.heading} delay={0.06 * i}>
+                      <div>
+                        <p className="text-[15px] font-semibold text-ink">{group.heading}</p>
+                        <ul className="mt-3 space-y-2">
+                          {group.items.map((item) => (
+                            <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-muted">
+                              <span aria-hidden className="mt-[0.62em] h-1 w-1 shrink-0 rounded-full bg-gold-400" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <Reveal delay={0.18}>
               <h2 className="eyebrow mb-5 mt-14">How we are building it</h2>

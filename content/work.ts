@@ -40,6 +40,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "Supabase", "Razorpay", "react-pdf", "next-intl", "TypeScript"],
     client: "Own product",
     accent: ["#dcb877", "#c9a15c"],
+    link: { href: "https://www.nirmanshastra.in", label: "Visit nirmanshastra.in" },
     image: "/media/work-construction-estimation-platform.jpg",
   },
   {
@@ -70,6 +71,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "Postgres", "Razorpay", "GSAP", "Lenis", "TypeScript"],
     client: "Multi-brand apparel retailer",
     accent: ["#c93e1a", "#ff6a38"],
+    link: { href: "https://minebynine.netlify.app", label: "Visit the store" },
     image: "/media/work-fashion-delivery-store.jpg",
   },
   {
@@ -98,6 +100,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "GSAP", "Lenis", "Tailwind", "TypeScript"],
     client: "Multi-brand phone retailer",
     accent: ["#d0441a", "#fa5b1f"],
+    link: { href: "https://sudip-enterprises.netlify.app", label: "Visit the store" },
     image: "/media/work-mobile-store-website.jpg",
   },
   {
@@ -126,6 +129,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "React", "Tailwind", "Vercel"],
     client: "Property advisory firm",
     accent: ["#c89653", "#0c243c"],
+    link: { href: "https://nirmanshastra-realty.vercel.app", label: "Visit NirmanShastra Realty" },
     image: "/media/work-property-advisory-website.jpg",
   },
   {
@@ -436,145 +440,237 @@ export const projects: Project[] = [
     image: "/media/work-travel-booking-website.jpg",
   },
   {
-    slug: "the-evidence-log",
-    name: "The Evidence Log",
-    category: "Own Product · Published",
+    slug: "notion-systems-shop",
+    name: "Notion Systems",
+    category: "Digital Products · Notion",
     label: "shipped",
     summary:
-      "A documentation system for people who need a clear, timestamped record of events, dates and documents — sold direct as a one-time purchase.",
+      "Fifteen Notion templates, each built around one profession's actual workflow rather than a generic dashboard with the labels changed.",
     vision:
-      "People who need a record usually need it because something has gone wrong, and they are assembling it under stress, late, from memory. The product's whole job is to make the structure obvious enough that a person in that state can still use it correctly.",
+      "Most Notion templates on sale are one database and a wall of empty views. They demo beautifully and are abandoned in a fortnight, because nobody designed for the day the enthusiasm runs out. Each of these starts from a real job — what a therapist bills for, what a wedding planner is chased about, what a freelancer forgets — and is built backwards from that.",
     building: [
-      "A timestamped entry log with file and audio attachments",
-      "Tagging, records and exportable reports",
-      "The record is a file the buyer owns outright",
-      "Sold once at $26, not subscribed",
+      "Fifteen systems across business, creative, personal and family workflows",
+      "Relations and rollups doing the arithmetic, so nothing is counted twice",
+      "Views that answer one question each rather than showing everything",
+      "Entry templates, so adding a record is seconds and needs no decisions",
+      "Sample data in every system, because a blank template is where buyers stop",
     ],
     approach:
-      "Priced once rather than subscribed. A recurring charge on a record someone may need to keep for years is a way of losing the customer twice — and the buyer is purchasing a finished thing, not a service.",
+      "Selling to strangers is the discipline here. There is no onboarding call, so the structure has to be obvious in the first minute or the buyer refunds — which is a much harder bar than building for a team you can explain it to, and it has improved every client handover since.",
     stage:
-      "Published and selling.",
+      "Fifteen live on Etsy.",
     next: [
-      "A guided first-entry walkthrough",
-      "A companion for shared records",
+      "Vertical bundles for a whole practice",
+      "A guided setup walkthrough per system",
     ],
-    tech: ["Product design", "Editorial", "Listing photography", "Etsy"],
+    tech: ["Notion", "Relational design", "Product copy", "Etsy"],
     client: "StudiedSystems",
-    accent: ["#d99a76", "#8e3f1e"],
-    image: "/media/work-the-evidence-log.jpg",
+    accent: ["#b39ddb", "#4e3e7d"],
+    link: { href: "https://studiedsystems.etsy.com", label: "Browse on Etsy" },
+    catalogue: [
+      {
+        heading: "Business & client work",
+        items: [
+          "Freelancer Client CRM",
+          "Virtual Assistant OS",
+          "Photography CRM",
+          "Real Estate Agent CRM",
+          "Therapist Practice OS",
+          "Teacher Planner OS",
+          "Content Creator OS",
+        ],
+      },
+      {
+        heading: "Personal & planning",
+        items: [
+          "Second Brain OS (PARA)",
+          "Life Planner OS",
+          "Personal Finance OS",
+          "ADHD Focus Planner",
+        ],
+      },
+      {
+        heading: "Home & family",
+        items: [
+          "Indian Wedding Planner",
+          "Baby Planner",
+          "New Homeowner",
+          "Dog Care Planner",
+        ],
+      },
+    ],
   },
   {
-    slug: "the-application-kit",
-    name: "The Application Kit",
-    category: "Own Product · Published",
-    label: "shipped",
-    summary:
-      "A document checklist, deadline timeline and status dashboard for anyone running several applications at once, with sample documents so the first entry takes minutes.",
-    vision:
-      "Running six applications at once is not hard because any one of them is hard. It is hard because the deadlines, documents and states live in six different places, and the one that slips is always the one nobody was looking at.",
-    building: [
-      "A per-application document checklist with three states",
-      "A timeline view with reminders before dates pass",
-      "A dashboard sorting open, in-progress and submitted",
-      "Sample documents, so the first entry takes minutes",
-    ],
-    approach:
-      "The worked sample is the manual. A blank template asks the buyer to invent a structure before they can use it, which is where most of them stop — so the kit arrives with one application already filled in.",
-    stage:
-      "Published and selling at $22.",
-    next: [
-      "Regional presets for common application types",
-      "A shared view for a family or advisor",
-    ],
-    tech: ["Product design", "Editorial", "Listing photography", "Etsy"],
-    client: "StudiedSystems",
-    accent: ["#d99a76", "#8e3f1e"],
-    image: "/media/work-the-application-kit.jpg",
-  },
-  {
-    slug: "tell-it-back",
-    name: "Tell It Back",
-    category: "Own Product · Published",
-    label: "shipped",
-    summary:
-      "A homeschool narration companion — 88 prompts sorted by age and subject, the four rules that make the method work, and the original source text behind it.",
-    vision:
-      "Narration is a teaching method people adopt from a summary and then abandon, because the summary leaves out the four rules that make it work at all. Most products in this space sell prompts and skip the method.",
-    building: [
-      "88 prompts organised by age and subject",
-      "The four rules that make the method work, stated first",
-      "A section built around the four common failures",
-      "The original source text, and printable cards",
-    ],
-    approach:
-      "Leading with the failure modes rather than the promise is the unusual choice. A parent who knows the four ways this goes wrong will keep going when it does; one sold only on the benefit stops the first week it is awkward.",
-    stage:
-      "Published and selling at $18.",
-    next: [
-      "Subject-specific packs",
-      "A version for classroom groups",
-    ],
-    tech: ["Product design", "Editorial", "Research", "Etsy"],
-    client: "StudiedSystems",
-    accent: ["#d99a76", "#8e3f1e"],
-    image: "/media/work-tell-it-back.jpg",
-  },
-  {
-    slug: "engineering-workbooks",
+    slug: "engineering-spreadsheets",
     name: "Engineering Spreadsheets",
-    category: "Own Product · Published",
+    category: "Digital Products · Construction",
     label: "shipped",
     summary:
-      "Nine construction site workbooks across two regional editions, covering bar bending schedules, billing and measurement, labour compliance, delay control, cost estimation and payment protection.",
+      "Ten construction and contractor Excel systems — estimating, billing, payroll, compliance and project controls — in Indian and United States editions.",
     vision:
-      "Site paperwork is where money is actually lost — an unrecorded variation, a missed measurement, a delay nobody documented. The engineers who need these are not going to adopt software; they will open a spreadsheet, so the spreadsheet has to be right.",
+      "Site paperwork is where the money actually goes missing: an unrecorded variation, a missed measurement, a delay nobody documented, a subcontractor whose insurance lapsed. The engineers who need this will not adopt software — they will open a spreadsheet — so the spreadsheet has to be right.",
     building: [
-      "Nine workbooks across an India and a United States edition",
-      "India: bar bending, billing, compliance, delay control, cost estimation",
-      "United States: contractor estimator, payment protection, subcontractor compliance",
-      "Every workbook shipping blank and worked, because the sample is the manual",
+      "Estimating and job costing, with a BOQ bid calculator",
+      "Billing to IS 1200 and CPWD, and a payment tracker with retainage and change orders",
+      "Bar bending schedules with rebar cutting lengths, to IS 456 and IS 1786",
+      "Labour payroll and compliance for Indian sites; COI expiry and enforcement letters for US ones",
+      "Project controls with an EVM dashboard and a delay register",
+      "A site documentation pack — RFI, procurement and test registers",
     ],
     approach:
-      "Two regional editions rather than one generic set, because compliance is the entire value and a generic labour-compliance sheet is worse than none — it gives false confidence in exactly the document an audit will examine.",
+      "Two regional editions rather than one generic set, because compliance is the entire value and a generic labour-compliance sheet is worse than none: it gives false confidence in exactly the document an audit will open first.",
     stage:
-      "Published.",
+      "Ten live on Etsy, including a full contractor bundle.",
     next: [
       "More trades per edition",
-      "A guided video per workbook",
+      "A walkthrough video per workbook",
     ],
-    tech: ["Excel", "Domain modelling", "Technical writing", "Video"],
-    client: "Own product",
+    tech: ["Excel", "Google Sheets", "IS codes", "CPWD", "Etsy"],
+    client: "StudiedSystems",
     accent: ["#dcb877", "#865b21"],
-    image: "/media/work-engineering-workbooks.jpg",
+    link: { href: "https://studiedsystems.etsy.com", label: "Browse on Etsy" },
+    catalogue: [
+      {
+        heading: "Estimating & billing",
+        items: [
+          "Construction Cost Estimator (India BOQ)",
+          "Contractor Estimate Template (bid, job costing)",
+          "Construction Billing Spreadsheet (IS 1200, CPWD)",
+          "Bar Bending Schedule (rebar cutting length)",
+        ],
+      },
+      {
+        heading: "Payment & compliance",
+        items: [
+          "Construction Payment Tracker (retainage, change orders, waivers)",
+          "Construction Labour Payroll (India compliance)",
+          "Subcontractor Insurance Tracker with enforcement letters",
+        ],
+      },
+      {
+        heading: "Controls & documentation",
+        items: [
+          "Construction Project Controls (EVM dashboard, delay register)",
+          "Construction Site Documentation Pack (RFI, procurement, test registers)",
+          "Contractor Bundle — estimating, payment and compliance together",
+        ],
+      },
+    ],
+    image: "/media/work-engineering-spreadsheets.jpg",
   },
   {
-    slug: "kawaii-little-worlds",
-    name: "Kawaii Little Worlds",
-    category: "Own Product · Published",
+    slug: "school-workbooks",
+    name: "School & Homeschool Workbooks",
+    category: "Digital Products · Education",
     label: "shipped",
     summary:
-      "A children's colouring series published to Amazon KDP — 6x9, 46 pages, print-ready interior and cover, with the AI-content disclosure answered honestly.",
+      "A full maths curriculum for grades one to eight — 1,668 worksheets with answer keys — plus the record-keeping kit a homeschooling parent actually has to produce.",
     vision:
-      "Publishing to a print platform is a production problem, not a creative one. Bleed, trim, spine width and colour space decide whether the book is accepted, and none of that is visible on screen until it is rejected.",
+      "I have two children and could not find material that neither talked down to them nor buried them in joyless drilling. The second problem was worse: homeschooling parents are asked for attendance, hours and a transcript, and there is almost nothing decent for producing those.",
     building: [
-      "Print-ready 6x9 interior and wrap cover, produced to the platform's spec",
-      "Four story beats followed by a 25-plate gallery",
-      "A formal copyright page and fill-in activity pages",
-      "The AI-content disclosure answered honestly at upload",
-      "A second title on the same production pipeline",
+      "Full-syllabus maths workbooks for every grade from one to eight",
+      "1,668 worksheets in the complete bundle, every one with an answer key",
+      "Grade bundles and a middle-school set, for buying a stage rather than a year",
+      "Sixty-page printable practice packs per grade for lighter practice",
+      "A portfolio record-keeping kit — attendance, hours and transcript",
+      "A transcript template with course descriptions and a school profile, for college applications",
+      "A narration guide of 88 living-books prompts",
     ],
     approach:
-      "The disclosure was answered honestly, which is the only defensible choice and also the practical one — a platform that later determines otherwise removes the listing, and the whole catalogue with it. The pipeline is built so the second title cost a fraction of the first.",
+      "Diagram-heavy and answer-key complete, because the parent teaching it is usually not a maths teacher and the answer key is what makes the material usable at all. The record-keeping side exists because that is the part parents are actually anxious about.",
     stage:
-      "Published on Amazon KDP, two titles.",
+      "Twenty-four titles live on Etsy.",
     next: [
-      "More titles on the same pipeline",
-      "A paperback bundle",
+      "English and reading on the same model",
+      "Regional syllabus editions",
     ],
-    tech: ["Art direction", "Typesetting", "PDF production", "Amazon KDP"],
-    client: "Self-published — Amazon KDP",
-    accent: ["#b39ddb", "#4e3e7d"],
-    image: "/media/work-kawaii-little-worlds.jpg",
+    tech: ["Curriculum design", "Typesetting", "PDF production", "Etsy"],
+    client: "StudiedSystems",
+    accent: ["#7fc4bb", "#1c6b66"],
+    link: { href: "https://studiedsystems.etsy.com", label: "Browse on Etsy" },
+    catalogue: [
+      {
+        heading: "Maths workbooks, grade by grade",
+        items: [
+          "1st through 8th Grade Math Workbooks",
+          "8th Grade Pre-Algebra Workbook",
+          "185 to 227 worksheets per grade, answer keys included",
+        ],
+      },
+      {
+        heading: "Bundles",
+        items: [
+          "Math Workbook Bundle, Grades 1-8 — 1,668 worksheets",
+          "Elementary Bundle, Grades 1-5 — 1,037 worksheets",
+          "Middle School Bundle, Grades 6-8 — 631 worksheets",
+          "Grades 1-3 Bundle — 590 worksheets",
+        ],
+      },
+      {
+        heading: "Practice packs & homeschool records",
+        items: [
+          "60-page printable practice packs, grades 1-8",
+          "Homeschool Portfolio Record Keeping Kit",
+          "Homeschool Transcript Template",
+          "Homeschool Narration Guide — 88 prompts",
+        ],
+      },
+    ],
+    image: "/media/work-school-workbooks.jpg",
+  },
+  {
+    slug: "published-books",
+    name: "Published Books",
+    category: "Own Products · Amazon KDP",
+    label: "shipped",
+    summary:
+      "Eleven titles on Amazon — six pilgrimage and temple guides across the Jyotirlingas, the Krishna-Radha temples and the Hanuman circuit, and five mandala and kawaii colouring books.",
+    vision:
+      "A pilgrim planning a Jyotirlinga circuit is working from blog posts that contradict each other on darshan timings and say nothing honest about the routes. The temple books exist to be the version that answers to something — real timings, real routes, and the origin stories told properly rather than summarised.",
+    building: [
+      "Twelve Flames — the Jyotirlingas, as a story volume and a practical guide",
+      "Twelve Flutes — the Krishna-Radha temples, same pairing",
+      "Hanuman — fifteen temples across three continents, story and guide",
+      "Five colouring books: mandalas for anxiety, Tibetan and Hindu devotional, and a kawaii series",
+      "Print-ready interiors and wrap covers produced to the platform's spec",
+      "Kindle, paperback and hardcover editions where the format suits the book",
+    ],
+    approach:
+      "Every title ships as a story volume and a practical guide rather than one book trying to be both, because the reader on a train wants timings and the reader at home wants the origin story, and a book that interleaves them serves neither. The AI-content disclosure is answered honestly at upload — the only defensible answer, and the practical one, since a platform that later decides otherwise removes the whole catalogue.",
+    stage:
+      "Eleven titles published.",
+    next: [
+      "More temple circuits on the same pairing",
+      "Hindi editions of the practical guides",
+    ],
+    tech: ["Research", "Art direction", "Typesetting", "PDF production", "Amazon KDP"],
+    client: "Self-published",
+    accent: ["#e0a75e", "#8e3f1e"],
+    link: { href: "https://www.amazon.com/s?k=Sudip+Jhawar&i=stripbooks", label: "See the books on Amazon" },
+    catalogue: [
+      {
+        heading: "Pilgrimage & temple guides",
+        items: [
+          "Twelve Flames: The Story of the Twelve Jyotirlingas",
+          "Twelve Flames: A Pilgrim's Practical Guide",
+          "Twelve Flutes: The Sacred Origin Stories",
+          "Twelve Flutes: The Pilgrim's Complete Guide",
+          "Hanuman: The Story of Fifteen Temples",
+          "HANUMAN: A Pilgrim's Practical Guide",
+        ],
+      },
+      {
+        heading: "Colouring books",
+        items: [
+          "Calm in Circles — mandalas with cute animals",
+          "Circle Therapy — simple mandalas for calming anxiety",
+          "Tibetan Buddhist Mandalas — 50 meditative mandalas",
+          "Divine Hindu Mandalas — meditative mandalas",
+          "Crystal Grove Adventure — a kawaii colouring journey",
+        ],
+      },
+    ],
+    image: "/media/work-published-books.jpg",
   },
   {
     slug: "voice-reception",
