@@ -968,28 +968,52 @@ header[data-over="light"] .wordmark {
 --------------------------------------------------------------------------- */
 @keyframes chip-glow-pulse {
   0%, 100% { opacity: 0; }
-  50%      { opacity: 1; }
+  50%      { opacity: 0.6; }
 }
 
 .chip-glow {
   position: absolute;
-  inset: -1px;
+  /* Close to the pill. Held further out, adjacent chips pooled into one lit
+     band instead of reading as individual buttons. */
+  inset: -3px;
   border-radius: 9999px;
   pointer-events: none;
   opacity: 0;
-  /* Blue, not gold: the glow should read as the studio's own colour rather
-     than as a highlight in a second accent. */
-  border: 1px solid color-mix(in oklab, var(--color-blue-400) 60%, transparent);
-  background: radial-gradient(
-    120% 140% at 50% 50%,
-    color-mix(in oklab, var(--color-blue-500) 18%, transparent),
-    transparent 70%
+  /* Blue at the left edge of the chip, gold at the right — the brand gradient
+     traversing each pill individually, so every chip lights the same way
+     regardless of where it sits in the row. */
+  background: linear-gradient(
+    90deg,
+    rgba(30, 123, 255, 0.72),
+    rgba(122, 152, 200, 0.58) 50%,
+    rgba(220, 184, 119, 0.72)
   );
-  box-shadow:
-    0 0 14px -2px color-mix(in oklab, var(--color-blue-500) 50%, transparent),
-    inset 0 0 10px -4px color-mix(in oklab, var(--color-blue-300) 45%, transparent);
+  filter: blur(5px);
   animation: chip-glow-pulse var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
   will-change: opacity;
+}
+
+/**
+ * The crisp ring, same gradient. A border cannot take one, so this is the
+ * standard trick: paint the gradient, then mask out everything but a 1px
+ * frame. The site already uses it for .conic-ring.
+ */
+.chip-glow::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 9999px;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(30, 123, 255, 0.85),
+    rgba(150, 170, 205, 0.6) 50%,
+    rgba(220, 184, 119, 0.85)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 
 @media (prefers-reduced-motion: reduce) {

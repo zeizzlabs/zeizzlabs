@@ -3,62 +3,111 @@
 import { useEffect, useRef } from "react";
 
 /**
- * The loading progress, drawn as a field of glowing sine waves.
+ * The opening animation: a wave that draws itself across the screen.
  *
- * Progress is read from a ref every frame rather than passed as a prop. The
- * counter updates sixty times a second, and re-rendering React that often to
- * move a wave would be absurd — the canvas simply reads the number the
- * Preloader is already maintaining.
+ * THE IDEA. The ribbon is never a fragment of a longer shape — at every moment
+ * it is a *complete* spindle, pointed at both ends and fullest in the middle,
+ * whose right-hand tip happens to be travelling. So the stroke grows from the
+ * left edge to the right one, thickening as it goes, and arrives whole. That is
+ * what gives it an ending: when the tip reaches the right edge the gesture is
+ * finished, and the curtain can lift on a completed thought rather than on a
+ * loop cut mid-cycle.
  *
- * The waves are energised only up to the progress point: behind the leading
- * edge they run at full amplitude, ahead of it they flatten to a line. So the
- * field fills from left to right as the site loads, and the bright head is a
- * real position rather than decoration. Amplitude also grows with progress, so
- * the whole thing gathers force as it completes.
+ * TWO LINES, NOTHING ELSE. Earlier versions piled on bands and hairlines,
+ * then a heavy blue ribbon that dominated everything around it. Both were the
+ * same mistake at different volumes. What is left is one gold thread and one
+ * blue, on different frequencies and opposite drifts so they cross rather than
+ * run in parallel, each carrying a travelling highlight. Two strokes, fully
+ * committed, on an empty ground — solid enough to read as structure rather
+ * than as a wisp, and still coming to a point at both tips.
  *
- * Riding the waves are travellers: points of light that run the full width,
- * extreme left to extreme right, following the curve of whichever wave they
- * were given. Each one picks a new wave, speed, amplitude and tail every time
- * it completes a pass, so no two crossings are alike and the field never falls
- * into a loop. They sweep the whole width regardless of progress — they are
- * the flow, not the measurement.
+ * SHAPE. `sin(pi * u)` raised to 0.62 — the sine gives the taper to a point at
+ * both tips, the exponent below one fills the body out so the middle is a broad
+ * stroke rather than a lens. Thickness also scales with how far the ribbon has
+ * travelled, so it gathers weight as it crosses rather than arriving at full
+ * mass immediately.
  *
- * Canvas, not SVG. A glow on a moving stroke is a repaint whichever way it is
- * drawn, and a canvas is one composited layer rather than several filtered
- * paths — and this is the one moment on the site where a continuous repaint is
- * unambiguously worth it, since nothing else is on screen and the whole point
- * is to hold attention while assets arrive.
+ * COST. One canvas, one rAF loop, no filters. The light is stacked translucent
+ * strokes rather than shadowBlur, which is far cheaper per frame and keeps its
+ * edge at any size. Reduced motion is handled upstream: the Preloader does not
+ * mount at all.
  */
 
-/** Blue, ordered back to front. The theme's own blues. */
-const WAVES = [
-  { hue: "30,123,255", freq: 1.35, speed: 0.55, amp: 1.0, width: 2.4, alpha: 0.9 },
-  { hue: "77,163,255", freq: 2.1, speed: -0.82, amp: 0.72, width: 1.7, alpha: 0.75 },
-  { hue: "140,196,255", freq: 3.05, speed: 1.15, amp: 0.5, width: 1.3, alpha: 0.6 },
-  { hue: "30,123,255", freq: 4.4, speed: -1.5, amp: 0.34, width: 1.0, alpha: 0.45 },
-  { hue: "180,215,255", freq: 6.2, speed: 2.0, amp: 0.22, width: 0.8, alpha: 0.32 },
+type Band = {
+  /** Vertical placement, as a fraction of height from the middle. */
+  offset: number;
+  /** Sine components: amplitude (fraction of height), cycles, drift. */
+  parts: [number, number, number][];
+  /** Fullest thickness at the centre, in px, at full extension. */
+  thick: number;
+  /** Colour stops along the length. */
+  stops: [string, string, string];
+  /** Glow colour, as an rgba prefix awaiting its alpha. */
+  glow: string;
+  /** Fraction of the draw elapsed before this thread starts. */
+  delay: number;
+};
+
+const BANDS: Band[] = [
+  {
+    // Gold, riding high through the middle.
+    offset: -0.02,
+    parts: [
+      [0.125, 1.15, 0.18],
+      [0.03, 2.35, -0.3],
+    ],
+    thick: 40,
+    stops: ["#dcb877", "#f2d9a4", "#c9a15c"],
+    glow: "rgba(220,184,119,",
+    delay: 0,
+  },
+  {
+    // Blue, on its own path — a different frequency and the opposite drift, so
+    // the two cross rather than run in parallel.
+    offset: 0.06,
+    parts: [
+      [0.105, 1.55, -0.24],
+      [0.034, 2.9, 0.36],
+    ],
+    thick: 34,
+    stops: ["#1e7bff", "#7ab8ff", "#1e7bff"],
+    glow: "rgba(60,150,255,",
+    delay: 0.12,
+  },
 ];
 
+/** Pointed at both ends, fullest in the middle. */
+const spindle = (u: number) => Math.pow(Math.sin(Math.PI * u), 0.62);
+
+/** Decelerating: the stroke arrives rather than stops. */
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
 export function WaveProgress({
-  progress,
-  onFirstSweep,
+  onStart,
+  onComplete,
   className,
 }: {
-  /** 0..1, updated externally each frame. */
-  progress: React.RefObject<number>;
-  /** Fired once, when the lead traveller has crossed the full width. */
-  onFirstSweep?: () => void;
+  /**
+   * Fired on the first painted frame. The canvas cannot begin until React has
+   * hydrated, which on a cold load is a second or two after the page appears —
+   * so the caller's timeout has to be armed from here, not from its own mount,
+   * or the cap expires before the gesture has drawn.
+   */
+  onStart?: () => void;
+  /** Fired once, when the wave has finished crossing. */
+  onComplete?: () => void;
   className?: string;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
-  // Held in a ref rather than listed as a dependency: the caller passes an
-  // inline arrow, so depending on it would tear down and restart the canvas
-  // loop on every render of the Preloader.
-  const sweepCb = useRef(onFirstSweep);
+  // Held in a ref rather than a dependency: the caller passes an inline arrow,
+  // and depending on it would restart the canvas loop on every render.
+  const doneCb = useRef(onComplete);
+  const startCb = useRef(onStart);
   useEffect(() => {
-    sweepCb.current = onFirstSweep;
-  }, [onFirstSweep]);
+    doneCb.current = onComplete;
+    startCb.current = onStart;
+  }, [onComplete, onStart]);
 
   useEffect(() => {
     const cv = canvas.current;
@@ -83,152 +132,119 @@ export function WaveProgress({
     const ro = new ResizeObserver(resize);
     ro.observe(cv);
 
+    /** How long the stroke takes to cross, in seconds. */
+    const DRAW = 1.8;
     const start = performance.now();
+    let announced = false;
+    let began = false;
 
-    /**
-     * The exact y of a wave at x — shared by the stroke and by the travellers,
-     * so a traveller sits precisely on the curve it is riding rather than
-     * near it.
-     */
-    const waveY = (i: number, x: number, t: number, p: number) => {
-      const wave = WAVES[i];
-      const lead = w * p;
-      const ends = Math.pow(Math.sin((Math.PI * x) / w), 0.55);
-      const energy = x <= lead ? 1 : Math.max(0, 1 - (x - lead) / 90);
-      const gather = 0.4 + 0.6 * p;
-      const amp = (h / 2) * 0.72 * wave.amp * ends * energy * gather;
-      const phase = (x / w) * Math.PI * 2 * wave.freq + t * wave.speed * Math.PI;
-      return h / 2 + Math.sin(phase) * amp;
+    /** Centreline of a band at x. */
+    const centre = (b: Band, x: number, t: number) => {
+      let y = h / 2 + b.offset * h;
+      for (const [amp, cycles, drift] of b.parts) {
+        y += amp * h * Math.sin((x / w) * Math.PI * 2 * cycles + t * drift * Math.PI);
+      }
+      return y;
     };
-
-    type Traveller = {
-      x: number;
-      wave: number;
-      speed: number;
-      tail: number;
-      size: number;
-    };
-
-    // Fresh parameters on every pass, so a crossing is never a repeat of the
-    // one before it.
-    const respawn = (tr: Traveller, atStart: boolean) => {
-      tr.x = atStart ? -Math.random() * w * 0.8 : -30;
-      tr.wave = Math.floor(Math.random() * WAVES.length);
-      tr.speed = 0.22 + Math.random() * 0.5; // fraction of the width per second
-      tr.tail = 14 + Math.floor(Math.random() * 22);
-      tr.size = 1.6 + Math.random() * 1.6;
-    };
-
-    const travellers: Traveller[] = Array.from({ length: 4 }, () => {
-      const tr = { x: 0, wave: 0, speed: 0, tail: 0, size: 0 };
-      respawn(tr, true);
-      return tr;
-    });
-
-    // The lead: pinned to the left edge and given a fixed pace, so the pass
-    // the Preloader waits on takes a known ~2.4s rather than whatever a random
-    // speed happened to produce.
-    travellers[0].x = -30;
-    travellers[0].speed = 0.5; // ~2s for the full pass
-    travellers[0].wave = 0;
-    let swept = false;
-
-    let prevT = 0;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const t = (now - start) / 1000;
-      const p = Math.max(0, Math.min(1, progress.current ?? 0));
 
       ctx.clearRect(0, 0, w, h);
-      if (w === 0) return;
+      if (w === 0 || h === 0) return;
 
-      const mid = h / 2;
-      const lead = w * p;
-      // Step in pixels. Two is smooth enough at this size and a third of the
-      // work of one.
-      const step = 2;
-
-      for (const wave of WAVES) {
-        ctx.beginPath();
-        for (let x = 0; x <= w; x += step) {
-          /**
-           * Three envelopes multiply together:
-           *   ends   — fades the wave into nothing at both edges, so it never
-           *            terminates on a hard vertical cut;
-           *   energy — full behind the leading edge, tapering to flat ahead of
-           *            it, which is what makes the field read as filling;
-           *   gather — the whole field grows as loading completes.
-           */
-          const ends = Math.pow(Math.sin((Math.PI * x) / w), 0.55);
-          const energy = x <= lead ? 1 : Math.max(0, 1 - (x - lead) / 90);
-          const gather = 0.4 + 0.6 * p;
-
-          const amp = (h / 2) * 0.72 * wave.amp * ends * energy * gather;
-          const phase = (x / w) * Math.PI * 2 * wave.freq + t * wave.speed * Math.PI;
-          const y = mid + Math.sin(phase) * amp;
-
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-
-        // The glow is the shadow of the stroke itself, so there is one path to
-        // rasterise rather than a blurred copy underneath it.
-        ctx.strokeStyle = `rgba(${wave.hue},${wave.alpha})`;
-        ctx.lineWidth = wave.width;
-        ctx.lineCap = "round";
-        ctx.shadowColor = `rgba(${wave.hue},0.85)`;
-        ctx.shadowBlur = 14;
-        ctx.stroke();
+      if (!began) {
+        began = true;
+        startCb.current?.();
+      }
+      if (!announced && t >= DRAW) {
+        announced = true;
+        doneCb.current?.();
       }
 
-      // Travellers, drawn on top of the field.
-      const dt = prevT ? Math.min(0.05, t - prevT) : 0;
-      prevT = t;
+      for (const b of BANDS) {
+        // Each thread starts a beat after the last, so they arrive in
+        // sequence rather than together.
+        const local = easeOut(Math.max(0, Math.min(1, (t / DRAW - b.delay) / (1 - b.delay))));
+        if (local <= 0.001) continue;
 
-      for (const tr of travellers) {
-        tr.x += tr.speed * w * dt;
-        if (tr.x > w + 40) {
-          if (tr === travellers[0] && !swept) {
-            swept = true;
-            sweepCb.current?.();
+        // The thread's right-hand tip. Everything is drawn as a complete
+        // spindle from 0 to here, so the leading edge is always a point.
+        const reach = local * w;
+        // Mass in proportion to length: a thread a fifth of the width across
+        // is a fifth as thick, or the opening frames are a stub rather than
+        // the beginning of a stroke.
+        const mass = b.thick * local;
+        const step = Math.max(2, Math.round(reach / 320));
+
+        const grad = ctx.createLinearGradient(0, 0, reach, 0);
+        grad.addColorStop(0, b.stops[0]);
+        grad.addColorStop(0.5, b.stops[1]);
+        grad.addColorStop(1, b.stops[2]);
+
+        const path = (scale: number) => {
+          ctx.beginPath();
+          for (let x = 0; x <= reach; x += step) {
+            ctx.lineTo(x, centre(b, x, t) - (mass * scale * spindle(x / reach)) / 2);
           }
-          respawn(tr, false);
+          for (let x = reach; x >= 0; x -= step) {
+            ctx.lineTo(x, centre(b, x, t) + (mass * scale * spindle(x / reach)) / 2);
+          }
+          ctx.closePath();
+        };
+
+        /**
+         * The glow is three widening passes at falling alpha rather than a
+         * shadowBlur. It costs a fraction as much per frame, and — unlike a
+         * blur, which softens uniformly — it keeps the spindle's points sharp
+         * while the body blooms, which is the whole character of the shape.
+         */
+        // Tighter multipliers than a thread needed: a firm line wants its glow
+        // held close, or the body reads as soft rather than solid.
+        for (const [scale, alpha] of [
+          [3.4, 0.08],
+          [2.2, 0.13],
+          [1.45, 0.2],
+        ] as const) {
+          path(scale);
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = b.glow + "1)";
+          ctx.fill();
         }
 
-        // The tail is the same curve sampled backwards, so it lies along the
-        // wave rather than trailing behind in a straight line.
-        for (let k = tr.tail; k >= 0; k--) {
-          const x = tr.x - k * 3.5;
-          if (x < 0 || x > w) continue;
-          const y = waveY(tr.wave, x, t, p);
-          const fade = 1 - k / (tr.tail + 1);
+        // The thread itself.
+        path(1);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        /**
+         * A highlight travelling the length. It moves faster than the tip, so
+         * it overtakes and runs off the end, then returns — the thread reads
+         * as carrying something rather than merely existing.
+         */
+        const hx = ((t * 0.62 + b.delay) % 1) * reach;
+        const span = Math.max(60, reach * 0.13);
+        for (let k = 0; k < 3; k++) {
+          const f = 1 - k / 3;
           ctx.beginPath();
-          ctx.arc(x, y, tr.size * (0.35 + 0.65 * fade), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(190,224,255,${(0.5 * fade * fade).toFixed(3)})`;
-          ctx.shadowColor = "rgba(77,163,255,0.9)";
-          ctx.shadowBlur = 10 * fade;
+          for (let x = Math.max(0, hx - span); x <= Math.min(reach, hx + span); x += step) {
+            const fall = 1 - Math.abs(x - hx) / span;
+            ctx.lineTo(x, centre(b, x, t) - (mass * (1 + k * 1.6) * fall * spindle(x / reach)) / 2);
+          }
+          for (let x = Math.min(reach, hx + span); x >= Math.max(0, hx - span); x -= step) {
+            const fall = 1 - Math.abs(x - hx) / span;
+            ctx.lineTo(x, centre(b, x, t) + (mass * (1 + k * 1.6) * fall * spindle(x / reach)) / 2);
+          }
+          ctx.closePath();
+          ctx.globalAlpha = 0.5 * f * f;
+          ctx.fillStyle = k === 0 ? "#ffffff" : b.glow + "1)";
           ctx.fill();
         }
       }
 
-      // The leading edge: a bright head sitting exactly at the progress point,
-      // so the number and the picture always agree.
-      ctx.shadowBlur = 26;
-      ctx.shadowColor = "rgba(140,196,255,0.95)";
-      ctx.beginPath();
-      ctx.arc(lead, mid, 2.6, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(220,238,255,0.95)";
-      ctx.fill();
-
-      // A faint rule ahead of the head, so the remaining distance is legible.
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.moveTo(lead, mid);
-      ctx.lineTo(w, mid);
-      ctx.strokeStyle = "rgba(140,196,255,0.14)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      ctx.globalAlpha = 1;
     };
 
     raf = requestAnimationFrame(frame);
@@ -236,7 +252,7 @@ export function WaveProgress({
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [progress]);
+  }, []);
 
   return <canvas ref={canvas} aria-hidden className={className} />;
 }

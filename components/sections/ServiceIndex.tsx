@@ -54,13 +54,29 @@ export function ServiceIndex({
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
 
+  /**
+   * The row mask is temporary.
+   *
+   * Each row is `overflow-hidden` so the entrance can slide the link up from
+   * below without it appearing over its neighbour. That mask then stayed
+   * forever and clipped the chip glow — top, bottom and both sides — which is
+   * the "invisible line" that kept reappearing on a different edge each time
+   * one was padded around. It is lifted the moment the rise is done, and
+   * immediately where the rise never runs.
+   */
+  const unmask = () => {
+    root.current
+      ?.querySelectorAll<HTMLElement>("[data-svc-mask]")
+      .forEach((el) => (el.style.overflow = "visible"));
+  };
+
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (prefersReducedMotion()) return unmask();
       // Touch gets the list without the entrance stagger: the rows start at
       // autoAlpha 0, and a scrub that never resolves on a coarse pointer would
       // leave the whole menu invisible.
-      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (window.matchMedia("(pointer: coarse)").matches) return unmask();
 
       // Rows rise in sequence as the block enters. fromTo, not from — see the
       // note in components/motion/Reveal.tsx.
@@ -73,6 +89,7 @@ export function ServiceIndex({
           duration: 1,
           stagger: 0.07,
           scrollTrigger: { trigger: root.current, start: "top 72%", once: true },
+          onComplete: unmask,
         }
       );
 
@@ -123,7 +140,11 @@ export function ServiceIndex({
           const on = active === i;
           const dim = active !== null && !on;
           return (
-            <li key={s.id} className="overflow-hidden border-t border-line last:border-b">
+            <li
+              key={s.id}
+              data-svc-mask
+              className="overflow-hidden border-t border-line last:border-b"
+            >
               <TransitionLink
                 href={`/services/${s.id}`}
                 data-svc-row
@@ -177,9 +198,18 @@ export function ServiceIndex({
                     on && "lg:grid-rows-[1fr] lg:opacity-100"
                   )}
                 >
-                  <div className="overflow-hidden">
+                  {/*
+                    Two different clips had to be dealt with, which is why this
+                    kept reappearing on a new edge. The row above is unmasked
+                    once its entrance is done; this wrapper cannot be, because
+                    it is what makes the hover collapse work on desktop. So it
+                    is widened instead — the negative margin pushes the clip
+                    box past the chips, the padding puts them back where they
+                    were, and the glow has room on every side.
+                  */}
+                  <div className="overflow-hidden -mx-6 px-6">
                     {chips === "glow" ? (
-                      <GlowChips items={s.deliverables} className="mt-4" />
+                      <GlowChips items={s.deliverables} className="mt-1" />
                     ) : (
                       <DriftingChips items={s.deliverables} className="mt-4" />
                     )}

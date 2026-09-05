@@ -121,6 +121,7 @@ export const services: Service[] = [
   },
   {
     id: "social-media",
+    image: "/media/service-social-media.jpg",
     title: "Social Media Management",
     short: "Social Media Management",
     icon: "Megaphone",
@@ -144,6 +145,7 @@ export const services: Service[] = [
   },
   {
     id: "content-channels",
+    image: "/media/service-content-channels.jpg",
     title: "Content & Channel Management",
     short: "Content & Channel Management",
     icon: "Video",
@@ -166,6 +168,7 @@ export const services: Service[] = [
   },
   {
     id: "seo-visibility",
+    image: "/media/service-seo-visibility.jpg",
     title: "SEO & Search Visibility",
     short: "SEO & Search Visibility",
     icon: "Search",
@@ -190,6 +193,7 @@ export const services: Service[] = [
   },
   {
     id: "notion-systems",
+    image: "/media/service-notion-systems.jpg",
     title: "Notion & Internal Systems",
     short: "Notion & Internal Systems",
     icon: "LayoutGrid",
@@ -212,6 +216,7 @@ export const services: Service[] = [
   },
   {
     id: "ai-calling-agents",
+    image: "/media/service-ai-calling-agents.jpg",
     title: "AI Calling Agents",
     short: "AI Calling Agents",
     icon: "PhoneCall",
@@ -234,6 +239,7 @@ export const services: Service[] = [
   },
   {
     id: "ai-chatbots",
+    image: "/media/service-ai-chatbots.jpg",
     title: "AI Chatbots",
     short: "AI Chatbots",
     icon: "Bot",
@@ -256,6 +262,7 @@ export const services: Service[] = [
   },
   {
     id: "whatsapp-integration",
+    image: "/media/service-whatsapp-integration.jpg",
     title: "WhatsApp Integration",
     short: "WhatsApp Integration",
     icon: "MessageSquare",
@@ -279,6 +286,7 @@ export const services: Service[] = [
   },
   {
     id: "crm-sales",
+    image: "/media/service-crm-sales.jpg",
     title: "CRM & Sales Systems",
     short: "CRM & Sales Systems",
     icon: "Users",
@@ -301,6 +309,7 @@ export const services: Service[] = [
   },
   {
     id: "custom-tools",
+    image: "/media/service-custom-tools.jpg",
     title: "Custom Tools & Calculators",
     short: "Custom Tools & Calculators",
     icon: "Calculator",

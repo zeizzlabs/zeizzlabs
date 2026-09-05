@@ -14,6 +14,12 @@ import { cn } from "@/lib/cn";
  * box-shadow, would be a repaint each and could not be done this way — which
  * is why the effect is a glow and the text stays sharp throughout.
  *
+ * COLOUR traverses each chip individually — blue at its left edge, gold at its
+ * right — rather than progressing across the row. A per-row sweep meant a chip
+ * was blue or gold depending on where it happened to land, which made the
+ * lighting a function of layout; this way every chip lights the same way, and
+ * the brand gradient is legible in a single pill.
+ *
  * The timing is deliberately incommensurate. Each chip gets a duration and a
  * delay derived from its index through a small hash, so the periods do not
  * share factors and the pattern never visibly repeats — but it is a hash and
@@ -48,7 +54,16 @@ export function GlowChips({
   className?: string;
 }) {
   return (
-    <ul className={cn("flex flex-wrap gap-2", className)}>
+    /**
+     * The vertical padding is not decoration. These chips sit inside the
+     * overflow-hidden wrapper that drives the collapse on desktop, so anything
+     * the glow reaches past the pill is sliced along a hard horizontal line —
+     * which is exactly the invisible shelf that was reported under the row.
+     *
+     * The halo sits 4px outside the pill and is blurred by 7, so it carries
+     * about 11px. Twenty leaves headroom without padding the row out.
+     */
+    <ul className={cn("flex flex-wrap gap-2 py-5", className)}>
       {items.map((d) => {
         // 2.6s-5.4s periods with delays spread across a full cycle, so the
         // block is never all-on or all-off.

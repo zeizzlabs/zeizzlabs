@@ -18,18 +18,19 @@ const SESSION_KEY = "zeizz.intro.seen";
 
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null);
-  const countRef = useRef<HTMLSpanElement>(null);
   // Written every frame by the counter tick and read by the canvas, so the
   // wave field follows real progress without re-rendering React sixty times a
   // second.
-  const progressRef = useRef(0);
   /**
-   * The curtain waits for two things: everything loaded, and the wave having
-   * run once end to end. On a fast connection the first is true almost
-   * immediately, and without the second the animation would be cut off before
-   * anyone saw it happen.
+   * The curtain lifts when the assets are ready AND the wave has either
+   * finished crossing or three seconds have passed — whichever comes first.
+   * On a fast connection the assets are ready almost immediately, and without
+   * the second condition the gesture would be cut off before anyone saw it;
+   * the three-second cap stops it becoming a toll on a slow one.
    */
-  const sweptRef = useRef(false);
+  const waveDoneRef = useRef(false);
+  /** Timer handle, so the effect's teardown can clear a cap the canvas armed. */
+  const waveCapRef = useRef(0);
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
@@ -64,7 +65,6 @@ export function Preloader() {
     const total = images.length + 1; // +1 for the font set
     let done = 0;
 
-    const state = { shown: 0 };
     const bump = () => {
       done += 1;
     };
@@ -84,33 +84,24 @@ export function Preloader() {
       done = total;
     }, 4000);
 
-    // And a second one for the sweep. The intro must never be the reason
-    // someone cannot reach the site, so if the canvas never reports a pass —
-    // no context, a hidden tab, anything — the curtain lifts anyway.
+    // Three seconds is the cap, not a target: whichever of the wave finishing
+    // and this timer comes first releases the curtain. It also covers the case
+    // where the canvas never reports at all — no context, a hidden tab —
+    // because the intro must never be the reason someone cannot reach the site.
     // 3.5s, not 6: the lead pass takes about two seconds, so this is a
     // generous backstop rather than a second delay in its own right. Six
     // seconds meant that on any run where the canvas did not report, the
     // curtain sat there long after the site was ready.
-    const sweepFailsafe = window.setTimeout(() => {
-      sweptRef.current = true;
-    }, 3500);
+    // The cap itself is armed by the canvas on its first frame — see the
+    // onStart handler below. Only the teardown lives here.
 
     let cleanupTick: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
-      // Ease the displayed number toward real progress every frame, so it
-      // always moves but never overtakes what has actually loaded.
+      // Both conditions, checked every frame: everything fetched, and the
+      // wave either finished or capped out.
       const tick = () => {
-        const real = (done / total) * 100;
-        // Eased at 0.14 rather than 0.08: the counter was still crawling up the
-        // last few percent seconds after everything had loaded, and with the
-        // sweep gate now holding the curtain as well the two together made the
-        // intro overstay. Measured 6.3s before this, ~4s after.
-        state.shown += (Math.max(real, state.shown + 0.5) - state.shown) * 0.14;
-        const v = Math.min(100, Math.round(state.shown));
-        if (countRef.current) countRef.current.textContent = String(v).padStart(3, "0");
-        progressRef.current = state.shown / 100;
-        if (v >= 100 && sweptRef.current) {
+        if (done >= total && waveDoneRef.current) {
           gsap.ticker.remove(tick);
           outro();
         }
@@ -126,14 +117,18 @@ export function Preloader() {
             window.dispatchEvent(new CustomEvent("zeizz:intro-done"));
           },
         });
-        tl.to("[data-intro-fade]", { autoAlpha: 0, duration: 0.5, stagger: 0.05 })
-          // The panel lifts away as a mask rather than a fade — the reveal
-          // reads as a curtain, which is what makes it feel deliberate.
-          .to(
-            root.current,
-            { clipPath: "inset(0 0 100% 0)", duration: 1.1, ease: "zeizz" },
-            "-=0.15"
-          );
+        /**
+         * A fade, not a curtain.
+         *
+         * The panel used to wipe away on a clip-path, which is a deliberate,
+         * announced gesture — it makes the reveal an event in its own right.
+         * The wave has already been the event by this point, so the panel
+         * should simply stop being there. power2.out leaves quickly and
+         * settles slowly, so the site is visible early in the transition and
+         * the last of the panel drifts off rather than snapping.
+         */
+        tl.to("[data-intro-fade]", { autoAlpha: 0, duration: 0.35, stagger: 0.04 })
+          .to(root.current, { autoAlpha: 0, duration: 0.95, ease: "power2.out" }, "-=0.2");
       };
 
       gsap.ticker.add(tick);
@@ -147,7 +142,7 @@ export function Preloader() {
 
     return () => {
       window.clearTimeout(failsafe);
-      window.clearTimeout(sweepFailsafe);
+      window.clearTimeout(waveCapRef.current);
       cleanupTick?.();
       ctx.revert();
     };
@@ -164,7 +159,29 @@ export function Preloader() {
     >
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" />
 
-      <div className="relative flex flex-col items-center gap-8 px-8">
+      {/*
+        Full-bleed, and behind everything. The ribbons are pointed at both
+        tips, so they have to reach the actual screen edges — boxed into a
+        column under the mark they read as a widget rather than as the room the
+        mark is standing in.
+      */}
+      <WaveProgress
+        onStart={() => {
+          // Three seconds measured from the wave's first frame, not from mount.
+          // The canvas cannot start until hydration, and arming the cap any
+          // earlier spends the budget on work the visitor never sees.
+          waveCapRef.current = window.setTimeout(() => {
+            waveDoneRef.current = true;
+          }, 3000);
+        }}
+        onComplete={() => {
+          waveDoneRef.current = true;
+        }}
+        className="pointer-events-none absolute inset-x-0 top-1/2 h-[62vh] w-full -translate-y-1/2"
+      />
+
+      <div className="relative z-10 flex flex-col items-center gap-8 px-8">
+
         <div className="overflow-hidden">
           <div data-intro-rise className="relative">
             {/* No bloom behind the mark. The artwork is transparent, and any
@@ -181,27 +198,7 @@ export function Preloader() {
           </div>
         </div>
 
-        <div data-intro-fade className="overflow-hidden">
-          <p data-intro-rise className="eyebrow">
-            Digital Creation &amp; Innovation
-          </p>
-        </div>
 
-        <div data-intro-fade className="flex w-[min(34rem,86vw)] flex-col gap-2">
-          <WaveProgress
-            progress={progressRef}
-            onFirstSweep={() => {
-              sweptRef.current = true;
-            }}
-            className="h-24 w-full sm:h-28"
-          />
-          <span
-            ref={countRef}
-            className="self-end font-mono text-xs tracking-[0.3em] text-blue-300"
-          >
-            000
-          </span>
-        </div>
       </div>
     </div>
   );
