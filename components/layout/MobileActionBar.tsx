@@ -15,9 +15,15 @@ import { Icon } from "@/components/ui/Icon";
  * rather than appearing at a scroll threshold: a threshold is one more thing
  * that can flap, and the flag is wanted over the hero anyway.
  *
- * The only scroll-driven state is whether the contact section is under them,
- * and that is read once per animation frame with cached offsets — the same
- * discipline the header now uses, for the same reason.
+ * The two round buttons arrive with the header and leave with it, on the very
+ * same 72/16 threshold — over the hero there is no header and there should be
+ * no buttons either. The quote flag is not gated: it is wanted over the hero
+ * and on every page, so it never appears or disappears at all.
+ *
+ * Both scroll reads are rAF-throttled with cached offsets, and the arrival
+ * threshold has real hysteresis. A single line would flap on and off while a
+ * thumb rests near it, toggling four elements each time — which is exactly the
+ * fault that made the header itself appear to flicker.
  *
  * THE FLAG'S CLICK. The furled tab and the unfurled label used to be two
  * different elements, swapped on click. Tapping the tab therefore unmounted the
@@ -28,6 +34,7 @@ import { Icon } from "@/components/ui/Icon";
  */
 export function MobileActionBar() {
   const [hidden, setHidden] = useState(false);
+  const [withHeader, setWithHeader] = useState(false);
   const [open, setOpen] = useState(false);
   const closeTimer = useRef<number>(0);
 
@@ -45,6 +52,11 @@ export function MobileActionBar() {
     let raf = 0;
     const update = () => {
       raf = 0;
+
+      // Matched to Navbar's own thresholds so the buttons and the header
+      // arrive and leave on the same frame rather than a beat apart.
+      setWithHeader((was) => (was ? window.scrollY > 16 : window.scrollY > 72));
+
       if (!box) return setHidden(false);
       const viewBottom = window.scrollY + window.innerHeight;
       setHidden(box.top < viewBottom - 40 && box.bottom > window.scrollY);
@@ -84,7 +96,7 @@ export function MobileActionBar() {
     // No backdrop-blur: a backdrop-filter on a fixed element over scrolling
     // content repaints every frame on iOS and visibly flickers. The panel
     // colour is opaque enough on its own.
-    "transition-transform duration-200 active:scale-90";
+    "transition-[translate,opacity,transform] duration-300 ease-[var(--ease-out-quint)] active:scale-90";
 
   return (
     <div
@@ -98,8 +110,14 @@ export function MobileActionBar() {
       <a
         href={telLink}
         aria-label="Call ZeizzLabs"
-        tabIndex={hidden ? -1 : 0}
-        className={cn(round, "absolute left-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]")}
+        tabIndex={hidden || !withHeader ? -1 : 0}
+        className={cn(
+          round,
+          "absolute left-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]",
+          withHeader
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-4 opacity-0"
+        )}
       >
         <Icon name="Phone" className="h-5 w-5 text-blue-400" strokeWidth={1.8} />
       </a>
@@ -109,8 +127,14 @@ export function MobileActionBar() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Message ZeizzLabs on WhatsApp"
-        tabIndex={hidden ? -1 : 0}
-        className={cn(round, "absolute right-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]")}
+        tabIndex={hidden || !withHeader ? -1 : 0}
+        className={cn(
+          round,
+          "absolute right-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]",
+          withHeader
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-4 opacity-0"
+        )}
       >
         <Icon name="MessageCircle" className="h-5 w-5 text-[var(--color-gold-400)]" strokeWidth={1.8} />
       </a>
