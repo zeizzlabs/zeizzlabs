@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { WaveProgress } from "./WaveProgress";
 
 /**
  * The opening beat. Every studio site in this tier has one, and it does real
@@ -18,7 +19,17 @@ const SESSION_KEY = "zeizz.intro.seen";
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const countRef = useRef<HTMLSpanElement>(null);
-  const barRef = useRef<HTMLSpanElement>(null);
+  // Written every frame by the counter tick and read by the canvas, so the
+  // wave field follows real progress without re-rendering React sixty times a
+  // second.
+  const progressRef = useRef(0);
+  /**
+   * The curtain waits for two things: everything loaded, and the wave having
+   * run once end to end. On a fast connection the first is true almost
+   * immediately, and without the second the animation would be cut off before
+   * anyone saw it happen.
+   */
+  const sweptRef = useRef(false);
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
@@ -73,6 +84,17 @@ export function Preloader() {
       done = total;
     }, 4000);
 
+    // And a second one for the sweep. The intro must never be the reason
+    // someone cannot reach the site, so if the canvas never reports a pass —
+    // no context, a hidden tab, anything — the curtain lifts anyway.
+    // 3.5s, not 6: the lead pass takes about two seconds, so this is a
+    // generous backstop rather than a second delay in its own right. Six
+    // seconds meant that on any run where the canvas did not report, the
+    // curtain sat there long after the site was ready.
+    const sweepFailsafe = window.setTimeout(() => {
+      sweptRef.current = true;
+    }, 3500);
+
     let cleanupTick: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
@@ -80,11 +102,15 @@ export function Preloader() {
       // always moves but never overtakes what has actually loaded.
       const tick = () => {
         const real = (done / total) * 100;
-        state.shown += (Math.max(real, state.shown + 0.35) - state.shown) * 0.08;
+        // Eased at 0.14 rather than 0.08: the counter was still crawling up the
+        // last few percent seconds after everything had loaded, and with the
+        // sweep gate now holding the curtain as well the two together made the
+        // intro overstay. Measured 6.3s before this, ~4s after.
+        state.shown += (Math.max(real, state.shown + 0.5) - state.shown) * 0.14;
         const v = Math.min(100, Math.round(state.shown));
         if (countRef.current) countRef.current.textContent = String(v).padStart(3, "0");
-        if (barRef.current) barRef.current.style.transform = `scaleX(${v / 100})`;
-        if (v >= 100) {
+        progressRef.current = state.shown / 100;
+        if (v >= 100 && sweptRef.current) {
           gsap.ticker.remove(tick);
           outro();
         }
@@ -121,6 +147,7 @@ export function Preloader() {
 
     return () => {
       window.clearTimeout(failsafe);
+      window.clearTimeout(sweepFailsafe);
       cleanupTick?.();
       ctx.revert();
     };
@@ -160,17 +187,17 @@ export function Preloader() {
           </p>
         </div>
 
-        <div data-intro-fade className="flex w-[min(22rem,70vw)] flex-col gap-3">
-          <span className="relative h-px w-full overflow-hidden bg-line-strong">
-            <span
-              ref={barRef}
-              className="absolute inset-0 origin-left [background:var(--gradient-brand)]"
-              style={{ transform: "scaleX(0)" }}
-            />
-          </span>
+        <div data-intro-fade className="flex w-[min(34rem,86vw)] flex-col gap-2">
+          <WaveProgress
+            progress={progressRef}
+            onFirstSweep={() => {
+              sweptRef.current = true;
+            }}
+            className="h-24 w-full sm:h-28"
+          />
           <span
             ref={countRef}
-            className="self-end font-mono text-xs tracking-[0.3em] text-gold-400"
+            className="self-end font-mono text-xs tracking-[0.3em] text-blue-300"
           >
             000
           </span>
