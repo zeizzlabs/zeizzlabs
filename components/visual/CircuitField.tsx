@@ -1,3 +1,4 @@
+import type React from "react";
 import { cn } from "@/lib/cn";
 
 /**
@@ -55,12 +56,18 @@ function Side({ mirror }: { mirror?: boolean }) {
               strokeWidth={2}
               strokeLinecap="round"
               strokeDasharray="26 460"
-              style={{
-                animation: `dash-flow ${t.dur}s linear infinite`,
-                animationDelay: `${i * 0.55}s`,
-                filter: "drop-shadow(0 0 5px currentColor)",
-                color: stroke,
-              }}
+              className="circuit-pulse"
+              style={
+                {
+                  // Timing as custom properties rather than an inline
+                  // `animation`, so a media query can stop it. An inline style
+                  // wins over any stylesheet, which is why this could not be
+                  // switched off for touch devices before.
+                  "--dur": `${t.dur}s`,
+                  "--delay": `${i * 0.55}s`,
+                  color: stroke,
+                } as React.CSSProperties
+              }
             />
             <circle
               cx={ex}

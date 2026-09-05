@@ -380,6 +380,15 @@ body {
 
 .animate-dash { stroke-dasharray: 5 11; animation: dash-flow 1.9s linear infinite; }
 
+/* The travelling pulse on the circuit backdrop. A drop-shadow on a path that
+   animates every frame is a per-frame blur — the single most expensive thing
+   that was running while the page sat idle. */
+.circuit-pulse {
+  animation: dash-flow var(--dur, 6s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
 @keyframes pulse-ring {
   0%   { transform: scale(0.85); opacity: 0.75; }
   100% { transform: scale(2.1);  opacity: 0; }
@@ -858,4 +867,60 @@ header[data-over="light"] .wordmark {
   .quote-flag {
     animation: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   MOBILE STABILITY — the reason the header, its buttons and the floating
+   controls appeared to flicker while the page sat completely idle.
+
+   `Atmosphere` mounts in every PageHero, so on every page three large blurred
+   gradient blobs run `drift`, `sway` and `sheen` forever. Directly above them
+   the header carries `backdrop-filter: blur(18px)`. A backdrop-filter has to
+   re-sample and re-blur whatever sits behind it every time that content
+   changes — which here is every frame, on every page, with no scrolling and no
+   interaction. Desktop GPUs absorb it. Mobile ones shimmer, and everything
+   inside the blurred bar (the menu button, the theme toggle, the wordmark)
+   shimmers with it.
+
+   So on a touch device: no backdrop-filter, and the decorative atmosphere
+   holds still. Both are invisible losses on a phone — the gradients are still
+   there, they simply stop moving — and between them the header has nothing
+   left to repaint.
+--------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .glass {
+    /* Opaque enough to read against, without sampling what is behind it. */
+    background: color-mix(in oklab, var(--color-canvas) 92%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .animate-drift,
+  .animate-drift-slow,
+  .animate-sway,
+  .animate-sheen,
+  .animate-sweep,
+  /* stroke-dashoffset is a repaint, not a composite: it redraws the SVG every
+     frame for as long as it runs, which on a phone is pure cost for a detail
+     nobody is looking at while idle. */
+  .animate-dash,
+  .shimmer-line,
+  .animate-ring,
+  .animate-spin-slow,
+  .animate-float,
+  /* A spinning conic gradient is repainted every frame; it is a border
+     flourish, and holding it still costs a phone nothing anyone will miss. */
+  .conic-ring::before {
+    animation: none;
+  }
+
+  .circuit-pulse {
+    animation: none;
+    /* The glow is the costly half — a blur recomputed per frame. */
+    filter: none;
+  }
+
+  /* The quote flag keeps waving — it is the one piece of motion here that is
+     doing a job, it is transform-only, and with the backdrop-filter gone it no
+     longer forces anything else to repaint. */
 }

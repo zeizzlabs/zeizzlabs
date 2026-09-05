@@ -70,11 +70,11 @@ export function MobileActionBar() {
     };
   }, []);
 
-  // Unfurled is a flourish, not a mode. It furls itself so it never sits there
-  // covering what the reader is trying to get to.
+  // Unfurled is a flourish, not a mode: it furls itself after two seconds so it
+  // never sits there covering what the reader is trying to get to.
   useEffect(() => {
     if (!open) return;
-    closeTimer.current = window.setTimeout(() => setOpen(false), 6000);
+    closeTimer.current = window.setTimeout(() => setOpen(false), 2000);
     return () => window.clearTimeout(closeTimer.current);
   }, [open]);
 
