@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { services } from "@/content/services";
 import { offerings } from "@/content/offerings";
@@ -23,7 +24,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const s = services.find((x) => x.id === slug);
   if (!s) return {};
-  return { title: s.short, description: s.blurb };
+  // The overview, not the blurb: a share card and a search snippet both have
+  // room for a sentence that actually says what the pillar is.
+  return pageMetadata({
+    title: s.short,
+    description: s.overview,
+    path: `/services/${s.id}`,
+    image: s.image,
+  });
 }
 
 export default async function ServicePage({ params }: PageProps<"/services/[slug]">) {

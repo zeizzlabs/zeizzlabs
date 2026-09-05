@@ -825,3 +825,37 @@ header[data-over="light"] .wordmark {
   html.is-loading, html.is-loading body { overflow: auto; height: auto; }
   html.has-custom-cursor, html.has-custom-cursor * { cursor: auto !important; }
 }
+
+/* ---------------------------------------------------------------------------
+   Quote flag — the gold tab on the right edge of the mobile viewport.
+
+   It is pinned along its right edge, so every transform pivots there: that is
+   what separates cloth catching wind from a box wobbling in place. The motion
+   is a slow skew paired with a shallow rotate, deliberately not a loop that
+   returns to centre on a beat — an even oscillation reads mechanical.
+
+   Transform only, so it stays on the compositor and costs nothing on the
+   mid-range phones most of this traffic is on.
+--------------------------------------------------------------------------- */
+@keyframes quote-flag-wave {
+  0%   { transform: rotate(0deg)     skewY(0deg); }
+  22%  { transform: rotate(-0.9deg)  skewY(1.1deg); }
+  45%  { transform: rotate(0.5deg)   skewY(-0.7deg); }
+  63%  { transform: rotate(-0.4deg)  skewY(0.9deg); }
+  81%  { transform: rotate(0.7deg)   skewY(-0.5deg); }
+  100% { transform: rotate(0deg)     skewY(0deg); }
+}
+
+.quote-flag {
+  transform-origin: right center;
+  animation: quote-flag-wave 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* A flag flapping forever beside the text is exactly the kind of motion people
+   turn off, so honour the preference rather than merely slowing it down. */
+@media (prefers-reduced-motion: reduce) {
+  .quote-flag {
+    animation: none;
+  }
+}

@@ -378,6 +378,36 @@ export const projects: Project[] = [
     image: "/media/work-property-developer-website.jpg",
   },
   {
+    slug: "hotel-website",
+    name: "Hotel Website",
+    category: "Client Site · Hospitality",
+    label: "in-development",
+    summary:
+      "A nine-route site for an independent hotel — rooms, dining, a full menu, events, pool and bookings — and the one project in the set where WebGL earned its place.",
+    vision:
+      "A hotel site is judged in the first two seconds against the photograph the guest has already seen on a booking aggregator. If it does not feel more expensive than the aggregator listing, the guest books there instead and the hotel pays the commission on a booking it could have taken directly. Everything on the page is in service of that one comparison.",
+    building: [
+      "Nine routes, including a full dining menu and a direct bookings flow",
+      "Three-dimensional scenes on selected routes, where depth carries the luxury read",
+      "Scroll-scrubbed timelines rather than fade-in-on-scroll",
+      "A two-colour palette — midnight and champagne — held across the whole site",
+      "A downloadable menu and an events enquiry path",
+    ],
+    approach:
+      "WebGL is on a handful of routes and nowhere else. A three-dimensional scene is expensive on exactly the mid-range phone a guest is browsing from in bed, so it has to change the decision to be worth the cost — on the pool and the grounds it does, because depth is what those rooms are selling. On the booking form it would only slow the thing the hotel is paid for.",
+    stage:
+      "In development. The build is live at a staging URL while rooms, rates and the booking path are still being finished.",
+    next: [
+      "Live availability and rates against the property management system",
+      "Direct booking with payment, so the commission stops being paid",
+      "A second language for the inbound pilgrimage season",
+    ],
+    tech: ["Next.js", "React Three Fiber", "GSAP", "Lenis", "Tailwind", "TypeScript"],
+    client: "Independent hotel",
+    accent: ["#e3c98d", "#c4a253"],
+    image: "/media/work-hotel-website.jpg",
+  },
+  {
     slug: "travel-booking-website",
     name: "Travel & Yatra Booking Website",
     category: "Client Site · Travel",

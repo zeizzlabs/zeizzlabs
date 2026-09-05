@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Frame } from "@/components/ui/Frame";
@@ -9,11 +10,12 @@ import { FinalCta } from "@/components/sections/FinalCta";
 import { CircleCta } from "@/components/ui/CircleCta";
 import { site } from "@/content/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "ZeizzLabs is a digital creation and innovation studio — one team covering design, engineering, AI and automation for businesses that want to grow online.",
-};
+  path: "/about",
+});
 
 const beliefs = [
   {

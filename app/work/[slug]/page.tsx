@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { projects, workLabels } from "@/content/work";
 import { PageHero } from "@/components/sections/PageHero";
@@ -20,7 +21,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const p = projects.find((x) => x.slug === slug);
   if (!p) return {};
-  return { title: p.name, description: p.summary };
+  return pageMetadata({
+    title: p.name,
+    description: p.summary,
+    path: `/work/${p.slug}`,
+    image: p.image,
+    // A case study is an article, not a page of the site's furniture.
+    type: "article",
+  });
 }
 
 export default async function ProjectPage({ params }: PageProps<"/work/[slug]">) {

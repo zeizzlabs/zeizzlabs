@@ -23,6 +23,7 @@ const VERSIONS: Record<string, string> = {
   "/media/work-fashion-delivery-store.jpg": "jdtd0z",
   "/media/work-fast-food-ordering-website.jpg": "lhe2ag",
   "/media/work-helios-dashboard.jpg": "eqzsbf",
+  "/media/work-hotel-website.jpg": "usl0x4",
   "/media/work-kawaii-little-worlds.jpg": "lh8s5j",
   "/media/work-mobile-store-website.jpg": "jdvjbt",
   "/media/work-property-advisory-website.jpg": "jdu3a6",

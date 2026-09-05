@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Process } from "@/components/sections/Process";
 import { FinalCta } from "@/components/sections/FinalCta";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "How we work",
   description:
     "Six steps from first call to launch and beyond — with a fixed quote, a staging link from week one, and something concrete delivered at every stage.",
-};
+  path: "/process",
+});
 
 export default function ProcessPage() {
   return (

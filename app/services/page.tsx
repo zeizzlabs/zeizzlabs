@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { servicesCount, servicesCountWord } from "@/content/services";
@@ -6,11 +7,12 @@ import { ServiceIndex } from "@/components/sections/ServiceIndex";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Ticker } from "@/components/sections/Ticker";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Services",
   description:
     "One studio for the digital side of a business: websites and apps, AI agents and chatbots, automation, WhatsApp, CRM, SEO, social media, branding, dashboards and custom tools.",
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

@@ -3,86 +3,54 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { site, whatsappLink, telLink } from "@/content/site";
+import { whatsappLink, telLink } from "@/content/site";
 import { Icon } from "@/components/ui/Icon";
 
 /**
- * Persistent mobile action bar — Call / WhatsApp / Quote.
+ * Mobile contact affordances — two round buttons and a quote flag.
  *
- * For a services business most mobile visitors want to contact you, not read.
- * The bar appears once the hero is past (so it never covers the first
- * impression) and hides while the contact section is on screen, since the form
- * is already right there. Sits above the iOS home indicator via safe-area
- * padding, and every target clears 44px.
+ * WHY THE OLD BAR MOVED. It was a full-width bar that re-anchored itself to the
+ * visual viewport on every `visualViewport` scroll and resize event, writing a
+ * new `bottom` each frame. The intent was right — `position: fixed` is anchored
+ * to the layout viewport, which on a phone stays tall while the visible area
+ * shrinks under the URL bar. But iOS fires those events continuously through
+ * the URL-bar animation and through rubber-band overscroll, and the value it
+ * reports mid-gesture is not stable. So the bar chased a moving number and
+ * visibly juddered up and down the whole time you scrolled.
+ *
+ * The fix is to stop fighting the browser. Two small round buttons pinned to
+ * the bottom corners and a flag on the right edge are all small enough that
+ * they sit inside the safe area at every URL-bar state, so plain `fixed` with
+ * `env(safe-area-inset-bottom)` is correct and never needs a single write from
+ * JavaScript. Nothing is measured per frame, so there is nothing left to
+ * judder.
+ *
+ * Colour comes from tokens that are already redefined under
+ * [data-theme="dark"], so both themes are handled without a second code path.
  */
 export function MobileActionBar() {
   const [show, setShow] = useState(false);
-  // Read inside the scroll handler without re-subscribing it every render.
+  const [open, setOpen] = useState(false);
   const shown = useRef(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  /**
-   * Pin the bar to the VISUAL viewport.
-   *
-   * `position: fixed; bottom: 0` anchors to the layout viewport. On a phone the
-   * layout viewport stays the full height while the visual viewport shrinks and
-   * grows as the URL bar shows and hides — and browsers reposition fixed
-   * elements lazily during a scroll gesture. That mismatch is what makes a
-   * bottom bar float and lag behind the finger, and no amount of tuning the
-   * transition fixes it, because the element is anchored to the wrong box.
-   *
-   * visualViewport reports the real one. Offsetting by the difference keeps the
-   * bar welded to the bottom edge the user can actually see.
-   */
-  useEffect(() => {
-    const vv = window.visualViewport;
-    const el = ref.current;
-    if (!vv || !el) return;
-
-    let raf = 0;
-    const place = () => {
-      raf = 0;
-      const gap = window.innerHeight - vv.height - vv.offsetTop;
-      // Written straight to style: this must never be transitioned, or the bar
-      // animates every time the browser chrome moves.
-      el.style.bottom = `${Math.max(0, gap)}px`;
-    };
-    const onVV = () => {
-      if (!raf) raf = requestAnimationFrame(place);
-    };
-
-    place();
-    vv.addEventListener("resize", onVV);
-    vv.addEventListener("scroll", onVV);
-    return () => {
-      cancelAnimationFrame(raf);
-      vv.removeEventListener("resize", onVV);
-      vv.removeEventListener("scroll", onVV);
-    };
-  }, []);
+  const closeTimer = useRef<number>(0);
 
   useEffect(() => {
     /**
-     * One source of truth, measured in a single rAF-throttled read.
+     * One rAF-throttled read, and it only ever sets a boolean.
      *
-     * The previous version had a scroll handler and an IntersectionObserver
-     * both writing this state, and they disagreed whenever the contact section
-     * entered or left the viewport — which is what made the bar flicker. It
-     * also waited three quarters of a viewport before appearing, so on a long
-     * hero it felt like it never came.
+     * The hysteresis matters: a single threshold flaps on and off while the
+     * scroll position sits near it, which is a second, independent reason the
+     * old bar looked unstable.
      */
     let raf = 0;
 
     const update = () => {
       raf = 0;
-      // Matches the header's trigger so the two arrive together, but with a
-      // dead zone: a single threshold flaps on and off when the scroll position
-      // sits near it, which is what made the bar look unstable.
       const y = window.scrollY;
-      const past = shown.current ? y > 8 : y > 24;
+      const past = shown.current ? y > 60 : y > 140;
 
-      // Hide it over the contact section: the form is right there, and a
-      // floating bar on top of it is just in the way.
+      // Over the contact section the form is right there; floating buttons on
+      // top of it are just in the way.
       const contact = document.getElementById("contact");
       let overContact = false;
       if (contact) {
@@ -91,8 +59,11 @@ export function MobileActionBar() {
       }
 
       const next = past && !overContact;
-      shown.current = next;
-      setShow(next);
+      if (next !== shown.current) {
+        shown.current = next;
+        setShow(next);
+        if (!next) setOpen(false);
+      }
     };
 
     const onScroll = () => {
@@ -109,48 +80,99 @@ export function MobileActionBar() {
     };
   }, []);
 
-  const items = [
-    { href: telLink, label: "Call", icon: "Phone", sub: site.phone },
-    { href: whatsappLink, label: "WhatsApp", icon: "MessageCircle", sub: "Chat now" },
-  ];
+  // Unfurled is a look-at-me state, not a mode. It furls itself again so it
+  // never sits there covering content the reader is trying to get to.
+  useEffect(() => {
+    if (!open) return;
+    closeTimer.current = window.setTimeout(() => setOpen(false), 5000);
+    return () => window.clearTimeout(closeTimer.current);
+  }, [open]);
+
+  const round =
+    "pointer-events-auto grid h-14 w-14 place-items-center rounded-full border " +
+    "border-line-strong bg-panel text-ink shadow-[0_8px_28px_-10px_rgba(0,0,0,0.55)] " +
+    "backdrop-blur-xl transition-transform duration-200 active:scale-90";
 
   return (
     <div
-      ref={ref}
       aria-hidden={!show}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:hidden",
-        // Only the slide and the fade animate. `transition-all` also animated
-        // the repositioning the mobile URL bar causes, which made it drift.
-        // Note `translate`, not `transform`: Tailwind v4's translate-y-*
-        // utilities set the standalone `translate` property, so naming
-        // `transform` here would leave the slide un-animated.
-        "transition-[translate,opacity] duration-300 ease-[var(--ease-out-quint)]",
-        // Promote to its own layer without writing `transform` here, which
-        // would fight the translate-y utilities below.
-        "[will-change:translate,opacity]",
-        show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
+        "pointer-events-none fixed inset-0 z-40 sm:hidden",
+        "transition-opacity duration-300 ease-[var(--ease-out-quint)]",
+        show ? "opacity-100" : "opacity-0"
       )}
     >
-      <div className="glass flex items-center gap-2 rounded-2xl border border-line-strong p-2 shadow-[0_-10px_40px_-20px_rgba(0,0,0,1)]">
-        {items.map((it) => (
-          <a
-            key={it.label}
-            href={it.href}
-            target={it.href.startsWith("http") ? "_blank" : undefined}
-            rel="noopener noreferrer"
-            className="flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-raised px-3 text-[13px] font-medium text-ink active:scale-[0.97] transition-transform"
+      {/* Call — bottom left. */}
+      <a
+        href={telLink}
+        aria-label="Call ZeizzLabs"
+        tabIndex={show ? 0 : -1}
+        className={cn(
+          round,
+          "absolute left-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]",
+          "transition-[translate,opacity] duration-300",
+          show ? "translate-y-0" : "pointer-events-none translate-y-6"
+        )}
+      >
+        <Icon name="Phone" className="h-5 w-5 text-blue-400" strokeWidth={1.8} />
+      </a>
+
+      {/* WhatsApp — bottom right. */}
+      <a
+        href={whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Message ZeizzLabs on WhatsApp"
+        tabIndex={show ? 0 : -1}
+        className={cn(
+          round,
+          "absolute right-4 bottom-[calc(env(safe-area-inset-bottom)+1rem)]",
+          "transition-[translate,opacity] duration-300",
+          show ? "translate-y-0" : "pointer-events-none translate-y-6"
+        )}
+      >
+        <Icon name="MessageCircle" className="h-5 w-5 text-[var(--color-gold-400)]" strokeWidth={1.8} />
+      </a>
+
+      {/*
+        The quote flag — pinned to the right edge, hanging around the middle.
+        Furled it is a bare gold tab with no words on it. Tapping unfurls it
+        into "Get a quote", which is the link.
+
+        `transform-origin: right` is the whole trick: every transform pivots on
+        the edge it is pinned to, so the rotate/skew reads as cloth catching
+        wind rather than a box wobbling.
+      */}
+      <div className="absolute right-0 top-[56%] flex -translate-y-1/2 items-center">
+        {open ? (
+          <Link
+            href="/#contact"
+            onClick={() => setOpen(false)}
+            className={cn(
+              "quote-flag pointer-events-auto flex items-center gap-2 rounded-l-lg py-3 pl-4 pr-3",
+              "text-[13px] font-semibold tracking-tight whitespace-nowrap",
+              "text-[#2a1f08] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]",
+              "[background:linear-gradient(100deg,var(--color-gold-300),var(--color-gold-400)_55%,var(--color-gold-500))]"
+            )}
           >
-            <Icon name={it.icon} className="h-4 w-4 text-blue-400" strokeWidth={1.8} />
-            {it.label}
-          </a>
-        ))}
-        <Link
-          href="/#contact"
-          className="flex min-h-[46px] flex-1 items-center justify-center rounded-xl px-3 text-[13px] font-semibold text-white [background:var(--gradient-brand)] active:scale-[0.97] transition-transform"
-        >
-          Get a quote
-        </Link>
+            Get a quote
+            <Icon name="ArrowUpRight" className="h-4 w-4" strokeWidth={2} />
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Get a quote"
+            tabIndex={show ? 0 : -1}
+            className={cn(
+              "quote-flag pointer-events-auto grid h-16 w-8 place-items-center rounded-l-lg",
+              "text-[#2a1f08] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]",
+              "[background:linear-gradient(100deg,var(--color-gold-300),var(--color-gold-400)_55%,var(--color-gold-500))]"
+            )}
+          >
+            <Icon name="Sparkles" className="h-4 w-4" strokeWidth={2} />
+          </button>
+        )}
       </div>
     </div>
   );
