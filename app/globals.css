@@ -899,17 +899,22 @@ header[data-over="light"] .wordmark {
   .animate-drift-slow,
   .animate-sway,
   .animate-sheen,
-  .animate-sweep,
-  /* stroke-dashoffset is a repaint, not a composite: it redraws the SVG every
-     frame for as long as it runs, which on a phone is pure cost for a detail
-     nobody is looking at while idle. */
+  /*
+   * Only the repaints are held still. Everything listed here changes pixels
+   * every frame — a stroke-dashoffset, a background-position, a conic gradient
+   * — which is the class of work that made this page shimmer once the header's
+   * backdrop-filter was re-blurring over it.
+   *
+   * Transform-only animations are NOT in this list, and should never be added
+   * to it: a rotate or a translate is composited and costs the main thread
+   * nothing. `.animate-spin-slow` (the rotating "All services" ring) and
+   * `.animate-float` were swept in here by mistake during that fix, which
+   * stopped the ring turning on phones while it kept turning on desktop.
+   */
   .animate-dash,
   .shimmer-line,
   .animate-ring,
-  .animate-spin-slow,
-  .animate-float,
-  /* A spinning conic gradient is repainted every frame; it is a border
-     flourish, and holding it still costs a phone nothing anyone will miss. */
+  .animate-sweep,
   .conic-ring::before {
     animation: none;
   }
